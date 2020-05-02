@@ -16,12 +16,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        switch (position){
-//            case 0: return new fragment_comidas();
+//        switch (position){
+//            case 0: return new fragment_
 //            case 1: return new fragment_bebidas();
 //            case 2: return new fragment_ejercicios();
 //            default: return null;
-        }
+//        }
         return null;
     }
 
@@ -33,12 +33,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position){
+//        switch (position){
 //            case 0: return "Comidas";
 //            case 1: return "Bebidas";
 //            case 2: return "Ejercicios";
 //            default: return "";
-        }
+//        }
+        return "";
     }
 
 }

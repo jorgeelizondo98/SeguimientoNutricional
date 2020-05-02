@@ -52,6 +52,23 @@
             </com.google.android.material.tabs.TabLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date_text"
+            android:text="Ingresar fecha Seleccionada"
+            android:paddingTop="20dp"
+            android:paddingBottom="8dp"
+            android:layout_marginStart="20dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:textColor="#0F124D"/>
+
+        <androidx.viewpager.widget.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/pager"/>
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

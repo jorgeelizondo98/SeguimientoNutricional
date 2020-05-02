@@ -7,15 +7,22 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.seguimientonutricional.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
 
     private FloatingActionButton fabAddButton;
+    private ViewPager viewPager;
+//    private ViewPa
+
+    public HomeFragment() {
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -24,6 +31,8 @@ public class HomeFragment extends Fragment {
 
         fabAddButton = root.findViewById(R.id.fab);
         //TODO: Implementar accion del floating button para agregar registro
+
+
 
         return root;
     }

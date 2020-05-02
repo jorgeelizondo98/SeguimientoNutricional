@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.seguimientonutricional.Adapters.ViewPagerAdapter;
 import com.example.seguimientonutricional.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 
 public class HomeFragment extends Fragment {
@@ -19,7 +21,8 @@ public class HomeFragment extends Fragment {
 
     private FloatingActionButton fabAddButton;
     private ViewPager viewPager;
-//    private ViewPa
+    private ViewPagerAdapter viewPagerAdapter;
+    private TabLayout tabLayout;
 
     public HomeFragment() {
     }
@@ -31,6 +34,14 @@ public class HomeFragment extends Fragment {
 
         fabAddButton = root.findViewById(R.id.fab);
         //TODO: Implementar accion del floating button para agregar registro
+
+
+        viewPager = root.findViewById(R.id.pager);
+        tabLayout = root.findViewById(R.id.tab_layout);
+        //Agrega viewPagerAdapter al tablayout
+        viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        viewPager.setAdapter(viewPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
 
 
 

@@ -6,6 +6,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.example.seguimientonutricional.ui.home.tabsFragments.BebidasFragment;
+import com.example.seguimientonutricional.ui.home.tabsFragments.ComidasFragment;
+import com.example.seguimientonutricional.ui.home.tabsFragments.EjerciciosFragment;
+
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     public ViewPagerAdapter(@NonNull FragmentManager fm) {
@@ -16,13 +20,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-//        switch (position){
-//            case 0: return new fragment_
-//            case 1: return new fragment_bebidas();
-//            case 2: return new fragment_ejercicios();
-//            default: return null;
-//        }
-        return null;
+        switch (position){
+            case 0: return new ComidasFragment();
+            case 1: return new BebidasFragment();
+            case 2: return new EjerciciosFragment();
+            default: return null;
+        }
     }
 
     @Override
@@ -33,13 +36,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-//        switch (position){
-//            case 0: return "Comidas";
-//            case 1: return "Bebidas";
-//            case 2: return "Ejercicios";
-//            default: return "";
-//        }
-        return "";
+        switch (position){
+            case 0: return "Comidas";
+            case 1: return "Bebidas";
+            case 2: return "Ejercicios";
+            default: return "";
+        }
     }
 
 }

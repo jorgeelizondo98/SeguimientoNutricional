@@ -1,12 +1,18 @@
 package com.example.seguimientonutricional;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,9 +22,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MainActivity extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private static final String DIALOG_DATE = "DialogDate";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +64,46 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_calendar:
+                onCalendarSelected();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void onCalendarSelected(){
+        //Despliega pop-up del calendario
+        FragmentManager manager = getSupportFragmentManager();
+        DatePickerFragment dialog = new DatePickerFragment();
+        dialog.show(manager,DIALOG_DATE);
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.DAY_OF_MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        Date dateTime = c.getTime();
+        Log.d("checa",Integer.toString(year));
+        String date = formatDate(dateTime);
+
+        //TODO: Pasar string al fragmentHome para desplegar ahi la fecha.
+
+    }
+
+    private String formatDate(Date dateTime){
+        SimpleDateFormat format = new SimpleDateFormat("EEEE d 'de' MMMM 'del' yyyy",
+                new Locale("es","MEX"));
+        String date = format.format(dateTime);
+        return date;
     }
 
     @Override

@@ -75,27 +75,10 @@ public class LoginActivity extends AppCompatActivity
     current_fragment = emailRegisterFragment;
     switchEmailFragment(null);
 
-
+    // Facebook login.
     mFacebookCallbackManager = CallbackManager.Factory.create();
-
     LoginManager.getInstance().registerCallback(mFacebookCallbackManager,
-        new FacebookCallback<LoginResult>() {
-          @Override
-          public void onSuccess(LoginResult loginResult) {
-            // App code
-            handleFacebookAccessToken(loginResult.getAccessToken());
-          }
-
-          @Override
-          public void onCancel() {
-            // App code
-          }
-
-          @Override
-          public void onError(FacebookException exception) {
-            // App code
-          }
-        });
+        loginResultFacebookCallback);
   }
 
   @Override
@@ -140,7 +123,7 @@ public class LoginActivity extends AppCompatActivity
   }
 
   @Override
-  public void onRegister(String email, String password, String confirm_password) {
+  public void onEmailRegister(String email, String password, String confirm_password) {
     if (password.equals(confirm_password)) {
       mAuth.createUserWithEmailAndPassword(email, password)
           .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -167,7 +150,7 @@ public class LoginActivity extends AppCompatActivity
   }
 
   @Override
-  public void onLogin(String email, String password) {
+  public void onEmailLogin(String email, String password) {
     mAuth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
           @Override
@@ -191,6 +174,25 @@ public class LoginActivity extends AppCompatActivity
     Intent signInIntent = mGoogleSignInClient.getSignInIntent();
     startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
   }
+
+  FacebookCallback<LoginResult> loginResultFacebookCallback = new FacebookCallback<LoginResult>() {
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+      handleFacebookAccessToken(loginResult.getAccessToken());
+    }
+
+    @Override
+    public void onCancel() {
+      // TODO: Get str from strings file.
+      Toast.makeText(LoginActivity.this, "Login cancelado", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onError(FacebookException exception) {
+      // TODO: Get str from strings file.
+      Toast.makeText(LoginActivity.this, "Fallo login", Toast.LENGTH_SHORT).show();
+    }
+  };
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {

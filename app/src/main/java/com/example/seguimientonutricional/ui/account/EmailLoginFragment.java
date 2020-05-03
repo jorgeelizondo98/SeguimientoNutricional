@@ -36,7 +36,7 @@ public class EmailLoginFragment extends Fragment {
   }
 
   interface OnFragmentInteractionListener {
-    void onLogin(String email, String password);
+    void onEmailLogin(String email, String password);
   }
 
   @Override
@@ -60,7 +60,7 @@ public class EmailLoginFragment extends Fragment {
         final String email_str = email.getText().toString();
         final String password_str = password.getText().toString();
 
-        mListener.onLogin(email_str, password_str);
+        mListener.onEmailLogin(email_str, password_str);
       }
     });
 

@@ -35,7 +35,7 @@ public class EmailRegisterFragment extends Fragment {
   }
 
   interface OnFragmentInteractionListener {
-    void onRegister(String email, String password, String confirm_password);
+    void onEmailRegister(String email, String password, String confirm_password);
   }
 
   @Override
@@ -61,7 +61,7 @@ public class EmailRegisterFragment extends Fragment {
         final String password_str = password.getText().toString();
         final String confirm_password_str = confirm_password.getText().toString();
 
-        mListener.onRegister(email_str, password_str, confirm_password_str);
+        mListener.onEmailRegister(email_str, password_str, confirm_password_str);
       }
     });
 

@@ -26,7 +26,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity implements EmailRegisterFragment.OnFragmentInteractionListener, EmailLoginFragment.OnFragmentInteractionListener {
+public class LoginActivity extends AppCompatActivity
+    implements EmailRegisterFragment.OnFragmentInteractionListener,
+        EmailLoginFragment.OnFragmentInteractionListener {
 
   private static final String TAG = "LOGIN";
 
@@ -38,7 +40,6 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
   private EmailLoginFragment emailLoginFragment;
   private EmailRegisterFragment emailRegisterFragment;
   private Fragment current_fragment;
-  private Button registerOrLoginButton;
 
   private FirebaseAuth mAuth;
 
@@ -56,9 +57,10 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
     mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     findViewById(R.id.google_sign_in_button).setOnClickListener(clickSignIn);
 
+    // Firebase auth for Email and Facebook Signup.
     mAuth = FirebaseAuth.getInstance();
 
-    registerOrLoginButton = findViewById(R.id.register_login);
+    // Email signup.
     emailLoginFragment = EmailLoginFragment.newInstance();
     emailRegisterFragment = EmailRegisterFragment.newInstance();
     current_fragment = emailRegisterFragment;
@@ -76,17 +78,18 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
     FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
     if (googleUser != null) {
-      Toast.makeText(this, "Google USer", Toast.LENGTH_SHORT).show();
-      updateUI(googleUser);
+      updateUI();
     } else if (firebaseUser != null) {
-      Toast.makeText(this, "Firebase USer", Toast.LENGTH_SHORT).show();
-      updateUI(firebaseUser);
+      updateUI();
     }
   }
 
   public void switchEmailFragment(View view){
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+    // TODO: Revisar si lo puedo sacar del parametro view.
+    Button registerOrLoginButton = findViewById(R.id.register_login);
 
     if (current_fragment instanceof EmailLoginFragment) {
       fragmentTransaction.add(R.id.account_fragment_container, emailRegisterFragment)
@@ -116,14 +119,13 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
                 // Sign in success, update UI with the signed-in user's information
                 Log.d(TAG, "createUserWithEmail:success");
                 FirebaseUser user = mAuth.getCurrentUser();
-                updateUI(user);
+                updateUI();
               } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                 // TODO: Get string from strings file.
                 Toast.makeText(LoginActivity.this, "Registro fallido.",
                     Toast.LENGTH_SHORT).show();
-                updateUI(null);
               }
             }
           });
@@ -143,11 +145,12 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
               // Sign in success, update UI with the signed-in user's information
               Log.d(TAG, "signInWithEmail:success");
               FirebaseUser user = mAuth.getCurrentUser();
-              updateUI(user);
+              updateUI();
             } else {
               // If sign in fails, display a message to the user.
               Log.w(TAG, "signInWithEmail:failure", task.getException());
-              updateUI(null);
+              // TODO: Get str from strings file.
+              Toast.makeText(LoginActivity.this, "Fallo login", Toast.LENGTH_SHORT).show();
             }
           }
         });
@@ -166,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
       // The Task returned from this call is always completed, no need to attach
       // a listener.
       Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-      handleSignInResult(task);
+      handleGoogleSignInResult(task);
     } else if (requestCode == FACEBOOK_SIGN_IN) {
 
     } else if (requestCode == LOGOUT) {
@@ -175,28 +178,23 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
     }
   }
 
-  private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+  private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
     try {
       GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
       // Signed in successfully, show authenticated UI.
-      updateUI(account);
+      updateUI();
     } catch (ApiException e) {
       // The ApiException status code indicates the detailed failure reason.
       // Please refer to the GoogleSignInStatusCodes class reference for more information.
       Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-      updateUI(null);
+      // TODO: Get str from strings file.
+      Toast.makeText(this, "Fallo login", Toast.LENGTH_SHORT).show();
     }
   }
 
-  private <T> void updateUI(T account) {
-    if (account == null) {
-      // TODO: Sacar del archivo de strings.
-      Toast.makeText(this, "Cuenta y/o contraseña incorrectas.", Toast.LENGTH_SHORT).show();
-    } else {
-      Intent intent = new Intent(this, MainActivity.class);
-      startActivityForResult(intent, LOGOUT);
-    }
+  private void updateUI() {
+    Intent intent = new Intent(this, MainActivity.class);
+    startActivityForResult(intent, LOGOUT);
   }
 
   private View.OnClickListener clickSignIn = new View.OnClickListener() {
@@ -210,3 +208,4 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
     }
   };
 }
+

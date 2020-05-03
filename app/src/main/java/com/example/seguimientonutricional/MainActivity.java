@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
@@ -36,17 +37,19 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_settings, R.id.nav_logout)
+                R.id.nav_home, R.id.nav_settings, R.id.nav_signout)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navigationView.setNavigationItemSelectedListener(onItemClick);
     }
 
     @Override
@@ -58,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         switch (item.getItemId()){
             case R.id.action_calendar:
                 onCalendarSelected();
@@ -102,4 +104,21 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    private NavigationView.OnNavigationItemSelectedListener onItemClick = new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            final NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
+            if (menuItem.getItemId() == R.id.nav_signout){
+                finish();
+            }
+            //This is for maintaining the behavior of the Navigation view
+            NavigationUI.onNavDestinationSelected(menuItem, navController);
+            //This is for closing the drawer after acting on it
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        }
+    };
+
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,6 +31,8 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
 
   private static GoogleSignInClient mGoogleSignInClient;
   private static final int GOOGLE_SIGN_IN = 0;
+  private static final int FACEBOOK_SIGN_IN = 1;
+  private static final int LOGOUT = 2;
 
   private EmailLoginFragment emailLoginFragment;
   private EmailRegisterFragment emailRegisterFragment;
@@ -72,8 +75,10 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
     FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
     if (googleUser != null) {
+      Toast.makeText(this, "Google USer", Toast.LENGTH_SHORT).show();
       updateUI(googleUser);
     } else if (firebaseUser != null) {
+      Toast.makeText(this, "Firebase USer", Toast.LENGTH_SHORT).show();
       updateUI(firebaseUser);
     }
   }
@@ -115,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                 // TODO: Get string from strings file.
-                Toast.makeText(LoginActivity.this, "Authentication Failed.",
+                Toast.makeText(LoginActivity.this, "Registro fallido.",
                     Toast.LENGTH_SHORT).show();
                 updateUI(null);
               }
@@ -141,9 +146,6 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
             } else {
               // If sign in fails, display a message to the user.
               Log.w(TAG, "signInWithEmail:failure", task.getException());
-              // TODO: Get string from strings file.
-              Toast.makeText(LoginActivity.this, "Authentication failed.",
-                  Toast.LENGTH_SHORT).show();
               updateUI(null);
             }
           }
@@ -158,13 +160,17 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-
     // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
     if (requestCode == GOOGLE_SIGN_IN) {
       // The Task returned from this call is always completed, no need to attach
       // a listener.
       Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
       handleSignInResult(task);
+    } else if (requestCode == FACEBOOK_SIGN_IN) {
+
+    } else if (requestCode == LOGOUT) {
+      mAuth.signOut();
+      mGoogleSignInClient.signOut();
     }
   }
 
@@ -184,9 +190,11 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
 
   private <T> void updateUI(T account) {
     if (account == null) {
-      Toast.makeText(this, "NULL!", Toast.LENGTH_SHORT).show();
+      // TODO: Sacar del archivo de strings.
+      Toast.makeText(this, "Cuenta y/o contraseña incorrectas.", Toast.LENGTH_SHORT).show();
     } else {
-      Toast.makeText(this, "INICIADA SESION!", Toast.LENGTH_SHORT).show();
+      Intent intent = new Intent(this, MainActivity.class);
+      startActivityForResult(intent, LOGOUT);
     }
   }
 

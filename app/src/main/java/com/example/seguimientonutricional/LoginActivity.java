@@ -1,11 +1,15 @@
 package com.example.seguimientonutricional;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -22,6 +26,11 @@ public class LoginActivity extends AppCompatActivity {
   private static GoogleSignInClient mGoogleSignInClient;
   private static final int GOOGLE_SIGN_IN = 0;
 
+  private EmailLoginFragment emailLoginFragment;
+  private EmailRegisterFragment emailRegisterFragment;
+  private Fragment current_fragment;
+  private Button registerOrLoginButton;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -37,6 +46,12 @@ public class LoginActivity extends AppCompatActivity {
     mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
     findViewById(R.id.google_sign_in_button).setOnClickListener(clickSignIn);
+
+    registerOrLoginButton = findViewById(R.id.register_login);
+    emailLoginFragment = EmailLoginFragment.newInstance();
+    emailRegisterFragment = EmailRegisterFragment.newInstance();
+    current_fragment = emailRegisterFragment;
+    switchFragment(null);
   }
 
   @Override
@@ -48,6 +63,28 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
     if (account != null) {
       updateUI(account);
+    }
+  }
+
+  // Para mostrar el Fragmento
+  public void switchFragment(View view){
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+    if (current_fragment instanceof EmailLoginFragment) {
+      fragmentTransaction.add(R.id.account_fragment_container, emailRegisterFragment)
+          .addToBackStack(null);
+      fragmentTransaction.remove(emailLoginFragment).commit();
+      // TODO: Get string from strings file.
+      registerOrLoginButton.setText("O iniciar sesión");
+      current_fragment = emailRegisterFragment;
+    } else {
+      fragmentTransaction.add(R.id.account_fragment_container, emailLoginFragment)
+          .addToBackStack(null);
+      fragmentTransaction.remove(emailRegisterFragment).commit();
+      // TODO: Get string from strings file.
+      registerOrLoginButton.setText("O registrarse");
+      current_fragment = emailLoginFragment;
     }
   }
 

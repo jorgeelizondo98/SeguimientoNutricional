@@ -1,5 +1,6 @@
 package com.example.seguimientonutricional;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -17,9 +18,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements EmailRegisterFragment.OnFragmentInteractionListener {
 
   private static final String TAG = "LOGIN";
 
@@ -31,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
   private Fragment current_fragment;
   private Button registerOrLoginButton;
 
+  private FirebaseAuth mAuth;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -41,17 +48,17 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestEmail()
         .build();
-
     // Build a GoogleSignInClient with the options specified by gso.
     mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
     findViewById(R.id.google_sign_in_button).setOnClickListener(clickSignIn);
+
+    mAuth = FirebaseAuth.getInstance();
 
     registerOrLoginButton = findViewById(R.id.register_login);
     emailLoginFragment = EmailLoginFragment.newInstance();
     emailRegisterFragment = EmailRegisterFragment.newInstance();
     current_fragment = emailRegisterFragment;
-    switchFragment(null);
+    switchEmailFragment(null);
   }
 
   @Override
@@ -60,14 +67,18 @@ public class LoginActivity extends AppCompatActivity {
 
     // Check for existing Google Sign In account, if the user is already signed in
     // the GoogleSignInAccount will be non-null.
-    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-    if (account != null) {
-      updateUI(account);
+    GoogleSignInAccount googleUser = GoogleSignIn.getLastSignedInAccount(this);
+    // Check if user is signed in (non-null) and update UI accordingly.
+    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+    if (googleUser != null) {
+      updateUI(googleUser);
+    } else if (firebaseUser != null) {
+      updateUI(firebaseUser);
     }
   }
 
-  // Para mostrar el Fragmento
-  public void switchFragment(View view){
+  public void switchEmailFragment(View view){
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -88,7 +99,35 @@ public class LoginActivity extends AppCompatActivity {
     }
   }
 
-  private void signIn() {
+  @Override
+  public void onRegister(String email, String password, String confirm_password) {
+    if (password.equals(confirm_password)) {
+      mAuth.createUserWithEmailAndPassword(email, password)
+          .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+              if (task.isSuccessful()) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d(TAG, "createUserWithEmail:success");
+                FirebaseUser user = mAuth.getCurrentUser();
+                updateUI(user);
+              } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                // TODO: Get string from strings file.
+                Toast.makeText(LoginActivity.this, "Authentication Failes",
+                    Toast.LENGTH_SHORT).show();
+                updateUI(null);
+              }
+            }
+          });
+    } else {
+      // TODO: Sacar del archivo de strings.
+      Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+    }
+  }
+
+  private void googleSignIn() {
     Intent signInIntent = mGoogleSignInClient.getSignInIntent();
     startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
   }
@@ -120,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
     }
   }
 
-  private void updateUI(GoogleSignInAccount account) {
+  private <T> void updateUI(T account) {
     if (account == null) {
       Toast.makeText(this, "NULL!", Toast.LENGTH_SHORT).show();
     } else {
@@ -133,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick(View view) {
       switch (view.getId()) {
         case R.id.google_sign_in_button:
-          signIn();
+          googleSignIn();
           break;
       }
     }

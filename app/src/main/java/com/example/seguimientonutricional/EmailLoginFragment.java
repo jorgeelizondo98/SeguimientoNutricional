@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,12 +24,13 @@ public class EmailLoginFragment extends Fragment {
   private String mParam1;
   private String mParam2;
 
+  private FirebaseAuth mAuth;
+
   public EmailLoginFragment() {
-    // Required empty public constructor
+    this.mAuth = mAuth;
   }
 
   public static EmailLoginFragment newInstance() {
-
     Bundle args = new Bundle();
 
     EmailLoginFragment fragment = new EmailLoginFragment();

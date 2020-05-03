@@ -42,6 +42,8 @@ public class LoginActivity extends AppCompatActivity
 
   private GoogleSignInClient mGoogleSignInClient;
   private CallbackManager mFacebookCallbackManager;
+  private FirebaseAuth mAuth;
+
   private static final int GOOGLE_SIGN_IN = 0;
   private static final int FACEBOOK_SIGN_IN = 64206;
   private static final int LOGOUT = 2;
@@ -49,8 +51,6 @@ public class LoginActivity extends AppCompatActivity
   private EmailLoginFragment emailLoginFragment;
   private EmailRegisterFragment emailRegisterFragment;
   private Fragment current_fragment;
-
-  private FirebaseAuth mAuth;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -109,15 +109,13 @@ public class LoginActivity extends AppCompatActivity
       fragmentTransaction.add(R.id.account_fragment_container, emailRegisterFragment)
           .addToBackStack(null);
       fragmentTransaction.remove(emailLoginFragment).commit();
-      // TODO: Get string from strings file.
-      registerOrLoginButton.setText("O iniciar sesión");
+      registerOrLoginButton.setText(R.string.or_login);
       current_fragment = emailRegisterFragment;
     } else {
       fragmentTransaction.add(R.id.account_fragment_container, emailLoginFragment)
           .addToBackStack(null);
       fragmentTransaction.remove(emailRegisterFragment).commit();
-      // TODO: Get string from strings file.
-      registerOrLoginButton.setText("O registrarse");
+      registerOrLoginButton.setText(R.string.or_register);
       current_fragment = emailLoginFragment;
     }
   }
@@ -137,15 +135,13 @@ public class LoginActivity extends AppCompatActivity
               } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                // TODO: Get string from strings file.
-                Toast.makeText(LoginActivity.this, "Registro fallido.",
+                Toast.makeText(LoginActivity.this, R.string.register_fail,
                     Toast.LENGTH_SHORT).show();
               }
             }
           });
     } else {
-      // TODO: Sacar del archivo de strings.
-      Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, R.string.pass_not_matching, Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -163,8 +159,8 @@ public class LoginActivity extends AppCompatActivity
             } else {
               // If sign in fails, display a message to the user.
               Log.w(TAG, "signInWithEmail:failure", task.getException());
-              // TODO: Get str from strings file.
-              Toast.makeText(LoginActivity.this, "Fallo login", Toast.LENGTH_SHORT).show();
+              Toast.makeText(LoginActivity.this,
+                  R.string.wrong_credentials, Toast.LENGTH_SHORT).show();
             }
           }
         });
@@ -183,14 +179,13 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     public void onCancel() {
-      // TODO: Get str from strings file.
-      Toast.makeText(LoginActivity.this, "Login cancelado", Toast.LENGTH_SHORT).show();
+      Toast.makeText(LoginActivity.this, R.string.login_cancelled,
+          Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onError(FacebookException exception) {
-      // TODO: Get str from strings file.
-      Toast.makeText(LoginActivity.this, "Fallo login", Toast.LENGTH_SHORT).show();
+      Toast.makeText(LoginActivity.this, R.string.login_fail, Toast.LENGTH_SHORT).show();
     }
   };
 
@@ -221,8 +216,7 @@ public class LoginActivity extends AppCompatActivity
       // The ApiException status code indicates the detailed failure reason.
       // Please refer to the GoogleSignInStatusCodes class reference for more information.
       Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-      // TODO: Get str from strings file.
-      Toast.makeText(this, "Fallo login", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, R.string.login_fail, Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -242,8 +236,7 @@ public class LoginActivity extends AppCompatActivity
             } else {
               // If sign in fails, display a message to the user.
               Log.w(TAG, "signInWithCredential:failure", task.getException());
-              // TODO: Get str from strings file.
-              Toast.makeText(LoginActivity.this, "Authentication failed.",
+              Toast.makeText(LoginActivity.this, R.string.login_fail,
                   Toast.LENGTH_SHORT).show();
             }
           }

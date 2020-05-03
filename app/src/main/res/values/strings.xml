@@ -5,6 +5,15 @@
     <string name="facebook_app_id">2851192594999297</string>
     <string name="fb_login_protocol_scheme">fb2851192594999297</string>
 
+    <!-- Login strings -->
+    <string name="or_register">O registrarse</string>
+    <string name="or_login">O iniciar sesión</string>
+    <string name="login_fail">Error al iniciar sesión</string>
+    <string name="wrong_credentials">Cuenta o contraseña incorrecta</string>
+    <string name="login_cancelled">Inicio de sesión cancelado</string>
+    <string name="register_fail">Error al realizar registro</string>
+    <string name="pass_not_matching">Las constraseñas no coinciden</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

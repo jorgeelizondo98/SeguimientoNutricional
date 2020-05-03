@@ -89,7 +89,7 @@ public class EmailRegisterFragment extends Fragment {
     super.onAttach(context);
 
     if(context instanceof  OnFragmentInteractionListener){
-      mListener =(OnFragmentInteractionListener) context;
+      mListener = (OnFragmentInteractionListener) context;
     } else {
       throw new ClassCastException(context.toString() +
           "Should implement OnFragmentInteractionListener");

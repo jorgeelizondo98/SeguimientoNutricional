@@ -24,7 +24,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity implements EmailRegisterFragment.OnFragmentInteractionListener {
+public class LoginActivity extends AppCompatActivity implements EmailRegisterFragment.OnFragmentInteractionListener, EmailLoginFragment.OnFragmentInteractionListener {
 
   private static final String TAG = "LOGIN";
 
@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                 // TODO: Get string from strings file.
-                Toast.makeText(LoginActivity.this, "Authentication Failes",
+                Toast.makeText(LoginActivity.this, "Authentication Failed.",
                     Toast.LENGTH_SHORT).show();
                 updateUI(null);
               }
@@ -125,6 +125,29 @@ public class LoginActivity extends AppCompatActivity implements EmailRegisterFra
       // TODO: Sacar del archivo de strings.
       Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
     }
+  }
+
+  @Override
+  public void onLogin(String email, String password) {
+    mAuth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+          @Override
+          public void onComplete(@NonNull Task<AuthResult> task) {
+            if (task.isSuccessful()) {
+              // Sign in success, update UI with the signed-in user's information
+              Log.d(TAG, "signInWithEmail:success");
+              FirebaseUser user = mAuth.getCurrentUser();
+              updateUI(user);
+            } else {
+              // If sign in fails, display a message to the user.
+              Log.w(TAG, "signInWithEmail:failure", task.getException());
+              // TODO: Get string from strings file.
+              Toast.makeText(LoginActivity.this, "Authentication failed.",
+                  Toast.LENGTH_SHORT).show();
+              updateUI(null);
+            }
+          }
+        });
   }
 
   private void googleSignIn() {

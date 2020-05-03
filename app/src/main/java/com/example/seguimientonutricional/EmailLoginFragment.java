@@ -1,5 +1,6 @@
 package com.example.seguimientonutricional;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -24,10 +26,13 @@ public class EmailLoginFragment extends Fragment {
   private String mParam1;
   private String mParam2;
 
-  private FirebaseAuth mAuth;
+  OnFragmentInteractionListener mListener;
+
+  private EditText email;
+  private EditText password;
 
   public EmailLoginFragment() {
-    this.mAuth = mAuth;
+
   }
 
   public static EmailLoginFragment newInstance() {
@@ -36,6 +41,10 @@ public class EmailLoginFragment extends Fragment {
     EmailLoginFragment fragment = new EmailLoginFragment();
     fragment.setArguments(args);
     return fragment;
+  }
+
+  interface OnFragmentInteractionListener {
+    void onLogin(String email, String password);
   }
 
   @Override
@@ -51,6 +60,34 @@ public class EmailLoginFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.fragment_email_login, container, false);
+    final View rootView = inflater.inflate(R.layout.fragment_email_login, container,
+        false);
+
+    email = rootView.findViewById(R.id.email);
+    password = rootView.findViewById(R.id.password);
+
+    rootView.findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        final String email_str = email.getText().toString();
+        final String password_str = password.getText().toString();
+
+        mListener.onLogin(email_str, password_str);
+      }
+    });
+
+    return rootView;
+  }
+
+  @Override
+  public void onAttach(Context context){
+    super.onAttach(context);
+
+    if(context instanceof OnFragmentInteractionListener){
+      mListener = (OnFragmentInteractionListener) context;
+    } else {
+      throw new ClassCastException(context.toString() +
+          "Should implement OnFragmentInteractionListener");
+    }
   }
 }

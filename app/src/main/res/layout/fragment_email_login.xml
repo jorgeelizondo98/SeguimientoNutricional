@@ -16,7 +16,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textEmailAddress"
-            android:text="Email" />
+            android:hint="Email"
+            android:backgroundTint="@color/colorPrimaryDark"/>
 
         <EditText
             android:id="@+id/password"
@@ -24,7 +25,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword"
-            android:text="Password" />
+            android:hint="Password"
+            android:backgroundTint="@color/colorPrimaryDark"/>
 
         <Button
             android:id="@+id/login"

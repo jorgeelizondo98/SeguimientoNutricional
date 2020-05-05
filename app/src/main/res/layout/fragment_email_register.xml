@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:hint="Name"
+            android:backgroundTint="@color/colorPrimaryDark"/>
 
         <EditText
             android:id="@+id/email"
@@ -25,7 +26,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textEmailAddress"
-            android:text="Email" />
+            android:hint="Email"
+            android:backgroundTint="@color/colorPrimaryDark"/>
 
         <EditText
             android:id="@+id/password"
@@ -33,7 +35,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword"
-            android:text="Password" />
+            android:hint="Password"
+            android:backgroundTint="@color/colorPrimaryDark"/>
 
         <EditText
             android:id="@+id/confirm_password"
@@ -41,12 +44,13 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword"
-            android:text="Password" />
+            android:hint="Repeat Password"
+            android:backgroundTint="@color/colorPrimaryDark"/>
 
         <Button
             android:id="@+id/register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register" />
+            android:hint="Register" />
     </LinearLayout>
 </FrameLayout>

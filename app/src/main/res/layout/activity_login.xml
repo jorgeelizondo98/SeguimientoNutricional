@@ -9,44 +9,49 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp">
 
         <FrameLayout
+            android:id="@+id/account_fragment_container"
+            android:name="com.example.seguimientonutricional.EmailLoginFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:name="com.example.seguimientonutricional.EmailLoginFragment"
-            android:id="@+id/account_fragment_container"
+            android:layout_gravity="center"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout="@layout/fragment_email_login">
-        </FrameLayout>
+            tools:layout="@layout/fragment_email_login"></FrameLayout>
 
         <Button
             android:id="@+id/register_login"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:onClick="switchEmailFragment"
             android:text="" />
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="O inicia sesión con:" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/google_sign_in_button"
             android:layout_width="200dp"
             android:layout_height="40dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
             android:layout_width="200dp"
             android:layout_height="60dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

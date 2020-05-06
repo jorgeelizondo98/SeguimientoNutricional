@@ -18,7 +18,9 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="Name"
-            android:backgroundTint="@color/colorPrimaryDark"/>
+            android:background = "@drawable/edit"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"/>
 
         <EditText
             android:id="@+id/email"
@@ -27,7 +29,9 @@
             android:ems="10"
             android:inputType="textEmailAddress"
             android:hint="Email"
-            android:backgroundTint="@color/colorPrimaryDark"/>
+            android:background = "@drawable/edit"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"/>
 
         <EditText
             android:id="@+id/password"
@@ -36,7 +40,9 @@
             android:ems="10"
             android:inputType="textPassword"
             android:hint="Password"
-            android:backgroundTint="@color/colorPrimaryDark"/>
+            android:background = "@drawable/edit"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"/>
 
         <EditText
             android:id="@+id/confirm_password"
@@ -45,12 +51,15 @@
             android:ems="10"
             android:inputType="textPassword"
             android:hint="Repeat Password"
-            android:backgroundTint="@color/colorPrimaryDark"/>
+            android:background = "@drawable/edit"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"/>
 
         <Button
             android:id="@+id/register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Register" />
+            android:hint="Register"
+            android:background = "@drawable/round_btn"/>
     </LinearLayout>
 </FrameLayout>

@@ -5,33 +5,49 @@
     android:layout_height="match_parent"
     tools:context=".ui.account.EmailLoginFragment">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+
+
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_email_black_24dp"
             android:ems="10"
+            android:hint="  Email"
             android:inputType="textEmailAddress"
-            android:hint="Email"
-            android:backgroundTint="@color/colorPrimaryDark"/>
+            android:paddingBottom="20dp"
+            android:background="@drawable/edit"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"/>
+            />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:drawableStart="@drawable/ic_lock_black_24dp"
             android:ems="10"
+            android:hint="  Password"
             android:inputType="textPassword"
-            android:hint="Password"
-            android:backgroundTint="@color/colorPrimaryDark"/>
+            android:paddingBottom="20dp"
+            android:background="@drawable/edit"
+            android:padding="10dp"
+            android:layout_marginBottom="16dp"/>
 
         <Button
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login" />
+            android:text="Login"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/round_btn"/>
     </LinearLayout>
 </FrameLayout>

@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.seguimientonutricional.MainActivity;
 import com.example.seguimientonutricional.R;
@@ -52,9 +51,7 @@ public class LoginActivity extends AppCompatActivity
   private static final int LOGOUT = 2;
 
   private FragmentManager fragmentManager;
-  private Fragment emailLoginFragment;
-  private Fragment emailRegisterFragment;
-  private String currentFragment;
+  private Fragment currentFragment;
   private static final String LOGIN_FRAGMENT = "login";
   private static final String REGISTER_FRAGMENT = "register";
 
@@ -81,23 +78,12 @@ public class LoginActivity extends AppCompatActivity
 
     fragmentManager = getSupportFragmentManager();
     // Email signup.
-    if (savedInstanceState != null) {
-      currentFragment = savedInstanceState.getString("currentFragment");
-      if (currentFragment == LOGIN_FRAGMENT) {
-        emailLoginFragment = fragmentManager.getFragment(savedInstanceState,
-            LOGIN_FRAGMENT);
-        emailRegisterFragment = EmailRegisterFragment.newInstance();
-      } else {
-        emailRegisterFragment = fragmentManager.getFragment(savedInstanceState,
-            REGISTER_FRAGMENT);
-        emailLoginFragment = EmailLoginFragment.newInstance();
-      }
-      setRegisterLoginButtonText();
-    } else {
-      emailLoginFragment = EmailLoginFragment.newInstance();
-      emailRegisterFragment = EmailRegisterFragment.newInstance();
-      currentFragment = REGISTER_FRAGMENT;
+    if (savedInstanceState == null) {
       switchEmailFragment(null);
+    } else {
+      currentFragment = fragmentManager.getFragment(savedInstanceState,
+          savedInstanceState.getString("currentFragmentKey"));
+      setRegisterLoginButtonText();
     }
 
     // Facebook login.
@@ -135,7 +121,7 @@ public class LoginActivity extends AppCompatActivity
 
   private void setRegisterLoginButtonText() {
     Button registerOrLoginButton = findViewById(R.id.register_login);
-    if (currentFragment == LOGIN_FRAGMENT) {
+    if (currentFragment.getTag() == LOGIN_FRAGMENT) {
       registerOrLoginButton.setText(R.string.or_register);
     } else {
       registerOrLoginButton.setText(R.string.or_login);
@@ -143,13 +129,18 @@ public class LoginActivity extends AppCompatActivity
   }
 
   public void switchEmailFragment(View view){
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    if (currentFragment == LOGIN_FRAGMENT) {
-      fragmentTransaction.replace(R.id.account_fragment_container, emailRegisterFragment).commit();
-      currentFragment = REGISTER_FRAGMENT;
+    if (currentFragment == null) {
+      currentFragment = EmailLoginFragment.newInstance();
+      fragmentManager.beginTransaction().add(R.id.account_fragment_container,
+          currentFragment, LOGIN_FRAGMENT).commit();
+    } else if (currentFragment.getTag() == LOGIN_FRAGMENT) {
+      currentFragment = EmailRegisterFragment.newInstance();
+      fragmentManager.beginTransaction().replace(R.id.account_fragment_container,
+          currentFragment, REGISTER_FRAGMENT).commit();
     } else {
-      fragmentTransaction.replace(R.id.account_fragment_container, emailLoginFragment).commit();
-      currentFragment = LOGIN_FRAGMENT;
+      currentFragment = EmailLoginFragment.newInstance();
+      fragmentManager.beginTransaction().replace(R.id.account_fragment_container,
+          currentFragment, LOGIN_FRAGMENT).commit();
     }
     setRegisterLoginButtonText();
   }
@@ -318,15 +309,9 @@ public class LoginActivity extends AppCompatActivity
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
 
-    //Save the fragment's instance
-    if (emailLoginFragment.isAdded()) {
-      fragmentManager.putFragment(outState, LOGIN_FRAGMENT,
-          emailLoginFragment);
-    } else {
-      fragmentManager.putFragment(outState, REGISTER_FRAGMENT,
-          emailRegisterFragment);
-    }
-    outState.putString("currentFragment", currentFragment);
+    // Save the fragment's instance
+    fragmentManager.putFragment(outState, currentFragment.getTag(), currentFragment);
+    outState.putString("currentFragmentKey", currentFragment.getTag());
   }
 }
 

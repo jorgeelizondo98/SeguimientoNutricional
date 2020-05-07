@@ -80,23 +80,4 @@ public class EmailRegisterFragment extends Fragment {
     }
   }
 
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-
-    if (savedInstanceState != null) {
-      email.setText(savedInstanceState.getString("email"));
-      password.setText(savedInstanceState.getString("password"));
-      confirm_password.setText(savedInstanceState.getString("confirm_password"));
-    }
-  }
-
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-
-    outState.putString("email", email.getText().toString());
-    outState.putString("password", password.getText().toString());
-    outState.putString("confirm_password", confirm_password.getText().toString());
-  }
 }

@@ -68,8 +68,7 @@
                     android:layout_gravity="center"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout="@layout/fragment_email_login"></FrameLayout>
+                    app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
                 <Button
                     android:id="@+id/register_login"

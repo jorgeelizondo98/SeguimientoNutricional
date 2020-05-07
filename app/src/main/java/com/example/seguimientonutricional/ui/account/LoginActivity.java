@@ -51,9 +51,12 @@ public class LoginActivity extends AppCompatActivity
   private static final int FACEBOOK_SIGN_IN = 64206;
   private static final int LOGOUT = 2;
 
-  private EmailLoginFragment emailLoginFragment;
-  private EmailRegisterFragment emailRegisterFragment;
-  private Fragment current_fragment;
+  private FragmentManager fragmentManager;
+  private Fragment emailLoginFragment;
+  private Fragment emailRegisterFragment;
+  private String currentFragment;
+  private static final String LOGIN_FRAGMENT = "login";
+  private static final String REGISTER_FRAGMENT = "register";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +79,26 @@ public class LoginActivity extends AppCompatActivity
     // Firebase auth for Email and Facebook Signup.
     mAuth = FirebaseAuth.getInstance();
 
+    fragmentManager = getSupportFragmentManager();
     // Email signup.
-    emailLoginFragment = EmailLoginFragment.newInstance();
-    emailRegisterFragment = EmailRegisterFragment.newInstance();
-    current_fragment = emailRegisterFragment;
-    switchEmailFragment(null);
+    if (savedInstanceState != null) {
+      currentFragment = savedInstanceState.getString("currentFragment");
+      if (currentFragment == LOGIN_FRAGMENT) {
+        emailLoginFragment = fragmentManager.getFragment(savedInstanceState,
+            LOGIN_FRAGMENT);
+        emailRegisterFragment = EmailRegisterFragment.newInstance();
+      } else {
+        emailRegisterFragment = fragmentManager.getFragment(savedInstanceState,
+            REGISTER_FRAGMENT);
+        emailLoginFragment = EmailLoginFragment.newInstance();
+      }
+      setRegisterLoginButtonText();
+    } else {
+      emailLoginFragment = EmailLoginFragment.newInstance();
+      emailRegisterFragment = EmailRegisterFragment.newInstance();
+      currentFragment = REGISTER_FRAGMENT;
+      switchEmailFragment(null);
+    }
 
     // Facebook login.
     mFacebookCallbackManager = CallbackManager.Factory.create();
@@ -115,26 +133,25 @@ public class LoginActivity extends AppCompatActivity
     }
   }
 
-  public void switchEmailFragment(View view){
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-    // TODO: Revisar si lo puedo sacar del parametro view.
+  private void setRegisterLoginButtonText() {
     Button registerOrLoginButton = findViewById(R.id.register_login);
-
-    if (current_fragment instanceof EmailLoginFragment) {
-      fragmentTransaction.add(R.id.account_fragment_container, emailRegisterFragment)
-          .addToBackStack(null);
-      fragmentTransaction.remove(emailLoginFragment).commit();
-      registerOrLoginButton.setText(R.string.or_login);
-      current_fragment = emailRegisterFragment;
-    } else {
-      fragmentTransaction.add(R.id.account_fragment_container, emailLoginFragment)
-          .addToBackStack(null);
-      fragmentTransaction.remove(emailRegisterFragment).commit();
+    if (currentFragment == LOGIN_FRAGMENT) {
       registerOrLoginButton.setText(R.string.or_register);
-      current_fragment = emailLoginFragment;
+    } else {
+      registerOrLoginButton.setText(R.string.or_login);
     }
+  }
+
+  public void switchEmailFragment(View view){
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    if (currentFragment == LOGIN_FRAGMENT) {
+      fragmentTransaction.replace(R.id.account_fragment_container, emailRegisterFragment).commit();
+      currentFragment = REGISTER_FRAGMENT;
+    } else {
+      fragmentTransaction.replace(R.id.account_fragment_container, emailLoginFragment).commit();
+      currentFragment = LOGIN_FRAGMENT;
+    }
+    setRegisterLoginButtonText();
   }
 
   @Override
@@ -225,7 +242,6 @@ public class LoginActivity extends AppCompatActivity
   }
 
   private void handleGoogleSignInResult(Task<GoogleSignInAccount> task) {
-
     try {
       // Google Sign In was successful, authenticate with Firebase
       GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -246,14 +262,12 @@ public class LoginActivity extends AppCompatActivity
                 Log.w(TAG, "signInWithCredential:failure", task.getException());
                 updateUI(null);
               }
-
-              // ...
             }
           });
     } catch (ApiException e) {
       // Google Sign In failed, update UI appropriately
       Log.w(TAG, "Google sign in failed", e);
-      // ...
+      updateUI(null);
     }
 
   }
@@ -299,5 +313,20 @@ public class LoginActivity extends AppCompatActivity
       }
     }
   };
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+
+    //Save the fragment's instance
+    if (emailLoginFragment.isAdded()) {
+      fragmentManager.putFragment(outState, LOGIN_FRAGMENT,
+          emailLoginFragment);
+    } else {
+      fragmentManager.putFragment(outState, REGISTER_FRAGMENT,
+          emailRegisterFragment);
+    }
+    outState.putString("currentFragment", currentFragment);
+  }
 }
 

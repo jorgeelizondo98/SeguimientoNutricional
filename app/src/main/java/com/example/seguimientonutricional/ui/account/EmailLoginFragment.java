@@ -78,4 +78,22 @@ public class EmailLoginFragment extends Fragment {
           "Should implement OnFragmentInteractionListener");
     }
   }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+
+    if (savedInstanceState != null) {
+      email.setText(savedInstanceState.getString("email"));
+      password.setText(savedInstanceState.getString("password"));
+    }
+  }
+
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+
+    outState.putString("email", email.getText().toString());
+    outState.putString("password", password.getText().toString());
+  }
 }

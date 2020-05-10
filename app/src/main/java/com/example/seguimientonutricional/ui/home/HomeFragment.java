@@ -35,15 +35,12 @@ public class HomeFragment extends Fragment {
         fabAddButton = root.findViewById(R.id.fab);
         //TODO: Implementar accion del floating button para agregar registro
 
-
         viewPager = root.findViewById(R.id.pager);
         tabLayout = root.findViewById(R.id.tab_layout);
         //Agrega viewPagerAdapter al tablayout
         viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
-
 
         return root;
     }

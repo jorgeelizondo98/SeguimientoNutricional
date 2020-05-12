@@ -1,6 +1,8 @@
 package com.example.seguimientonutricional.ui.account;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,8 +13,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.seguimientonutricional.MainActivity;
 import com.example.seguimientonutricional.R;
@@ -38,7 +44,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity
     implements EmailRegisterFragment.OnFragmentInteractionListener,
-        EmailLoginFragment.OnFragmentInteractionListener {
+        EmailLoginFragment.OnFragmentInteractionListener, QrFragment.OnQrFragmentInteractionListener {
 
   private static final String TAG = "LOGIN";
 
@@ -55,6 +61,10 @@ public class LoginActivity extends AppCompatActivity
   private static final String LOGIN_FRAGMENT = "login";
   private static final String REGISTER_FRAGMENT = "register";
 
+  private CardView cardView;
+  private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
+  private FirebaseUser notRegisteredUser;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -63,6 +73,8 @@ public class LoginActivity extends AppCompatActivity
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.activity_login);
 
+
+    cardView = findViewById(R.id.card);
     // Configure sign-in to request the user's ID, email address, and basic
     // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
     GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -96,16 +108,6 @@ public class LoginActivity extends AppCompatActivity
   @Override
   protected void onResume() {
     super.onResume();
-
-//    View decorView = getWindow().getDecorView();
-//    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//            | View.SYSTEM_UI_FLAG_FULLSCREEN
-//            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
-
   }
 
   @Override
@@ -156,7 +158,10 @@ public class LoginActivity extends AppCompatActivity
                 // Sign in success, update UI with the signed-in user's information
                 Log.d(TAG, "createUserWithEmail:success");
                 FirebaseUser user = mAuth.getCurrentUser();
-                updateUI(user);
+                notRegisteredUser = user;
+                requestCamera();
+                cardView.setVisibility(View.GONE);
+                sendsToQrFragment();
               } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -312,6 +317,31 @@ public class LoginActivity extends AppCompatActivity
     // Save the fragment's instance
     fragmentManager.putFragment(outState, currentFragment.getTag(), currentFragment);
     outState.putString("currentFragmentKey", currentFragment.getTag());
+
+  }
+
+  public void sendsToQrFragment(){
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    Fragment currFragment = fragmentManager.findFragmentById(R.id.account_fragment_container);
+    FragmentTransaction transaction = fragmentManager.beginTransaction();
+    transaction.remove(currFragment);
+    Fragment fragmentQr = new QrFragment();
+    transaction.addToBackStack(null);
+    transaction.replace(R.id.qr_fragment_container, fragmentQr);
+    transaction.commit();
+  }
+
+  private void requestCamera(){
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_DENIED){
+      ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+    }
+  }
+
+  @Override
+  public void onQRCodeFound(Boolean foundCode) {
+      //TODO: validar cuando se regresa sin haber escaneado el QR porque se registra de todas maneras.
+      updateUI(notRegisteredUser);
   }
 }
 

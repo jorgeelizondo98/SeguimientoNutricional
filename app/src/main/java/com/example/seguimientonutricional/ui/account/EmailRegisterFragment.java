@@ -2,13 +2,13 @@ package com.example.seguimientonutricional.ui.account;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.example.seguimientonutricional.R;
 
@@ -20,10 +20,11 @@ public class EmailRegisterFragment extends Fragment {
 
   OnFragmentInteractionListener mListener;
 
+
   private EditText email;
   private EditText password;
   private EditText confirm_password;
-
+  private CardView cardView;
   public EmailRegisterFragment() {}
 
   public static EmailRegisterFragment newInstance() {
@@ -53,6 +54,7 @@ public class EmailRegisterFragment extends Fragment {
     email = rootView.findViewById(R.id.email);
     password = rootView.findViewById(R.id.password);
     confirm_password = rootView.findViewById(R.id.confirm_password);
+    cardView = getActivity().findViewById(R.id.card);
 
     rootView.findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
       @Override
@@ -60,12 +62,17 @@ public class EmailRegisterFragment extends Fragment {
         final String email_str = email.getText().toString();
         final String password_str = password.getText().toString();
         final String confirm_password_str = confirm_password.getText().toString();
-
         mListener.onEmailRegister(email_str, password_str, confirm_password_str);
       }
     });
 
     return rootView;
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    cardView.setVisibility(View.VISIBLE);
   }
 
   @Override

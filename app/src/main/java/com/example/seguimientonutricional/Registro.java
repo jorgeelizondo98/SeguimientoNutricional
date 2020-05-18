@@ -1,33 +1,44 @@
 package com.example.seguimientonutricional;
 
-import android.media.Image;
+import android.widget.ImageView;
 
 public class Registro {
 
-    private String mGrade;
-    //TODO: ponerlo en tiempo
-    private String mTime;
-    private Image mImage;
+    private String mTitulo;
+    private String mDescripcion;
+    private String mFecha;
+    private ImageView mFoto;
 
 
-    public Registro(){
-
+    public String getTitulo() {
+        return mTitulo;
     }
 
-    public Registro(String grade, String time){
-        mGrade = grade;
-        mTime = time;
+    public void setTitulo(String mTitulo) {
+        this.mTitulo = mTitulo;
     }
 
-
-    public String getGrade(){
-        return mGrade;
+    public String getDescripcion() {
+        return mDescripcion;
     }
 
-    public String getTime(){
-        return mTime;
+    public void setDescripcion(String mDescripcion) {
+        this.mDescripcion = mDescripcion;
     }
 
+    public String getFecha() {
+        return mFecha;
+    }
 
+    public void setFecha(String mFecha) {
+        this.mFecha = mFecha;
+    }
 
+    public ImageView getFoto() {
+        return mFoto;
+    }
+
+    public void setFoto(ImageView mFoto) {
+        this.mFoto = mFoto;
+    }
 }

@@ -4,14 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.seguimientonutricional.Adapters.GridViewAdapter;
+import com.example.seguimientonutricional.Adapters.AdapterComida;
+import com.example.seguimientonutricional.Comida;
 import com.example.seguimientonutricional.R;
-import com.example.seguimientonutricional.Registro;
 
 import java.util.ArrayList;
 
@@ -19,6 +19,10 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class ComidasFragment extends Fragment {
+
+    private RecyclerView mRecyclerView;
+    private ArrayList<Comida> mComidas;
+    private AdapterComida adapterComida;
 
     public ComidasFragment() {
         // Required empty public constructor
@@ -30,20 +34,25 @@ public class ComidasFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_comidas, container, false);
+        mRecyclerView = root.findViewById(R.id.recycler_view_id);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
-        ArrayList<Registro> registros = new ArrayList<Registro>();
+        mComidas = new ArrayList<Comida>();
 
-        registros.add(new Registro("1/5","4:30 pm"));
-        registros.add(new Registro("3/5","8:30 pm"));
-        registros.add(new Registro("5/5","9:30 pm"));
-        registros.add(new Registro("2/5","10:30 pm"));
+        mComidas.add(new Comida("Sandwich","4:30"));
+        mComidas.add(new Comida("Sandwich3","8:30"));
+        mComidas.add(new Comida("Sandwich5","9:30"));
+        mComidas.add(new Comida("Sandwich","4:30"));
+        mComidas.add(new Comida("Sandwich3","8:30"));
+        mComidas.add(new Comida("Sandwich5","9:30"));
+        mComidas.add(new Comida("Sandwich","4:30"));
+        mComidas.add(new Comida("Sandwich3","8:30"));
+        mComidas.add(new Comida("Sandwich5","9:30"));
+
+        adapterComida = new AdapterComida(getActivity(),mComidas);
+        mRecyclerView.setAdapter(adapterComida);
 
 
-        ArrayAdapter<Registro> itemAdapter = new GridViewAdapter(getActivity(), registros);
-
-        GridView gridView = (GridView) root.findViewById(R.id.grid_view_id);
-
-        gridView.setAdapter(itemAdapter);
 
         return root;
     }

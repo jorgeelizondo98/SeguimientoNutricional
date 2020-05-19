@@ -104,16 +104,7 @@ public class LoginActivity extends AppCompatActivity
         loginResultFacebookCallback);
 
   }
-
-  public void logInIfCredentials() {
-
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-  }
-
+  
   @Override
   protected void onStart() {
     super.onStart();

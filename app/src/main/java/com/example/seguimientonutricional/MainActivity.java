@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     private AppBarConfiguration mAppBarConfiguration;
     private static final String DIALOG_DATE = "DialogDate";
+    private boolean logout = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             final DrawerLayout drawer = findViewById(R.id.drawer_layout);
             final NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
             if (menuItem.getItemId() == R.id.nav_signout){
+                logout = true;
                 finish();
             }
             //This is for maintaining the behavior of the Navigation view
@@ -121,6 +123,20 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         }
     };
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-
+    @Override
+    public void finish() {
+        if (logout) {
+            super.finish();
+        }
+    }
 }

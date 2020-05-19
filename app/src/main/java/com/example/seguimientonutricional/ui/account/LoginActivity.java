@@ -105,6 +105,10 @@ public class LoginActivity extends AppCompatActivity
 
   }
 
+  public void logInIfCredentials() {
+
+  }
+
   @Override
   protected void onResume() {
     super.onResume();
@@ -234,6 +238,8 @@ public class LoginActivity extends AppCompatActivity
       mAuth.signOut();
       mGoogleSignInClient.signOut();
       LoginManager.getInstance().logOut();
+    } else {
+
     }
   }
 

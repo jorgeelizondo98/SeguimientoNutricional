@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private boolean logout = false;
 
     private DBController db;
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
         navigationView.setNavigationItemSelectedListener(onItemClick);
 
-        db = new DBController(FirebaseAuth.getInstance().getCurrentUser());
-        db.getProfile();
+        db = new DBController();
+        profile = db.getProfile(FirebaseAuth.getInstance().getCurrentUser());
     }
 
     @Override

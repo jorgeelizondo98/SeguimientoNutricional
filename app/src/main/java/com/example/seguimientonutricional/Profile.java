@@ -1,5 +1,7 @@
 package com.example.seguimientonutricional;
 
+import android.graphics.Bitmap;
+
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.Objects;
 
 public class Profile {
 
+  private String id;
   private String name;
   private String firstLastName;
   private String secondLastName;
@@ -15,16 +18,13 @@ public class Profile {
   private float altura;
   private float circunferencia;
   private float peso;
+  private String photoUrl;
 
-  public Profile() {}
+  public Profile() {
 
-  public Profile(FirebaseUser user) {
-    // TODO: Definir como manejaremos el nombre, si nos traemos el display name del usuario, o
-    //    guardamos nosotros un nombre para el usuario.
-    String raw_name = user.getDisplayName();
-    name = raw_name.substring(0, raw_name.indexOf(' '));
-    email = user.getEmail();
   }
+
+  public void setId(String id) { this.id = id; }
 
   public void setName(String name, String firstLastName, String secondLastName) {
     this.name = Objects.toString(name, "");
@@ -40,6 +40,10 @@ public class Profile {
 
   public void setPeso(float peso) { this.peso = peso; }
 
+  public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
+
+  public String getId() { return id; }
+
   public String getName() { return name; }
 
   public String getFirstLastName() { return firstLastName; }
@@ -53,5 +57,7 @@ public class Profile {
   public Float getCircunferencia() { return circunferencia; }
 
   public Float getPeso() { return peso; }
+
+  public String getPhotoUrl() { return photoUrl; }
 
 }

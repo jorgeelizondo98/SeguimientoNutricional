@@ -1,5 +1,6 @@
 package com.example.seguimientonutricional;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,7 +16,11 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +28,7 @@ import java.util.Objects;
 public class DBController {
 
   FirebaseFirestore db;
+  FirebaseStorage storage;
 
   private final static String TAG = "database";
 
@@ -31,19 +37,29 @@ public class DBController {
   private final static String PROFILE_FIRSTLASTNAME = "apellidoPaterno";
   private final static String PROFILE_SECONDLASTNAME = "apellidoMaterno";
   private final static String PROFILE_EMAIL = "correo";
-  private final static String PROFILE_ALTURA = "altura";
-  private final static String PROFILE_CIRCUNFERENCIA = "circunferencia";
-  private final static String PROFILE_PESO = "peso";
   private final static String PROFILE_PHOTOURL = "fotoPerfil";
 
+  private final static String COLLECTION_ACTIVIDADES = "actividades";
+  private final static String REGISTRO_TITULO = "titulo";
+  private final static String REGISTRO_DESCRIPCION = "descripcion";
+  private final static String REGISTRO_FECHA = "fecha";
+  private final static String REGISTRO_COMENTARIO = "comentario";
+  private final static String REGISTRO_TIPO = "tipo";
+
+  private final static String COMIDA_FOTO = "foto";
+  private final static String COMIDA_TIPO = "comida";
+
+  // Constructor initializes database and storage classes.
   public DBController() {
     db = FirebaseFirestore.getInstance();
     FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
         .setPersistenceEnabled(true)
         .build();
     db.setFirestoreSettings(settings);
+    storage = FirebaseStorage.getInstance();
   }
 
+  // Takes an instance of Profile and formats it into a map of <String, Object>.
   private Map<String, Object> formatProfile(Profile profile) {
     Map<String, Object> formatted_profile = new HashMap<>();
     formatted_profile.put(PROFILE_NAME, profile.getName());
@@ -54,6 +70,7 @@ public class DBController {
     return formatted_profile;
   }
 
+  // Takes a FirebaseUser and retrieves the profile from the database, or creates it if not existent.
   public Profile getProfile(final FirebaseUser user) {
     final Profile[] profile = { new Profile() };
     // Search in the database for the profile.
@@ -103,13 +120,75 @@ public class DBController {
         }
       }
     });
-
     return profile[0];
   }
 
-  public void updateProfile(Profile profile) {
+  // Takes a Profile and updates it in the database.
+  public boolean updateProfile(Profile profile) {
     db.collection(COLLECTION_PROFILE).document(profile.getId()).set(formatProfile(profile),
         SetOptions.merge());
+    return true;
   }
-  
+
+  // Takes an instance of Registro and formats it into a map of <String, Object>.
+  private Map<String, Object> formatRegistro(Registro registro, Map<String, Object> formatted_registro) {
+    formatted_registro.put(REGISTRO_TITULO, registro.getTitulo());
+    formatted_registro.put(REGISTRO_DESCRIPCION, registro.getDescripcion());
+    formatted_registro.put(REGISTRO_FECHA, registro.getFecha());
+    formatted_registro.put(REGISTRO_COMENTARIO, registro.getComentario());
+    return formatted_registro;
+  }
+
+  // Takes an instance of Comida and formats it into a map of <String, Object>.
+  private Map<String, Object> formatComida(Comida comida) {
+    Map<String, Object> formatted_comida = new HashMap<>();
+    formatted_comida.put(COMIDA_FOTO, comida.getFotoUrl());
+    formatted_comida.put(REGISTRO_TIPO, COMIDA_TIPO);
+    return formatRegistro(comida, formatted_comida);
+  }
+
+  // Takes a Comida and adds it to the databse.
+  // If error returns false.
+  public boolean addComida(Comida comida) {
+    final boolean[] success = {true};
+    db.collection(COLLECTION_ACTIVIDADES)
+        .add(formatComida(comida))
+        .addOnFailureListener(new OnFailureListener() {
+          @Override
+          public void onFailure(@NonNull Exception e) {
+            Log.w(TAG, "Error adding document", e);
+            success[0] = false;
+          }
+        });
+    return success[0];
+  }
+
+  // Takes a Comida and updates it in the databse.
+  // If error returns false.
+  public boolean updateComida(Comida comida) {
+    db.collection(COLLECTION_ACTIVIDADES).document(comida.getId()).set(formatComida(comida),
+        SetOptions.merge());
+    return true;
+  }
+
+  // Takes a Profile, a Comida, and a Bitmap. uploads the Bitmap to Firebase Storage, gets the url
+  //    and adds it to Comida.
+  // If error, returned comida will have no id.
+  public Comida uploadPhotoAndUpdateComida(Profile profile, final Comida comida, Bitmap img) {
+    final StorageReference ref = storage.getReference().child(profile.getId() + "/" + comida.getId());
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    img.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    byte[] data = baos.toByteArray();
+
+    UploadTask uploadTask = ref.putBytes(data);
+    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+      @Override
+      public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        comida.setFotoUrl(ref.getDownloadUrl().toString());
+        updateComida(comida);
+      }
+    });
+    return comida;
+  }
 }

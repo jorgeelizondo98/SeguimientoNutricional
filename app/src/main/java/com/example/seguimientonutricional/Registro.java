@@ -1,14 +1,16 @@
 package com.example.seguimientonutricional;
 
-import android.widget.ImageView;
-
 public class Registro {
 
+    private String id;
     private String mTitulo;
     private String mDescripcion;
     private String mFecha;
-    private ImageView mFoto;
+    private String mComentario;
 
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
 
     public String getTitulo() {
         return mTitulo;
@@ -34,11 +36,7 @@ public class Registro {
         this.mFecha = mFecha;
     }
 
-    public ImageView getFoto() {
-        return mFoto;
-    }
+    public String getComentario() { return mComentario; }
 
-    public void setFoto(ImageView mFoto) {
-        this.mFoto = mFoto;
-    }
+    public void setComentario(String mComentario) { this.mComentario = mComentario; }
 }

@@ -2,8 +2,15 @@ package com.example.seguimientonutricional;
 
 public class Comida extends Registro {
 
-    public Comida(String titulo, String fecha) {
-        setTitulo(titulo);
-        setFecha(fecha);
+    private String mFotoUrl;
+
+    public Comida() {}
+
+    public String getFotoUrl() {
+        return mFotoUrl;
+    }
+
+    public void setFotoUrl(String mFotoUrl) {
+        this.mFotoUrl = mFotoUrl;
     }
 }

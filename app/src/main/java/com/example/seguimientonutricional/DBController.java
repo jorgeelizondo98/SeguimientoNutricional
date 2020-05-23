@@ -15,7 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +23,7 @@ import java.util.Objects;
 public class DBController {
 
   FirebaseFirestore db;
-  FirebaseStorage storage;
+
   private final static String TAG = "database";
 
   private final static String COLLECTION_PROFILE = "Pacientes";
@@ -43,7 +42,6 @@ public class DBController {
         .setPersistenceEnabled(true)
         .build();
     db.setFirestoreSettings(settings);
-    storage = FirebaseStorage.getInstance();
   }
 
   private Map<String, Object> formatProfile(Profile profile) {
@@ -52,9 +50,6 @@ public class DBController {
     formatted_profile.put(PROFILE_FIRSTLASTNAME, Objects.toString(profile.getFirstLastName(), ""));
     formatted_profile.put(PROFILE_SECONDLASTNAME, Objects.toString(profile.getSecondLastName(), ""));
     formatted_profile.put(PROFILE_EMAIL, profile.getEmail());
-    formatted_profile.put(PROFILE_ALTURA, profile.getAltura());
-    formatted_profile.put(PROFILE_CIRCUNFERENCIA, profile.getCircunferencia());
-    formatted_profile.put(PROFILE_PESO, profile.getPeso());
     formatted_profile.put(PROFILE_PHOTOURL, profile.getPhotoUrl());
     return formatted_profile;
   }
@@ -76,9 +71,6 @@ public class DBController {
                   (String) raw_profile.get(PROFILE_FIRSTLASTNAME),
                   (String) raw_profile.get(PROFILE_SECONDLASTNAME));
               profile[0].setEmail((String) raw_profile.get(PROFILE_EMAIL));
-              profile[0].setAltura(((Double) raw_profile.get(PROFILE_ALTURA)).floatValue());
-              profile[0].setCircunferencia(((Double) raw_profile.get(PROFILE_CIRCUNFERENCIA)).floatValue());
-              profile[0].setPeso(((Double) raw_profile.get(PROFILE_PESO)).floatValue());
               profile[0].setPhotoUrl((String) raw_profile.get(PROFILE_PHOTOURL));
               return;
             }
@@ -119,5 +111,5 @@ public class DBController {
     db.collection(COLLECTION_PROFILE).document(profile.getId()).set(formatProfile(profile),
         SetOptions.merge());
   }
-
+  
 }

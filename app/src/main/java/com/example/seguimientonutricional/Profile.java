@@ -15,9 +15,6 @@ public class Profile {
   private String firstLastName;
   private String secondLastName;
   private String email;
-  private float altura;
-  private float circunferencia;
-  private float peso;
   private String photoUrl;
 
   public Profile() {
@@ -34,12 +31,6 @@ public class Profile {
 
   public void setEmail(String email) { this.email = email; }
 
-  public void setAltura(float altura) { this.altura = altura; }
-
-  public void setCircunferencia(float circunferencia) { this.circunferencia = circunferencia; }
-
-  public void setPeso(float peso) { this.peso = peso; }
-
   public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
 
   public String getId() { return id; }
@@ -51,12 +42,6 @@ public class Profile {
   public String getSecondLastName() { return secondLastName; }
 
   public String getEmail() { return email; }
-
-  public Float getAltura() { return altura; }
-
-  public Float getCircunferencia() { return circunferencia; }
-
-  public Float getPeso() { return peso; }
 
   public String getPhotoUrl() { return photoUrl; }
 

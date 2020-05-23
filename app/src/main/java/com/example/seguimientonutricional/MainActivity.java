@@ -19,6 +19,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private AppBarConfiguration mAppBarConfiguration;
     private static final String DIALOG_DATE = "DialogDate";
     private boolean logout = false;
+
+    private DBController db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationView.setNavigationItemSelectedListener(onItemClick);
+
+        db = new DBController(FirebaseAuth.getInstance().getCurrentUser());
+        db.getProfile();
     }
 
     @Override

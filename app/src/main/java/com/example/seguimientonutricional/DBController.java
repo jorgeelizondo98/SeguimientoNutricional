@@ -15,11 +15,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class DBController extends Profile {
+public class DBController {
 
   FirebaseFirestore db;
   private FirebaseUser user;
@@ -55,7 +56,8 @@ public class DBController extends Profile {
   public Profile getProfile() {
     db = FirebaseFirestore.getInstance();
 
-    final Profile[] profile = { new Profile(user) };
+    final Profile[] profile = { new Profile() };
+    profile[0] = new Profile(user);
     // Search in the database for the profile.
     db.collection(COLLECTION_PROFILE).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
       @Override
@@ -64,16 +66,16 @@ public class DBController extends Profile {
           for (QueryDocumentSnapshot document : task.getResult()) {
             Log.d(TAG, document.getId() + " => " + document.getData());
             Map<String, Object> raw_profile = document.getData();
-            if ((String) raw_profile.get(PROFILE_EMAIL) == user.getEmail()) {
+            if (profile[0].getEmail().equals(raw_profile.get(PROFILE_EMAIL))) {
               // The profile was found. Format it.
               DBController.this.id = document.getId();
               profile[0].setName((String) raw_profile.get(PROFILE_NAME),
                   (String) raw_profile.get(PROFILE_FIRSTLASTNAME),
                   (String) raw_profile.get(PROFILE_SECONDLASTNAME));
               profile[0].setEmail((String) raw_profile.get(PROFILE_EMAIL));
-              profile[0].setAltura((Float) raw_profile.get(PROFILE_ALTURA));
-              profile[0].setCircunferencia((Float) raw_profile.get(PROFILE_CIRCUNFERENCIA));
-              profile[0].setPeso((Float) raw_profile.get(PROFILE_PESO));
+              profile[0].setAltura(((Double) raw_profile.get(PROFILE_ALTURA)).floatValue());
+              profile[0].setCircunferencia(((Double) raw_profile.get(PROFILE_CIRCUNFERENCIA)).floatValue());
+              profile[0].setPeso(((Double) raw_profile.get(PROFILE_PESO)).floatValue());
               return;
             }
           }

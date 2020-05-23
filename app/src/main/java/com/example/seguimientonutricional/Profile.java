@@ -34,11 +34,11 @@ public class Profile {
 
   public void setEmail(String email) { this.email = email; }
 
-  public void setAltura(Float altura) { this.altura = altura; }
+  public void setAltura(float altura) { this.altura = altura; }
 
-  public void setCircunferencia(Float circunferencia) { this.circunferencia = circunferencia; }
+  public void setCircunferencia(float circunferencia) { this.circunferencia = circunferencia; }
 
-  public void setPeso(Float peso) { this.peso = peso; }
+  public void setPeso(float peso) { this.peso = peso; }
 
   public String getName() { return name; }
 

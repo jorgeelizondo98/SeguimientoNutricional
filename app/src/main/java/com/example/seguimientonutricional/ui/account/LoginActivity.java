@@ -292,8 +292,6 @@ public class LoginActivity extends AppCompatActivity
     if (user == null) {
       Toast.makeText(LoginActivity.this, R.string.login_fail, Toast.LENGTH_SHORT).show();
     } else {
-      DBController db = new DBController(user);
-      db.getProfile();
       Intent intent = new Intent(this, MainActivity.class);
       startActivityForResult(intent, LOGOUT);
     }

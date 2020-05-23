@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.seguimientonutricional.DBController;
 import com.example.seguimientonutricional.MainActivity;
 import com.example.seguimientonutricional.R;
 import com.facebook.AccessToken;
@@ -291,6 +292,8 @@ public class LoginActivity extends AppCompatActivity
     if (user == null) {
       Toast.makeText(LoginActivity.this, R.string.login_fail, Toast.LENGTH_SHORT).show();
     } else {
+      DBController db = new DBController(user);
+      db.getProfile();
       Intent intent = new Intent(this, MainActivity.class);
       startActivityForResult(intent, LOGOUT);
     }

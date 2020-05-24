@@ -24,6 +24,7 @@ public class ComidasFragment extends Fragment {
     private ArrayList<Comida> mComidas;
     private AdapterComida adapterComida;
 
+
     public ComidasFragment() {
         // Required empty public constructor
     }
@@ -39,15 +40,6 @@ public class ComidasFragment extends Fragment {
 
         mComidas = new ArrayList<Comida>();
 
-        mComidas.add(new Comida("Sandwich","4:30"));
-        mComidas.add(new Comida("Sandwich3","8:30"));
-        mComidas.add(new Comida("Sandwich5","9:30"));
-        mComidas.add(new Comida("Sandwich","4:30"));
-        mComidas.add(new Comida("Sandwich3","8:30"));
-        mComidas.add(new Comida("Sandwich5","9:30"));
-        mComidas.add(new Comida("Sandwich","4:30"));
-        mComidas.add(new Comida("Sandwich3","8:30"));
-        mComidas.add(new Comida("Sandwich5","9:30"));
 
         adapterComida = new AdapterComida(getActivity(),mComidas);
         mRecyclerView.setAdapter(adapterComida);

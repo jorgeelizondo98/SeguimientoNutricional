@@ -1,7 +1,6 @@
 package com.example.seguimientonutricional;
 
 import android.app.DatePickerDialog;
-
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,12 +22,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
-import com.example.seguimientonutricional.test.DBController_test;
 import com.google.android.material.navigation.NavigationView;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -174,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements DBController.DBRe
     @Override
     public void onProfileReceived(Profile profile) {
         this.profile = profile;
-        Log.d("TEST", this.profile.getName());
+//        Log.d("TEST", this.profile.getName());
     }
 
     @Override

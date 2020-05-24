@@ -38,13 +38,6 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.fragment_comida_forms, container, false);
-  }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -130,12 +123,4 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     public void onTimeSet(int hour, int minute) {
         buttonHora.setText(Integer.toString(hour));
     }
-
-  @Override
-  public void onPrepareOptionsMenu(Menu menu) {
-    MenuItem item = menu.findItem(R.id.action_calendar);
-    if (item != null)
-      item.setVisible(false);
-  }
-
 }

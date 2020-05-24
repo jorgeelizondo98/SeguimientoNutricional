@@ -24,6 +24,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1.8"
                 android:background="@drawable/text_rounded_corner"
+                android:backgroundTint="#28DB86"
                 android:gravity="center"
                 android:text="1/5"
                 android:textColor="#FFFFFF" />

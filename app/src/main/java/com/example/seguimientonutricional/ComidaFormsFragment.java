@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+
 public class ComidaFormsFragment extends Fragment implements TimePickerFragment.OnTimeDialogListener {
 
     private Button buttonHora;
@@ -24,17 +25,26 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     private Integer carbohidratos;
     private Integer proteinas;
     private Integer grasas;
+  
+  public ComidaFormsFragment() {
+    // Required empty public constructor
+  }
 
-    public ComidaFormsFragment() {
-        // Required empty public constructor
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setHasOptionsMenu(true);
 
-    }
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    return inflater.inflate(R.layout.fragment_comida_forms, container, false);
+  }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -120,4 +130,12 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     public void onTimeSet(int hour, int minute) {
         buttonHora.setText(Integer.toString(hour));
     }
+
+  @Override
+  public void onPrepareOptionsMenu(Menu menu) {
+    MenuItem item = menu.findItem(R.id.action_calendar);
+    if (item != null)
+      item.setVisible(false);
+  }
+
 }

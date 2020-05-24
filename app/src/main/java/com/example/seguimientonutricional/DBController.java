@@ -1,9 +1,11 @@
 package com.example.seguimientonutricional;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,10 +26,12 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.PriorityQueue;
 
 public class DBController {
 
@@ -182,33 +186,47 @@ public class DBController {
     return formatRegistro(ejercicio, formatted_ejercicio);
   }
 
-  // Takes a Registro and adds it to the databse.
-  // If error returns Registro without id.
-  public Registro addRegistro(Registro registro) {
-    String id;
-    if (registro instanceof Comida) {
-      id = addRegistro(formatComida((Comida) registro));
-    } else if (registro instanceof Bebida) {
-      id = addRegistro(formatBebida((Bebida) registro));
-    } else {
-      id = addRegistro(formatEjercicio((Ejercicio) registro));
-    }
-    registro.setId(id);
-    return registro;
+  // Takes a Comida and adds it to the databse.
+  // If error returns Comida without id.
+  public Comida addComida(Comida comida) {
+    comida.setId(addRegistro(formatComida(comida)));
+    return comida;
   }
 
-  // Takes a Registro and updates it in the databse.
+  // Takes a Bebida and adds it to the databse.
+  // If error returns Bebida without id.
+  public Bebida addBebida(Bebida bebida) {
+    bebida.setId(addRegistro(formatBebida(bebida)));
+    return bebida;
+  }
+
+  // Takes a Ejercicio and adds it to the databse.
+  // If error returns Ejercicio without id.
+  public Ejercicio addEjercicio(Ejercicio ejercicio) {
+    ejercicio.setId(addRegistro(formatEjercicio(ejercicio)));
+    return ejercicio;
+  }
+
+  // Takes a Comida and updates it in the databse.
   // If error returns false.
-  public boolean updateRegistro(Registro registro) {
-    Map<String, Object> formatted_registro;
-    if (registro instanceof Comida) {
-      formatted_registro = formatComida((Comida) registro);
-    } else if (registro instanceof Bebida) {
-      formatted_registro = formatBebida((Bebida) registro);
-    } else {
-      formatted_registro = formatEjercicio((Ejercicio) registro);
-    }
-    db.collection(COLLECTION_ACTIVIDADES).document(registro.getId()).set(formatted_registro,
+  public boolean updateComida(Comida comida) {
+    db.collection(COLLECTION_ACTIVIDADES).document(comida.getId()).set(formatComida(comida),
+        SetOptions.merge());
+    return true;
+  }
+
+  // Takes a Bebida and updates it in the databse.
+  // If error returns false.
+  public boolean updateBebida(Bebida bebida) {
+    db.collection(COLLECTION_ACTIVIDADES).document(bebida.getId()).set(formatBebida(bebida),
+        SetOptions.merge());
+    return true;
+  }
+
+  // Takes a ejercicio and updates it in the databse.
+  // If error returns false.
+  public boolean updateEjercicio(Ejercicio ejercicio) {
+    db.collection(COLLECTION_ACTIVIDADES).document(ejercicio.getId()).set(formatEjercicio(ejercicio),
         SetOptions.merge());
     return true;
   }
@@ -228,16 +246,24 @@ public class DBController {
       @Override
       public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
         comida.setFotoUrl(ref.getDownloadUrl().toString());
-        updateRegistro(comida);
+        updateComida(comida);
       }
     });
     return comida;
   }
 
   // Receives a type and a date, and returns the registers for that type in that date.
-  private ArrayList<QueryDocumentSnapshot> getRegistros(final String tipo, final Date date) {
+  @RequiresApi(api = Build.VERSION_CODES.N)
+  private PriorityQueue<QueryDocumentSnapshot> getRegistros(final String tipo, final Date date) {
     final boolean[] success = {true};
-    final ArrayList<QueryDocumentSnapshot> registros = new ArrayList<>();
+    final PriorityQueue<QueryDocumentSnapshot> registros =
+        new PriorityQueue<>(new Comparator<QueryDocumentSnapshot>() {
+          @Override
+          public int compare(QueryDocumentSnapshot o1, QueryDocumentSnapshot o2) {
+            return ((Timestamp) o1.getData().get(REGISTRO_FECHA)).compareTo(
+                (Timestamp) o2.getData().get(REGISTRO_FECHA));
+          }
+        });
     db.collection(COLLECTION_PROFILE).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
       @Override
       public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -274,9 +300,10 @@ public class DBController {
     return registro;
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.N)
   public ArrayList<Comida> getComidas(Date date) {
     ArrayList<Comida> comidas = new ArrayList<>();
-    ArrayList<QueryDocumentSnapshot> rawRegistros = getRegistros(COMIDA_TIPO, date);
+    PriorityQueue<QueryDocumentSnapshot> rawRegistros = getRegistros(COMIDA_TIPO, date);
     if (rawRegistros == null) {
       return null;
     }
@@ -288,9 +315,10 @@ public class DBController {
     return comidas;
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.N)
   public ArrayList<Bebida> getBebidas(Date date) {
     ArrayList<Bebida> bebidas = new ArrayList<>();
-    ArrayList<QueryDocumentSnapshot> rawRegistros = getRegistros(COMIDA_TIPO, date);
+    PriorityQueue<QueryDocumentSnapshot> rawRegistros = getRegistros(BEBIDA_TIPO, date);
     if (rawRegistros == null) {
       return null;
     }
@@ -301,9 +329,10 @@ public class DBController {
     return bebidas;
   }
 
-  public ArrayList<Ejercicio> getEjercicio(Date date) {
+  @RequiresApi(api = Build.VERSION_CODES.N)
+  public ArrayList<Ejercicio> getEjercicios(Date date) {
     ArrayList<Ejercicio> ejercicios = new ArrayList<>();
-    ArrayList<QueryDocumentSnapshot> rawRegistros = getRegistros(COMIDA_TIPO, date);
+    PriorityQueue<QueryDocumentSnapshot> rawRegistros = getRegistros(EJERCICIO_TIPO, date);
     if (rawRegistros == null) {
       return null;
     }

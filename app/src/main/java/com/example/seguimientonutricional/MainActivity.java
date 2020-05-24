@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
         navigationView.setNavigationItemSelectedListener(onItemClick);
 
-        db = new DBController();
-        profile = db.getProfile(FirebaseAuth.getInstance().getCurrentUser());
+//        db = new DBController();
+//        profile = db.getProfile(FirebaseAuth.getInstance().getCurrentUser());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.seguimientonutricional;
 
 import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -18,15 +20,19 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.seguimientonutricional.test.DBController_test;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity implements DBController.DBResponseListener,
+    DatePickerDialog.OnDateSetListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private static final String DIALOG_DATE = "DialogDate";
@@ -55,15 +61,20 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationView.setNavigationItemSelectedListener(onItemClick);
-
-//        db = new DBController();
-//        profile = db.getProfile(FirebaseAuth.getInstance().getCurrentUser());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        db = new DBController(this);
+        db.loadProfile(FirebaseAuth.getInstance().getCurrentUser());
+
+        // This is the database testing script.
+        // DBController_test dbt = new DBController_test(FirebaseAuth.getInstance().getCurrentUser());
+
         return true;
     }
 
@@ -145,5 +156,33 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         if (logout) {
             super.finish();
         }
+    }
+
+    // DBController listeners.
+
+    @Override
+    public void onDatabaseNetworkError() {
+
+    }
+
+    @Override
+    public void onProfileReceived(Profile profile) {
+        this.profile = profile;
+        Log.d("TEST", this.profile.getName());
+    }
+
+    @Override
+    public void onComidasReceived(ArrayList<Comida> comidas) {
+
+    }
+
+    @Override
+    public void onBebidasReceived(ArrayList<Bebida> bebidas) {
+
+    }
+
+    @Override
+    public void onEjerciciosReceived(ArrayList<Ejercicio> ejercicios) {
+
     }
 }

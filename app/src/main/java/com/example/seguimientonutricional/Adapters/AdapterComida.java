@@ -39,7 +39,7 @@ public class AdapterComida extends RecyclerView.Adapter<AdapterComida.ViewHolder
         Comida currComida = mComidas.get(position);
 
         holder.mTitulo.setText(currComida.getTitulo());
-        holder.mFecha.setText(currComida.getFecha());
+        holder.mFecha.setText(currComida.getFecha().toString());
 
     }
 

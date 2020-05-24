@@ -7,22 +7,19 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentManager;
 
-import com.example.seguimientonutricional.Adapters.ViewPagerAdapter;
+import com.example.seguimientonutricional.ActividadesFragmentTabs;
+import com.example.seguimientonutricional.ComidaFormsFragment;
 import com.example.seguimientonutricional.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-
     private FloatingActionButton fabAddButton;
-    private ViewPager viewPager;
-    private ViewPagerAdapter viewPagerAdapter;
-    private TabLayout tabLayout;
+
 
     public HomeFragment() {
     }
@@ -32,16 +29,40 @@ public class HomeFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        fabAddButton = root.findViewById(R.id.fab);
-        //TODO: Implementar accion del floating button para agregar registro
 
-        viewPager = root.findViewById(R.id.pager);
-        tabLayout = root.findViewById(R.id.tab_layout);
-        //Agrega viewPagerAdapter al tablayout
-        viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        final FragmentManager fm  = getActivity().getSupportFragmentManager();
+        setUpTabsFragments(fm);
+
+
+        fabAddButton = root.findViewById(R.id.fab);
+
+        //TODO: Implementar accion del floating button para agregar registro
+        fabAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                fabAddButton.setVisibility(View.GONE);
+
+                Fragment fragment = new ComidaFormsFragment();
+                fm.beginTransaction().replace(R.id.container_home_content,fragment)
+                        .addToBackStack(null).commit();
+            }
+        });
+
 
         return root;
+    }
+
+
+    private void setUpTabsFragments(FragmentManager fm){
+        Fragment fragmentTabs = new ActividadesFragmentTabs();
+        fm.beginTransaction().replace(R.id.container_home_content,fragmentTabs).commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final FragmentManager fm  = getActivity().getSupportFragmentManager();
+        setUpTabsFragments(fm);
+        fabAddButton.setVisibility(View.VISIBLE);
     }
 }

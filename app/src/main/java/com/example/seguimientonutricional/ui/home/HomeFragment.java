@@ -14,8 +14,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.seguimientonutricional.ComidaFormsFragment;
 import com.example.seguimientonutricional.R;
-import com.example.seguimientonutricional.ui.home.tabsFragments.ActividadesFragmentTabs;
+import com.example.seguimientonutricional.ActividadesFragmentTabs;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;

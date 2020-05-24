@@ -1,4 +1,4 @@
-package com.example.seguimientonutricional.ui.home;
+package com.example.seguimientonutricional;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,9 +11,6 @@ import android.widget.RadioGroup;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
-import com.example.seguimientonutricional.R;
-import com.example.seguimientonutricional.TimePickerFragment;
 
 public class ComidaFormsFragment extends Fragment implements TimePickerFragment.OnTimeDialogListener {
 

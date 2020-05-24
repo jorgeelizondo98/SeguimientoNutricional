@@ -1,4 +1,4 @@
-package com.example.seguimientonutricional.ui.home.tabsFragments;
+package com.example.seguimientonutricional;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

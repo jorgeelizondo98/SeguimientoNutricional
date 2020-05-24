@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory
+        app:key="notificaciones"
+        app:title="Notificaciones">
+
+        <SwitchPreferenceCompat
+            app:key="recordatorio"
+            app:title="Recordatorio de llenado"
+            app:defaultValue="false"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:key="acerca"
+        app:title="Acerca">
+        <Preference
+            app:key="Version"
+            app:title="versión"
+            app:summary="@string/version"/>
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

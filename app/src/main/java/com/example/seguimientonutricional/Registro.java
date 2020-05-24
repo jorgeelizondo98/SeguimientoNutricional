@@ -1,12 +1,18 @@
 package com.example.seguimientonutricional;
 
+import java.util.Date;
+
 public class Registro {
 
     private String id;
     private String mTitulo;
     private String mDescripcion;
-    private String mFecha;
+    private Date mFecha;
     private String mComentario;
+
+    public Registro() {
+        mFecha = new Date();
+    }
 
     public String getId() { return id; }
 
@@ -28,11 +34,11 @@ public class Registro {
         this.mDescripcion = mDescripcion;
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return mFecha;
     }
 
-    public void setFecha(String mFecha) {
+    public void setFecha(Date mFecha) {
         this.mFecha = mFecha;
     }
 

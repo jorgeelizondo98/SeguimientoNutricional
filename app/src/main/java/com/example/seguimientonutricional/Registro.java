@@ -10,6 +10,7 @@ public class Registro {
     private Date mFecha;
     private String mComentario;
 
+
     public Registro() {
         mFecha = new Date();
     }

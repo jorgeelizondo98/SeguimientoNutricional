@@ -1,8 +1,8 @@
 package com.example.seguimientonutricional;
 
 import android.app.DatePickerDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
@@ -13,15 +13,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.seguimientonutricional.ui.home.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     private DBController db;
     private Profile profile;
+    HomeViewModel homeViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,13 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationView.setNavigationItemSelectedListener(onItemClick);
+
+        Locale locale = new Locale("es");
+        Locale.setDefault(locale);
+        Configuration config =
+                getBaseContext().getResources().getConfiguration();
+        config.setLocale(locale);
+        createConfigurationContext(config);
 
 //        db = new DBController();
 //        profile = db.getProfile(FirebaseAuth.getInstance().getCurrentUser());
@@ -90,21 +98,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         c.set(Calendar.YEAR, year);
         c.set(Calendar.DAY_OF_MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
         Date dateTime = c.getTime();
-        Log.d("checa",Integer.toString(year));
-        String date = formatDate(dateTime);
 
-        //TODO: Pasar string al fragmentHome para desplegar ahi la fecha.
-
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        homeViewModel.setDate(dateTime);
     }
 
-    private String formatDate(Date dateTime){
-        SimpleDateFormat format = new SimpleDateFormat("EEEE d 'de' MMMM 'del' yyyy",
-                new Locale("es","MEX"));
-        String date = format.format(dateTime);
-        return date;
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

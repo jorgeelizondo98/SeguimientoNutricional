@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ComidaFormsFragment">
+    tools:context=".ui.home.ComidaFormsFragment">
 
 
 
@@ -96,6 +96,7 @@
                 android:orientation="vertical">
 
                 <RadioGroup
+                    android:id="@+id/carbohidratos_radiogroup_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -128,6 +129,7 @@
                 </RadioGroup>
 
                 <RadioGroup
+                    android:id="@+id/proteinas_radiogroup_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -160,6 +162,7 @@
                 </RadioGroup>
 
                 <RadioGroup
+                    android:id="@+id/grasas_radiogroup_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -201,6 +204,11 @@
                 android:text="Hora"
                 style="?android:listSeparatorTextViewStyle"/>
 
+
+            <Button
+                android:id="@+id/button_hora_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

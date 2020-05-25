@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -27,7 +28,6 @@ import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,6 +43,9 @@ public class DBController {
   private DBResponseListener dbResponseListener;
 
   private final static String TAG = "database";
+
+  private final static String COLLECTION_DOCTORES = "Doctores";
+  private final static String DOCTOR_PACIENTE_REF = "ref";
 
   private final static String COLLECTION_PROFILE = "Pacientes";
   private final static String PROFILE_NAME = "nombre";
@@ -381,5 +384,23 @@ public class DBController {
       ejercicios.add(ejercicio);
     }
     dbResponseListener.onEjerciciosReceived(ejercicios);
+  }
+
+  public void associateDoctor(final Profile profile, final String doctorId) {
+    db.collection(COLLECTION_PROFILE).document(profile.getId()).get().addOnCompleteListener(
+        new OnCompleteListener<DocumentSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+          if (task.isSuccessful()) {
+            Map<String, Object> reference = new HashMap<>();
+            reference.put(DOCTOR_PACIENTE_REF, task.getResult().getReference());
+            db.collection(COLLECTION_DOCTORES).document(doctorId).collection(COLLECTION_PROFILE)
+                .document(profile.getId()).set(reference, SetOptions.merge());
+          } else {
+            Log.d(TAG, "Error getting documents: ", task.getException());
+            dbResponseListener.onDatabaseNetworkError();
+          }
+        }
+      });
   }
 }

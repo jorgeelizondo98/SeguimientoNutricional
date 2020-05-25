@@ -94,12 +94,13 @@ public class DBController_test implements DBController.DBResponseListener {
   @Override
   public void onProfileReceived(Profile profile) throws ParseException {
     this.profile = profile;
+    db.associateDoctor(profile, "ypghi03Et7bUnvJ8mxOqj2Zudi52");
 //    addComida_test();
 //    addBebida_test();
 //    addEjercicio_test();
-    db.loadComidas(profile, sdf.parse("2020/05/11 00:00:00"));
-    db.loadBebidas(profile, sdf.parse("2020/05/10 00:00:00"));
-    db.loadEjercicios(profile, sdf.parse("2020/05/10 00:00:00"));
+//    db.loadComidas(profile, sdf.parse("2020/05/11 00:00:00"));
+//    db.loadBebidas(profile, sdf.parse("2020/05/10 00:00:00"));
+//    db.loadEjercicios(profile, sdf.parse("2020/05/10 00:00:00"));
   }
 
   @Override

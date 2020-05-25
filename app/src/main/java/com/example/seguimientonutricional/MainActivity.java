@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.seguimientonutricional.test.DBController_test;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -78,9 +79,8 @@ public class MainActivity extends AppCompatActivity implements DBController.DBRe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         db = new DBController(this);
-        db.loadProfile(user);
+        db.loadProfile(FirebaseAuth.getInstance().getCurrentUser());
 
         // This is the database testing script.
         // DBController_test dbt = new DBController_test(FirebaseAuth.getInstance().getCurrentUser());

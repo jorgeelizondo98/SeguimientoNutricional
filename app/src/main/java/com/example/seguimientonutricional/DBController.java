@@ -121,10 +121,10 @@ public class DBController {
           }
           // The profile does not exist, so it should be created.
           profile[0].setName(
-              user.getDisplayName().substring(0, user.getDisplayName().indexOf(' ')),
+              (user.getDisplayName() != null? user.getDisplayName() : null),
               null, null);
           profile[0].setEmail(user.getEmail());
-          profile[0].setPhotoUrl(user.getPhotoUrl().toString());
+          profile[0].setPhotoUrl((user.getPhotoUrl() != null? user.getPhotoUrl().toString() : null));
           db.collection(COLLECTION_PROFILE)
               .add(formatProfile(profile[0]))
               .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

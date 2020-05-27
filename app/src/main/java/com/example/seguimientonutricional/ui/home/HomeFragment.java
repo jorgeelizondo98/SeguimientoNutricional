@@ -40,24 +40,18 @@ public class HomeFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-
         final FragmentManager fm  = getActivity().getSupportFragmentManager();
         setUpTabsFragments(fm);
 
-
         fabAddButton = root.findViewById(R.id.fab);
-
         fabAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Fragment fragment = new ComidaFormsFragment();
-                fm.beginTransaction().replace(R.id.container_home_content,fragment)
-                        .addToBackStack(null).commit();
+                fm.beginTransaction().replace(R.id.container_home_content,fragment,"comidaForm")
+                        .commit();
             }
         });
-
-
         return root;
     }
 

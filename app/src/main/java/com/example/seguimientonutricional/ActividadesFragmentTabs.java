@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.seguimientonutricional.Adapters.ViewPagerAdapter;
-import com.example.seguimientonutricional.R;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
 import com.google.android.material.tabs.TabLayout;
 
@@ -47,8 +46,6 @@ public class ActividadesFragmentTabs extends Fragment  {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_actividades_tabs, container, false);
 
-
-
         viewPager = root.findViewById(R.id.pager);
         tabLayout = root.findViewById(R.id.tab_layout);
         //Agrega viewPagerAdapter al tablayout
@@ -57,7 +54,6 @@ public class ActividadesFragmentTabs extends Fragment  {
         tabLayout.setupWithViewPager(viewPager);
 
         fecha = root.findViewById(R.id.date_text);
-
         Date currentDate = Calendar.getInstance().getTime();
         fecha.setText(formatDate(currentDate));
 

@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.seguimientonutricional.ActividadesFragmentTabs;
 import com.example.seguimientonutricional.BebidaFormsFragment;
 import com.example.seguimientonutricional.ComidaFormsFragment;
+import com.example.seguimientonutricional.EjercicioFormsFragment;
 import com.example.seguimientonutricional.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -69,8 +70,9 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
                 } else if(currentPosition == 1){
                     fragment = new BebidaFormsFragment();
                     tag = "bebidaForm";
-                } else if(currentPosition == 3){
-                    //TODO: Desplegar EjercicioForms
+                } else if(currentPosition == 2){
+                    fragment = new EjercicioFormsFragment();
+                    tag = "ejercicioForm";
                 }
 
                 getChildFragmentManager().beginTransaction().replace(R.id.container_home_content,fragment,tag)

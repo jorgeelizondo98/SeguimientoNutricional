@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BebidaFormsFragment">
+    tools:context=".EjercicioFormsFragment">
 
 
 
@@ -81,9 +81,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="8dp">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tiempo:"/>
+                    
+                    <Button
+                        android:id="@+id/duarcion_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Selecciona"
+                        android:layout_weight="1"
+                        android:layout_marginRight="24dp"/>
+                    
+                    
+                    
+                </LinearLayout>
 
                 <RadioGroup
-                    android:id="@+id/carbohidratos_radiogroup_id"
+                    android:id="@+id/intensidad_radiogroup_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -93,7 +116,7 @@
                         android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="Cantidad: " />
+                        android:text="Intensidad: " />
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -122,85 +145,6 @@
                         android:text="5"/>
                 </RadioGroup>
 
-                <RadioGroup
-                    android:id="@+id/proteinas_radiogroup_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="8dp">
-
-                    <TextView
-                        android:layout_width="96dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:text="Calidad: " />
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="1"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="2"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="3"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="4"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="5"/>
-                </RadioGroup>
-
-                <RadioGroup
-                    android:id="@+id/grasas_radiogroup_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="8dp">
-
-                    <TextView
-                        android:layout_width="96dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:text= "¿Tiene carbohidratos? " />
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="1"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="2"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="3"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="4"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="5"/>
-                </RadioGroup>
 
 
             </LinearLayout>
@@ -254,16 +198,7 @@
                     android:layout_marginRight="8dp"/>
 
             </LinearLayout>
-
-
-
-
-
-
         </LinearLayout>
-
-
-
 
     </androidx.cardview.widget.CardView>
 

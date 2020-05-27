@@ -7,9 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Comida;
+import com.example.seguimientonutricional.ComidaFormsFragment;
 import com.example.seguimientonutricional.R;
 
 import java.util.ArrayList;
@@ -36,13 +40,21 @@ public class AdapterComida extends RecyclerView.Adapter<AdapterComida.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Comida currComida = mComidas.get(position);
+        final Comida currComida = mComidas.get(position);
 
         holder.mTitulo.setText(currComida.getTitulo());
       
         holder.mFecha.setText(currComida.getFecha().toString());
 
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = ((AppCompatActivity)mContext).getSupportFragmentManager();
+                Fragment fragment = new ComidaFormsFragment(currComida);
+                fm.beginTransaction().replace(R.id.container_home_content,fragment,"comidaForm")
+                        .commit();
+            }
+        });
     }
 
     @Override

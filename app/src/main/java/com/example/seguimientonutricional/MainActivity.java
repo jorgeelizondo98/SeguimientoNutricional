@@ -21,11 +21,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.seguimientonutricional.test.DBController_test;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements DBController.DBRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements DBController.DBRe
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationView.setNavigationItemSelectedListener(onItemClick);
-
 
         Locale locale = new Locale("es");
         Locale.setDefault(locale);
@@ -169,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements DBController.DBRe
     @Override
     public void onProfileReceived(Profile profile) {
         this.profile = profile;
-//        Log.d("TEST", this.profile.getName());
     }
 
     @Override

@@ -13,40 +13,37 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.seguimientonutricional.Bebida;
-import com.example.seguimientonutricional.BebidaFormsFragment;
+import com.example.seguimientonutricional.Ejercicio;
+import com.example.seguimientonutricional.EjercicioFormsFragment;
 import com.example.seguimientonutricional.R;
 
 import java.util.ArrayList;
 
-public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder> {
-
-
+public class AdapterEjercicio extends RecyclerView.Adapter<AdapterEjercicio.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<Bebida> mBebidas;
+    private ArrayList<Ejercicio> mEjercicios;
 
-
-    public AdapterBebida(Context mContext, ArrayList<Bebida> bebidas){
+    public AdapterEjercicio(Context mContext, ArrayList<Ejercicio> ejercicios){
         this.mContext = mContext;
-        this.mBebidas = bebidas;
+        this.mEjercicios = ejercicios;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.list_item,parent,false);
-        return new AdapterBebida.ViewHolder(view);
+        return new AdapterEjercicio.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        final Bebida currBebida = mBebidas.get(position);
+        final Ejercicio currEjercicio = mEjercicios.get(position);
 
-        holder.mTitulo.setText(currBebida.getTitulo());
+        holder.mTitulo.setText(currEjercicio.getTitulo());
 
-        holder.mFecha.setText(currBebida.getFecha().toString());
+        holder.mFecha.setText(currEjercicio.getFecha().toString());
 
         holder.mImageView.setImageResource(R.drawable.cocktail);
 
@@ -54,8 +51,8 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
             @Override
             public void onClick(View v) {
                 FragmentManager fm = ((AppCompatActivity)mContext).getSupportFragmentManager();
-                Fragment fragment = new BebidaFormsFragment(currBebida);
-                fm.beginTransaction().replace(R.id.container_home_content,fragment,"bebidaForm")
+                Fragment fragment = new EjercicioFormsFragment(currEjercicio);
+                fm.beginTransaction().replace(R.id.container_home_content,fragment,"ejercicioForm")
                         .commit();
             }
         });
@@ -64,7 +61,7 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mBebidas.size();
+        return mEjercicios.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -81,5 +78,4 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
             mImageView = itemView.findViewById(R.id.imagen_view_id);
         }
     }
-
 }

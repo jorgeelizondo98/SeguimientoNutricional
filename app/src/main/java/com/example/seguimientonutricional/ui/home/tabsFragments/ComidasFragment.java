@@ -68,8 +68,8 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
         FragmentManager fm = getActivity().getSupportFragmentManager();
         mComidas = new ArrayList<Comida>();
         makeGridViewDynamic();
-        List<Fragment> allFragments = getActivity().getSupportFragmentManager().getFragments();
-
+        List<Fragment> allFragments = getParentFragment().getChildFragmentManager().getFragments();
+        List<Fragment> allFragments2 = getActivity().getSupportFragmentManager().getFragments();
         //We get the actual fragment running
         for (Fragment fragmento: allFragments) {
             if (fragmento instanceof ComidasFragment){
@@ -97,7 +97,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterComida(){
-        adapterComida = new AdapterComida(getActivity(),mComidas);
+        adapterComida = new AdapterComida(getActivity(),mComidas,getParentFragment().getParentFragment());
         mRecyclerView.setAdapter(adapterComida);
     }
 

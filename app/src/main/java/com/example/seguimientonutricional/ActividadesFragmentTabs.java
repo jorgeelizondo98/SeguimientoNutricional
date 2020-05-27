@@ -32,6 +32,7 @@ public class ActividadesFragmentTabs extends Fragment  {
     private ViewPagerAdapter viewPagerAdapter;
     private TabLayout tabLayout;
     private HomeViewModel homeViewModel;
+    private Integer currentPage = 0;
 
     private TextView fecha;
 
@@ -39,6 +40,11 @@ public class ActividadesFragmentTabs extends Fragment  {
         // Required empty public constructor
     }
 
+    public interface OnTabSelectedListener{
+        public void onTabChanged(int position);
+    }
+
+    OnTabSelectedListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,18 +55,38 @@ public class ActividadesFragmentTabs extends Fragment  {
         viewPager = root.findViewById(R.id.pager);
         tabLayout = root.findViewById(R.id.tab_layout);
         //Agrega viewPagerAdapter al tablayout
-        viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(currentPage);
+
+        Fragment fragment = getParentFragment();
+        mListener = (OnTabSelectedListener) fragment;
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentPage = position;
+                mListener.onTabChanged(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         fecha = root.findViewById(R.id.date_text);
         Date currentDate = Calendar.getInstance().getTime();
         fecha.setText(formatDate(currentDate));
 
-
         return root;
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -81,4 +107,5 @@ public class ActividadesFragmentTabs extends Fragment  {
         String date = format.format(dateTime);
         return date;
     }
+
 }

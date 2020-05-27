@@ -3,6 +3,8 @@ package com.example.seguimientonutricional.ui.home;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,9 +16,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.seguimientonutricional.ActividadesFragmentTabs;
+import com.example.seguimientonutricional.BebidaFormsFragment;
 import com.example.seguimientonutricional.ComidaFormsFragment;
 import com.example.seguimientonutricional.R;
-import com.example.seguimientonutricional.ActividadesFragmentTabs;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -24,15 +27,22 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ActividadesFragmentTabs.OnTabSelectedListener {
 
     private HomeViewModel homeViewModel;
     private FloatingActionButton fabAddButton;
     private String date;
+    private Integer currentPosition;
 
 
 
     public HomeFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -44,11 +54,26 @@ public class HomeFragment extends Fragment {
         setUpTabsFragments(fm);
 
         fabAddButton = root.findViewById(R.id.fab);
+
+        currentPosition = 0;
         fabAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new ComidaFormsFragment();
-                fm.beginTransaction().replace(R.id.container_home_content,fragment,"comidaForm")
+                Fragment fragment = null;
+                String tag = "";
+
+                if(currentPosition == 0){
+                    fragment = new ComidaFormsFragment();
+                    tag = "comidaForm";
+
+                } else if(currentPosition == 1){
+                    fragment = new BebidaFormsFragment();
+                    tag = "bebidaForm";
+                } else if(currentPosition == 3){
+                    //TODO: Desplegar EjercicioForms
+                }
+
+                getChildFragmentManager().beginTransaction().replace(R.id.container_home_content,fragment,tag)
                         .commit();
             }
         });
@@ -58,7 +83,10 @@ public class HomeFragment extends Fragment {
 
     private void setUpTabsFragments(FragmentManager fm){
         Fragment fragmentTabs = new ActividadesFragmentTabs();
-        fm.beginTransaction().replace(R.id.container_home_content,fragmentTabs).commit();
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_home_content,fragmentTabs)
+                .commit();
 
     }
 
@@ -70,6 +98,12 @@ public class HomeFragment extends Fragment {
         fabAddButton.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_calendar);
+        if(item!=null)
+            item.setVisible(true);
+    }
 
     private String formatDate(Date dateTime){
         SimpleDateFormat format = new SimpleDateFormat("EEEE d 'de' MMMM 'del' yyyy",
@@ -92,5 +126,8 @@ public class HomeFragment extends Fragment {
         });
     }
 
-
+    @Override
+    public void onTabChanged(int position) {
+        currentPosition = position;
+    }
 }

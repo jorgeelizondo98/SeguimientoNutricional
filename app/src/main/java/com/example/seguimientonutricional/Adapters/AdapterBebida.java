@@ -8,9 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Bebida;
@@ -25,11 +23,13 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
 
     private Context mContext;
     private ArrayList<Bebida> mBebidas;
+    private Fragment parent;
 
 
-    public AdapterBebida(Context mContext, ArrayList<Bebida> bebidas){
+    public AdapterBebida(Context mContext, ArrayList<Bebida> bebidas, Fragment parent){
         this.mContext = mContext;
         this.mBebidas = bebidas;
+        this.parent = parent;
     }
 
     @NonNull
@@ -53,9 +53,10 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = ((AppCompatActivity)mContext).getSupportFragmentManager();
                 Fragment fragment = new BebidaFormsFragment(currBebida);
-                fm.beginTransaction().replace(R.id.container_home_content,fragment,"bebidaForm")
+                parent.getChildFragmentManager().beginTransaction()
+                        .replace(R.id.container_home_content,fragment,"bebidaForm")
+                        .addToBackStack(null)
                         .commit();
             }
         });

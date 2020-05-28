@@ -58,19 +58,28 @@ public class ActividadesFragmentTabs extends Fragment  {
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setCurrentItem(currentPage);
+        viewPager.setCurrentItem(0);
+//        viewPager.setCurrentItem(currentPage);
 
         Fragment fragment = getParentFragment();
         mListener = (OnTabSelectedListener) fragment;
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
 
             }
 
             @Override
             public void onPageSelected(int position) {
+                FragmentLifeCycle fragmentToShow = (FragmentLifeCycle)viewPagerAdapter
+                        .getItem(position);
+                fragmentToShow.onResumeFragment();
+
+                FragmentLifeCycle fragmentToHide = (FragmentLifeCycle)viewPagerAdapter
+                        .getItem(currentPage);
+                fragmentToHide.onPauseFragment();
+
                 currentPage = position;
                 mListener.onTabChanged(position);
             }
@@ -87,6 +96,7 @@ public class ActividadesFragmentTabs extends Fragment  {
 
         return root;
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

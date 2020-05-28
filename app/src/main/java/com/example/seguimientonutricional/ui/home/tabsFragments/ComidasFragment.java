@@ -22,6 +22,7 @@ import com.example.seguimientonutricional.Bebida;
 import com.example.seguimientonutricional.Comida;
 import com.example.seguimientonutricional.DBController;
 import com.example.seguimientonutricional.Ejercicio;
+import com.example.seguimientonutricional.FragmentLifeCycle;
 import com.example.seguimientonutricional.Profile;
 import com.example.seguimientonutricional.R;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
@@ -36,7 +37,8 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ComidasFragment extends Fragment implements DBController.DBResponseListener {
+public class ComidasFragment extends Fragment implements DBController.DBResponseListener,
+        FragmentLifeCycle {
 
     private RecyclerView mRecyclerView;
     private ArrayList<Comida> mComidas;
@@ -69,7 +71,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
         mComidas = new ArrayList<Comida>();
         makeGridViewDynamic();
         List<Fragment> allFragments = getParentFragment().getChildFragmentManager().getFragments();
-        List<Fragment> allFragments2 = getActivity().getSupportFragmentManager().getFragments();
+
         //We get the actual fragment running
         for (Fragment fragmento: allFragments) {
             if (fragmento instanceof ComidasFragment){
@@ -83,6 +85,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
 
         return root;
     }
+
 
     private void makeGridViewDynamic(){
         if(mRecyclerView != null){
@@ -116,20 +119,15 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
             @Override
             public void onChanged(@Nullable Date newDate) {
                 fecha = newDate;
-                loadsComida();
-                setAdapterComida();
+                if(profile != null){
+                    loadsComida();
+                    setAdapterComida();
+                }
             }
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(profile != null){
-           setAdapterComida();
-        }
-    }
+
 
     @Override
     public void onDatabaseNetworkError() {
@@ -161,4 +159,20 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onPauseFragment() {
+        if(profile != null){
+            setAdapterComida();
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onResumeFragment() {
+        if(profile != null){
+            setAdapterComida();
+        }
+    }
 }

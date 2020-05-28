@@ -8,9 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Ejercicio;
@@ -23,10 +21,12 @@ public class AdapterEjercicio extends RecyclerView.Adapter<AdapterEjercicio.View
 
     private Context mContext;
     private ArrayList<Ejercicio> mEjercicios;
+    private Fragment parent;
 
-    public AdapterEjercicio(Context mContext, ArrayList<Ejercicio> ejercicios){
+    public AdapterEjercicio(Context mContext, ArrayList<Ejercicio> ejercicios,Fragment parent){
         this.mContext = mContext;
         this.mEjercicios = ejercicios;
+        this.parent = parent;
     }
 
     @NonNull
@@ -50,9 +50,10 @@ public class AdapterEjercicio extends RecyclerView.Adapter<AdapterEjercicio.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = ((AppCompatActivity)mContext).getSupportFragmentManager();
                 Fragment fragment = new EjercicioFormsFragment(currEjercicio);
-                fm.beginTransaction().replace(R.id.container_home_content,fragment,"ejercicioForm")
+                parent.getChildFragmentManager().beginTransaction()
+                        .replace(R.id.container_home_content,fragment,"ejercicioForm")
+                        .addToBackStack(null)
                         .commit();
             }
         });

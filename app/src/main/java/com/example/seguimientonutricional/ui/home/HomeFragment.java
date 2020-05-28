@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
     private HomeViewModel homeViewModel;
     private FloatingActionButton fabAddButton;
     private String date;
-    private Integer currentPosition;
+    private Integer currentPosition = 0;
 
 
 
@@ -51,18 +51,18 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        final FragmentManager fm  = getActivity().getSupportFragmentManager();
-        setUpTabsFragments(fm);
+        setUpTabsFragments();
 
         fabAddButton = root.findViewById(R.id.fab);
 
-        currentPosition = 0;
+
         fabAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment = null;
                 String tag = "";
 
+                List<Fragment> allFragments = getActivity().getSupportFragmentManager().getFragments();
                 if(currentPosition == 0){
                     fragment = new ComidaFormsFragment();
                     tag = "comidaForm";
@@ -75,7 +75,9 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
                     tag = "ejercicioForm";
                 }
 
-                getChildFragmentManager().beginTransaction().replace(R.id.container_home_content,fragment,tag)
+                Fragment fragmentRemove = getChildFragmentManager().findFragmentByTag("tabs");
+                getChildFragmentManager().beginTransaction()
+                        .replace(R.id.container_home_content,fragment,tag).addToBackStack(null)
                         .commit();
             }
         });
@@ -83,21 +85,13 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
     }
 
 
-    private void setUpTabsFragments(FragmentManager fm){
+    private void setUpTabsFragments(){
         Fragment fragmentTabs = new ActividadesFragmentTabs();
         getChildFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container_home_content,fragmentTabs)
+                .replace(R.id.container_home_content,fragmentTabs,"tabs")
                 .commit();
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        final FragmentManager fm  = getActivity().getSupportFragmentManager();
-        setUpTabsFragments(fm);
-        fabAddButton.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -132,4 +126,5 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
     public void onTabChanged(int position) {
         currentPosition = position;
     }
+
 }

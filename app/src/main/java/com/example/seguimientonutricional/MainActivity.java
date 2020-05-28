@@ -30,15 +30,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements DBController.DBResponseListener,
-    DatePickerDialog.OnDateSetListener {
+public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private static final String DIALOG_DATE = "DialogDate";
     private boolean logout = false;
 
-    private DBController db;
-    private Profile profile;
     HomeViewModel homeViewModel;
 
     @Override
@@ -76,9 +73,6 @@ public class MainActivity extends AppCompatActivity implements DBController.DBRe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-
-        db = new DBController(this);
-        db.loadProfile(FirebaseAuth.getInstance().getCurrentUser());
 
         // This is the database testing script.
         // DBController_test dbt = new DBController_test(FirebaseAuth.getInstance().getCurrentUser());
@@ -155,32 +149,5 @@ public class MainActivity extends AppCompatActivity implements DBController.DBRe
         if (logout) {
             super.finish();
         }
-    }
-
-    // DBController listeners.
-
-    @Override
-    public void onDatabaseNetworkError() {
-
-    }
-
-    @Override
-    public void onProfileReceived(Profile profile) {
-        this.profile = profile;
-    }
-
-    @Override
-    public void onComidasReceived(ArrayList<Comida> comidas) {
-
-    }
-
-    @Override
-    public void onBebidasReceived(ArrayList<Bebida> bebidas) {
-
-    }
-
-    @Override
-    public void onEjerciciosReceived(ArrayList<Ejercicio> ejercicios) {
-
     }
 }

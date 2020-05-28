@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
-        app:cardElevation="16dp">
+        app:cardElevation="8dp"
+        android:layout_margin="8dp">
 
 
         <LinearLayout
@@ -19,14 +20,15 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/rating_id"
+                android:id="@+id/fecha"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.8"
+                android:layout_weight="1.9"
                 android:background="@drawable/text_rounded_corner"
                 android:backgroundTint="#28DB86"
                 android:gravity="center"
-                android:text="1/5"
+                android:text="4:30"
+                android:textSize="20sp"
                 android:textColor="#FFFFFF" />
 
             <ImageView
@@ -42,18 +44,10 @@
                 android:layout_height="0dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="4:30 pm"
+                android:text="Comida"
+                android:textSize="16sp"
+                android:textColor="#000000"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/fecha"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="4:30 pm"
-                android:textStyle="bold" />
-
 
         </LinearLayout>
 

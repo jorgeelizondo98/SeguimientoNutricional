@@ -16,6 +16,7 @@ import com.example.seguimientonutricional.BebidaFormsFragment;
 import com.example.seguimientonutricional.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder> {
 
@@ -46,7 +47,9 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
 
         holder.mTitulo.setText(currBebida.getTitulo());
 
-        holder.mFecha.setText(currBebida.getFecha().toString());
+        Date date = currBebida.getFecha();
+        String hora = convertSecondsToHMmSs(date.getTime());
+        holder.mFecha.setText(hora);
 
         holder.mImageView.setImageResource(R.drawable.cocktail);
 
@@ -61,6 +64,13 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
             }
         });
 
+    }
+
+    public static String convertSecondsToHMmSs(long seconds) {
+        long s = seconds % 60;
+        long m = (seconds / 60) % 60;
+        long h = (seconds / (60 * 60)) % 24;
+        return String.format("%d:%02d", h,m);
     }
 
     @Override

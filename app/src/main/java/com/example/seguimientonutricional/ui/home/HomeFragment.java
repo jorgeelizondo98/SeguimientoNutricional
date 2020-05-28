@@ -42,8 +42,8 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -55,10 +55,11 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
 
         fabAddButton = root.findViewById(R.id.fab);
 
-
         fabAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                fabAddButton.hide();
                 Fragment fragment = null;
                 String tag = "";
 
@@ -84,6 +85,11 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
         return root;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        fabAddButton.show();
+    }
 
     private void setUpTabsFragments(){
         Fragment fragmentTabs = new ActividadesFragmentTabs();
@@ -126,5 +132,17 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
     public void onTabChanged(int position) {
         currentPosition = position;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        fabAddButton.show();
+    }
+
 
 }

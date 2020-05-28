@@ -22,6 +22,7 @@ import com.example.seguimientonutricional.Bebida;
 import com.example.seguimientonutricional.Comida;
 import com.example.seguimientonutricional.DBController;
 import com.example.seguimientonutricional.Ejercicio;
+import com.example.seguimientonutricional.FragmentLifeCycle;
 import com.example.seguimientonutricional.Profile;
 import com.example.seguimientonutricional.R;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
@@ -37,7 +38,8 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EjerciciosFragment extends Fragment implements DBController.DBResponseListener {
+public class EjerciciosFragment extends Fragment implements DBController.DBResponseListener,
+        FragmentLifeCycle {
 
     private RecyclerView mRecyclerView;
     private ArrayList<Ejercicio> mEjercicio;
@@ -92,7 +94,7 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterEjercicio(){
-        adapterEjercicio = new AdapterEjercicio(getActivity(),mEjercicio);
+        adapterEjercicio = new AdapterEjercicio(getActivity(),mEjercicio,getParentFragment().getParentFragment());
         mRecyclerView.setAdapter(adapterEjercicio);
     }
 
@@ -111,21 +113,13 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
             @Override
             public void onChanged(@Nullable Date newDate) {
                 fecha = newDate;
-                loadsEjercicio();
-                setAdapterEjercicio();
+                if(profile != null){
+                    loadsEjercicio();
+                    setAdapterEjercicio();
+                }
             }
         });
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(profile != null){
-            setAdapterEjercicio();
-        }
-    }
-
 
     @Override
     public void onDatabaseNetworkError() {
@@ -150,9 +144,27 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onEjerciciosReceived(ArrayList<Ejercicio> ejercicios) {
         mEjercicio = ejercicios;
         setAdapterEjercicio();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onPauseFragment() {
+        if(profile != null){
+            setAdapterEjercicio();
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onResumeFragment() {
+        if(profile != null){
+            setAdapterEjercicio();
+        }
     }
 }

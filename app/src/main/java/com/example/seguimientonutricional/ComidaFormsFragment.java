@@ -22,7 +22,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.seguimientonutricional.ui.home.HomeFragment;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +29,6 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
 public class ComidaFormsFragment extends Fragment implements TimePickerFragment.OnTimeDialogListener,
@@ -111,7 +109,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
             public void onClick(View v) {
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.setTargetFragment(ComidaFormsFragment.this,1);
-                timePicker.show(getActivity().getSupportFragmentManager(), "time picker");
+                timePicker.show(getParentFragment().getChildFragmentManager(), "time picker");
             }
         });
 
@@ -119,17 +117,14 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
             @Override
             public void onClick(View v) {
                 addComida();
-                Fragment fragmentHome = new HomeFragment();
-                fm.beginTransaction().replace(R.id.container_home_content,fragmentHome).commit();
+                getParentFragment().getChildFragmentManager().popBackStackImmediate();
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment framentHome = new HomeFragment();
-                List<Fragment> allFragments = getParentFragment().getChildFragmentManager().getFragments();
-                fm.beginTransaction().replace(R.id.container_home_content,framentHome).commit();
+                  getParentFragment().getChildFragmentManager().popBackStackImmediate();
             }
         });
 

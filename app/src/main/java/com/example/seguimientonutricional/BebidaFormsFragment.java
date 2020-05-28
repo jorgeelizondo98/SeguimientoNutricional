@@ -21,7 +21,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.seguimientonutricional.ui.home.HomeFragment;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -116,16 +115,14 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
             @Override
             public void onClick(View v) {
                 addBebida();
-                Fragment fragmentTabs = new HomeFragment();
-                fm.beginTransaction().replace(R.id.container_home_content,fragmentTabs).commit();
+                getParentFragment().getChildFragmentManager().popBackStackImmediate();
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragmentHome = new HomeFragment();
-                fm.beginTransaction().replace(R.id.container_home_content,fragmentHome).commit();
+                getParentFragment().getChildFragmentManager().popBackStackImmediate();
             }
         });
 

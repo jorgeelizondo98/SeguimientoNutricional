@@ -22,6 +22,7 @@ import com.example.seguimientonutricional.Bebida;
 import com.example.seguimientonutricional.Comida;
 import com.example.seguimientonutricional.DBController;
 import com.example.seguimientonutricional.Ejercicio;
+import com.example.seguimientonutricional.FragmentLifeCycle;
 import com.example.seguimientonutricional.Profile;
 import com.example.seguimientonutricional.R;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
@@ -37,7 +38,8 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BebidasFragment extends Fragment implements DBController.DBResponseListener {
+public class BebidasFragment extends Fragment implements DBController.DBResponseListener,
+        FragmentLifeCycle {
 
     private RecyclerView mRecyclerView;
     private ArrayList<Bebida> mBebidas;
@@ -52,6 +54,7 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,8 +79,16 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
         db.loadProfile(currentUser);
         fecha = Calendar.getInstance().getTime();
 
+        if(profile !=  null){
+            loadsBebida();
+            setAdapterBebida();
+        }
+
+
         return root;
     }
+
+
 
     private void makeGridViewDynamic(){
         if(mRecyclerView != null){
@@ -93,7 +104,7 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterBebida(){
-        adapterBebida = new AdapterBebida(getActivity(),mBebidas);
+        adapterBebida = new AdapterBebida(getActivity(),mBebidas,getParentFragment().getParentFragment());
         mRecyclerView.setAdapter(adapterBebida);
     }
 
@@ -112,20 +123,12 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
             @Override
             public void onChanged(@Nullable Date newDate) {
                 fecha = newDate;
-                loadsBebida();
-                setAdapterBebida();
+                if(profile != null){
+                    loadsBebida();
+                    setAdapterBebida();
+                }
             }
         });
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(profile != null){
-            setAdapterBebida();
-        }
     }
 
 
@@ -157,5 +160,21 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
     @Override
     public void onEjerciciosReceived(ArrayList<Ejercicio> ejercicios) {
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onPauseFragment() {
+        if(profile != null){
+            setAdapterBebida();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onResumeFragment() {
+        if(profile != null){
+            setAdapterBebida();
+        }
     }
 }

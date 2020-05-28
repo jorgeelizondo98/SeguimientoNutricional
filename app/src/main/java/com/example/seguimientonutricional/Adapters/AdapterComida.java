@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Comida;
@@ -51,9 +49,10 @@ public class AdapterComida extends RecyclerView.Adapter<AdapterComida.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = ((AppCompatActivity)mContext).getSupportFragmentManager();
                 Fragment fragment = new ComidaFormsFragment(currComida);
-                parent.getChildFragmentManager().beginTransaction().replace(R.id.container_home_content,fragment,"comidaForm")
+                parent.getChildFragmentManager().beginTransaction()
+                        .replace(R.id.container_home_content,fragment,"comidaForm")
+                        .addToBackStack(null)
                         .commit();
             }
         });

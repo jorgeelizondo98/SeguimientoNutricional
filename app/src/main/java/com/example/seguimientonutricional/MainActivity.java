@@ -79,9 +79,10 @@ public class MainActivity extends AppCompatActivity implements DBController.DBRe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
+        /*
         db = new DBController(this);
         db.loadProfile(FirebaseAuth.getInstance().getCurrentUser());
-
+        */
         // This is the database testing script.
         // DBController_test dbt = new DBController_test(FirebaseAuth.getInstance().getCurrentUser());
 

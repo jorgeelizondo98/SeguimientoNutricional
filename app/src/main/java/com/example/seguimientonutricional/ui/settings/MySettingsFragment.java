@@ -2,20 +2,28 @@ package com.example.seguimientonutricional.ui.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.example.seguimientonutricional.ComidaFormsFragment;
 import com.example.seguimientonutricional.R;
+import com.example.seguimientonutricional.TimePickerFragment;
 
 public class MySettingsFragment extends PreferenceFragmentCompat {
+
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
-
     }
 
     public void onResume() {
@@ -40,13 +48,19 @@ public class MySettingsFragment extends PreferenceFragmentCompat {
                 }
                 else{
                     Toast.makeText(getActivity(), "isChecked : " + true, Toast.LENGTH_LONG).show();
+
+
+                    final FragmentManager fm  = getActivity().getSupportFragmentManager();
+                    final Fragment fragment = new SettingsNotificationFragment();
+                    fm.beginTransaction().replace(R.id.settings_fragment,fragment)
+                            .addToBackStack(null).commit();
+
                     switchPreference.setChecked(true);
                     return false;
                 }
             }
         });
 
-
-
     }
+
 }

@@ -2,9 +2,9 @@ package com.example.seguimientonutricional;
 
 public class Comida extends Registro {
 
-    private Integer mCarbohidratos;
-    private Integer mProteinas;
-    private Integer mGrasas;
+    private Integer mCarbohidratos = -1;
+    private Integer mProteinas = -1;
+    private Integer mGrasas = -1;
     private String mFotoUrl;
 
     public Comida(){
@@ -26,10 +26,22 @@ public class Comida extends Registro {
         setComentario(registro.getComentario());
     }
 
-    public Comida(String titulo, String descricion) {
+    public Comida(String titulo, String descripcion) {
         this.setTitulo(titulo);
-        this.setDescripcion(descricion);
+        this.setDescripcion(descripcion);
     }
+
+    public Integer getCarbohidratos() { return mCarbohidratos; }
+
+    public void setCarbohidratos(Integer mCarbohidratos) { this.mCarbohidratos = mCarbohidratos; }
+
+    public Integer getProteinas() { return mProteinas; }
+
+    public void setProteinas(Integer mProteinas) { this.mProteinas = mProteinas; }
+
+    public Integer getGrasas() { return mGrasas; }
+
+    public void setGrasas(Integer mGrasas) { this.mGrasas = mGrasas; }
 
     public String getFotoUrl() {
         return mFotoUrl;

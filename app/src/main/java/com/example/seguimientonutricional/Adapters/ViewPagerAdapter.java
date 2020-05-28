@@ -4,13 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.seguimientonutricional.ui.home.tabsFragments.BebidasFragment;
 import com.example.seguimientonutricional.ui.home.tabsFragments.ComidasFragment;
 import com.example.seguimientonutricional.ui.home.tabsFragments.EjerciciosFragment;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     public ViewPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);

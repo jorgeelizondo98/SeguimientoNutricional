@@ -100,7 +100,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterComida(){
-        adapterComida = new AdapterComida(getActivity(),mComidas,getParentFragment().getParentFragment());
+        adapterComida = new AdapterComida(getContext(),mComidas,getParentFragment().getParentFragment());
         mRecyclerView.setAdapter(adapterComida);
     }
 

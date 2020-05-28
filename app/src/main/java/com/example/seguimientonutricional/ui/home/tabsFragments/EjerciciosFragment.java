@@ -94,7 +94,7 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterEjercicio(){
-        adapterEjercicio = new AdapterEjercicio(getActivity(),mEjercicio,getParentFragment().getParentFragment());
+        adapterEjercicio = new AdapterEjercicio(getContext(),mEjercicio,getParentFragment().getParentFragment());
         mRecyclerView.setAdapter(adapterEjercicio);
     }
 

@@ -59,7 +59,6 @@ public class ActividadesFragmentTabs extends Fragment  {
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(0);
-//        viewPager.setCurrentItem(currentPage);
 
         Fragment fragment = getParentFragment();
         mListener = (OnTabSelectedListener) fragment;

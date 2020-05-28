@@ -16,6 +16,7 @@ import com.example.seguimientonutricional.EjercicioFormsFragment;
 import com.example.seguimientonutricional.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AdapterEjercicio extends RecyclerView.Adapter<AdapterEjercicio.ViewHolder> {
 
@@ -43,9 +44,11 @@ public class AdapterEjercicio extends RecyclerView.Adapter<AdapterEjercicio.View
 
         holder.mTitulo.setText(currEjercicio.getTitulo());
 
-        holder.mFecha.setText(currEjercicio.getFecha().toString());
+        Date date = currEjercicio.getFecha();
+        String hora = convertSecondsToHMmSs(date.getTime());
+        holder.mFecha.setText(hora);
 
-        holder.mImageView.setImageResource(R.drawable.cocktail);
+        holder.mImageView.setImageResource(R.drawable.caminadora);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +61,13 @@ public class AdapterEjercicio extends RecyclerView.Adapter<AdapterEjercicio.View
             }
         });
 
+    }
+
+    public static String convertSecondsToHMmSs(long seconds) {
+        long s = seconds % 60;
+        long m = (seconds / 60) % 60;
+        long h = (seconds / (60 * 60)) % 24;
+        return String.format("%d:%02d", h,m);
     }
 
     @Override

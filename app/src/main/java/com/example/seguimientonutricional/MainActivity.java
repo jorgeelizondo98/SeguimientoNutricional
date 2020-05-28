@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private AppBarConfiguration mAppBarConfiguration;
     private static final String DIALOG_DATE = "DialogDate";
     private boolean logout = false;
+    private Calendar currFecha;
+
 
     HomeViewModel homeViewModel;
 
@@ -66,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 getBaseContext().getResources().getConfiguration();
         config.setLocale(locale);
         createConfigurationContext(config);
+
+        currFecha = Calendar.getInstance();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -93,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private void onCalendarSelected(){
         //Despliega pop-up del calendario
         FragmentManager manager = getSupportFragmentManager();
-        DatePickerFragment dialog = new DatePickerFragment();
+        DatePickerFragment dialog = new DatePickerFragment(currFecha);
         dialog.show(manager,DIALOG_DATE);
     }
 
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         c.set(Calendar.DAY_OF_MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         Date dateTime = c.getTime();
-
+        currFecha = c;
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.setDate(dateTime);
     }

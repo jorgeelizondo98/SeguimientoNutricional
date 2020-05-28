@@ -127,19 +127,4 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
         currentPosition = position;
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d("checa","hola");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("checa","hola");
-    }
-
-
-
-
 }

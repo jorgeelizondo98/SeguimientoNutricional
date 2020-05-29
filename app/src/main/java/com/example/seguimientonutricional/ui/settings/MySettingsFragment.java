@@ -50,6 +50,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat {
                     Toast.makeText(getActivity(), "isChecked : " + true, Toast.LENGTH_LONG).show();
 
 
+
                     final FragmentManager fm  = getActivity().getSupportFragmentManager();
                     final Fragment fragment = new SettingsNotificationFragment();
                     fm.beginTransaction().replace(R.id.settings_fragment,fragment)

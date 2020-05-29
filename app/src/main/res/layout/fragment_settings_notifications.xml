@@ -19,6 +19,15 @@
             android:hint="@string/time_notification"
             android:textSize="18sp"
             android:focusable="false"/>
+
+
+        <TextView
+            android:id="@+id/tv_timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
+
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -86,6 +95,7 @@
                 android:id="@+id/save_button"></Button>
 
         </RadioGroup>
+
 
     </LinearLayout>
 

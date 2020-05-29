@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.ProfileFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/layoutHead"
+            android:background="#5CC09F"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/imageProfile_view"
+                android:background="@drawable/ic_account_box_black_24dp"
+                android:layout_centerInParent="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:padding="16dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:layout_below="@id/layoutHead"
+            android:layout_width="360dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:layout_gravity="top"
+                android:drawablePadding="16dp"
+                android:drawableLeft="@drawable/ic_email_black_24dp"
+                tools:text="@string/correo_electronico"
+                android:hint="Correo"
+                android:id="@+id/text_email"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <android.inputmethodservice.ExtractEditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:layout_gravity="top"
+                android:drawablePadding="16dp"
+                android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                tools:text="@string/name"
+                android:hint="Nombre"
+                android:enabled="true"
+                android:imeOptions="actionDone"
+                android:id="@+id/profileName"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:layout_gravity="top"
+                android:drawablePadding="16dp"
+                android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                tools:text="@string/last_name"
+                android:hint="Apellido Paterno"
+                android:enabled="true"
+                android:imeOptions="actionDone"
+                android:id="@+id/profileLastName"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:layout_gravity="top"
+                android:drawablePadding="16dp"
+                android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                tools:text="@string/second_last_name"
+                android:hint="Apellido Materno"
+                android:enabled="true"
+                android:imeOptions="actionDone"
+                android:id="@+id/profileSecondLastName"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_height="wrap_content"/>
+
+
+            <Button
+                android:id="@+id/button_save"
+                android:layout_marginTop="15dp"
+                android:textColor="@android:color/white"
+                android:background="?colorPrimary"
+                android:textAllCaps="false"
+                android:layout_gravity="center_horizontal"
+                android:text="Guardar"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

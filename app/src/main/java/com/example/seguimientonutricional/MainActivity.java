@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_settings, R.id.nav_signout)
+                R.id.nav_home, R.id.nav_settings, R.id.nav_edit_profile, R.id.nav_signout)
                 .setDrawerLayout(drawer)
                 .build();
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

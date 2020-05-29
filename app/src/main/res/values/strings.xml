@@ -27,6 +27,12 @@
 
     <string name="home_second">Home Second</string>
 
+    <!-- Profile string -->
+    <string name="name">Nombre</string>
+    <string name="last_name">Apellido Paterno</string>
+    <string name="second_last_name">Apellido Materno</string>
+    <string name="correo_electronico">Correo</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

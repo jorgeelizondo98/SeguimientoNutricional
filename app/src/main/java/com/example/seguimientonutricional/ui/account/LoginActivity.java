@@ -18,9 +18,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.seguimientonutricional.DBController;
 import com.example.seguimientonutricional.MainActivity;
 import com.example.seguimientonutricional.R;
 import com.facebook.AccessToken;
@@ -45,7 +43,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity
     implements EmailRegisterFragment.OnFragmentInteractionListener,
-        EmailLoginFragment.OnFragmentInteractionListener, QrFragment.OnQrFragmentInteractionListener {
+        EmailLoginFragment.OnFragmentInteractionListener {
 
   private static final String TAG = "LOGIN";
 
@@ -155,9 +153,6 @@ public class LoginActivity extends AppCompatActivity
                 Log.d(TAG, "createUserWithEmail:success");
                 FirebaseUser user = mAuth.getCurrentUser();
                 notRegisteredUser = user;
-                requestCamera();
-                cardView.setVisibility(View.GONE);
-                sendsToQrFragment();
               } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -318,16 +313,7 @@ public class LoginActivity extends AppCompatActivity
 
   }
 
-  public void sendsToQrFragment(){
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    Fragment currFragment = fragmentManager.findFragmentById(R.id.account_fragment_container);
-    FragmentTransaction transaction = fragmentManager.beginTransaction();
-    transaction.remove(currFragment);
-    Fragment fragmentQr = new QrFragment();
-    transaction.addToBackStack(null);
-    transaction.replace(R.id.qr_fragment_container, fragmentQr);
-    transaction.commit();
-  }
+
 
   private void requestCamera(){
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -336,10 +322,6 @@ public class LoginActivity extends AppCompatActivity
     }
   }
 
-  @Override
-  public void onQRCodeFound(Boolean foundCode) {
-      //TODO: validar cuando se regresa sin haber escaneado el QR porque se registra de todas maneras.
-      updateUI(notRegisteredUser);
-  }
+
 }
 

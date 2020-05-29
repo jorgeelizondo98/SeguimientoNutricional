@@ -100,8 +100,11 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterComida(){
-        adapterComida = new AdapterComida(getContext(),mComidas,getParentFragment().getParentFragment());
-        mRecyclerView.setAdapter(adapterComida);
+        if(getParentFragment() != null){
+            adapterComida = new AdapterComida(getContext(),mComidas,getParentFragment().getParentFragment());
+            mRecyclerView.setAdapter(adapterComida);
+        }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -145,8 +148,11 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onComidasReceived(ArrayList<Comida> comidas) {
-        mComidas = comidas;
-        setAdapterComida();
+        if(profile != null){
+            mComidas = comidas;
+            setAdapterComida();
+        }
+
     }
 
     @Override

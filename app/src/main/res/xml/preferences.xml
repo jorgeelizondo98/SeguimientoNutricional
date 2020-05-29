@@ -2,6 +2,18 @@
 <androidx.preference.PreferenceScreen
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory
+        app:key="acerca"
+        app:title="Registrate con tu Nutriólogo">
+
+        <SwitchPreferenceCompat
+            app:key="nutriologo"
+            app:title="Sin registro a nutriólogo"
+            app:defaultValue="false"/>
+
+
+    </PreferenceCategory>
+
 
     <PreferenceCategory
         app:key="notificaciones"
@@ -13,6 +25,7 @@
             app:defaultValue="false"/>
 
     </PreferenceCategory>
+
     <PreferenceCategory
         app:key="acerca"
         app:title="Acerca">

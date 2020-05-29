@@ -104,8 +104,10 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterBebida(){
-        adapterBebida = new AdapterBebida(getContext(),mBebidas,getParentFragment().getParentFragment());
-        mRecyclerView.setAdapter(adapterBebida);
+        if(getParentFragment() != null) {
+            adapterBebida = new AdapterBebida(getContext(), mBebidas, getParentFragment().getParentFragment());
+            mRecyclerView.setAdapter(adapterBebida);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

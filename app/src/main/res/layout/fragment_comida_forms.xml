@@ -31,17 +31,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    >
+                    android:layout_marginRight="8dp">
 
                     <ImageView
                         android:id="@+id/imagen_view_id"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:src="@drawable/salad"/>
 
 
                     <ImageButton
+                        android:id="@+id/addPhoto_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_menu_camera"

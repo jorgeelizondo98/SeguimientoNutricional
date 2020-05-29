@@ -16,6 +16,7 @@ public class Profile {
   private String secondLastName;
   private String email;
   private String photoUrl;
+  private String nombreDoctor;
 
   public Profile() {
 
@@ -44,5 +45,9 @@ public class Profile {
   public String getEmail() { return email; }
 
   public String getPhotoUrl() { return photoUrl; }
+
+  public String getNombreDoctor() { return nombreDoctor; }
+
+  public void setNombreDoctor(String nombreDoctor) { this.nombreDoctor = nombreDoctor; }
 
 }

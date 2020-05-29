@@ -45,6 +45,7 @@ public class DBController {
   private final static String TAG = "database";
 
   private final static String COLLECTION_DOCTORES = "Doctores";
+  private final static String DOCTOR_NOMBRE = "nombre";
   private final static String DOCTOR_PACIENTE_REF = "ref";
 
   private final static String COLLECTION_PROFILE = "Pacientes";
@@ -53,6 +54,7 @@ public class DBController {
   private final static String PROFILE_SECONDLASTNAME = "apellidoMaterno";
   private final static String PROFILE_EMAIL = "correo";
   private final static String PROFILE_PHOTOURL = "fotoPerfil";
+  private final static String PROFILE_NOMBREDOCTOR = "nombreDoctor";
 
   private final static String COLLECTION_ACTIVIDADES = "actividades";
   private final static String REGISTRO_TITULO = "titulo";
@@ -86,6 +88,7 @@ public class DBController {
     void onComidasReceived(ArrayList<Comida> comidas);
     void onBebidasReceived(ArrayList<Bebida> bebidas);
     void onEjerciciosReceived(ArrayList<Ejercicio> ejercicios);
+    void onNewDoctorAssociated(Profile profile);
   }
 
   // Takes an instance of Profile and formats it into a map of <String, Object>.
@@ -95,6 +98,7 @@ public class DBController {
     formatted_profile.put(PROFILE_FIRSTLASTNAME, Objects.toString(profile.getFirstLastName(), ""));
     formatted_profile.put(PROFILE_SECONDLASTNAME, Objects.toString(profile.getSecondLastName(), ""));
     formatted_profile.put(PROFILE_EMAIL, profile.getEmail());
+    formatted_profile.put(PROFILE_NOMBREDOCTOR, profile.getNombreDoctor());
     formatted_profile.put(PROFILE_PHOTOURL, profile.getPhotoUrl());
     return formatted_profile;
   }
@@ -117,6 +121,7 @@ public class DBController {
                   (String) raw_profile.get(PROFILE_SECONDLASTNAME));
               profile[0].setEmail((String) raw_profile.get(PROFILE_EMAIL));
               profile[0].setPhotoUrl((String) raw_profile.get(PROFILE_PHOTOURL));
+              profile[0].setNombreDoctor((String) raw_profile.get(PROFILE_NOMBREDOCTOR));
               try {
                 dbResponseListener.onProfileReceived(profile[0]);
               } catch (ParseException e) {
@@ -277,7 +282,8 @@ public class DBController {
   //    and adds it to Comida.
   // If error, returned comida will have no id.
   public Comida uploadPhotoAndUpdateComida(final Profile profile, final Comida comida, Bitmap img) {
-    final StorageReference ref = storage.getReference().child(profile.getId() + "/" + comida.getId());
+    final StorageReference ref = storage.getReference().child(profile.getId() + "/" +
+        COLLECTION_ACTIVIDADES + comida.getFecha().toString());
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     img.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -406,6 +412,19 @@ public class DBController {
             reference.put(DOCTOR_PACIENTE_REF, task.getResult().getReference());
             db.collection(COLLECTION_DOCTORES).document(doctorId).collection(COLLECTION_PROFILE)
                 .document(profile.getId()).set(reference, SetOptions.merge());
+            db.collection(COLLECTION_DOCTORES).document(doctorId).get().addOnCompleteListener(
+                new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                  if (task.isSuccessful()) {
+                    profile.setNombreDoctor((String) task.getResult().get(DOCTOR_NOMBRE));
+                    dbResponseListener.onNewDoctorAssociated(profile);
+                  } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                    dbResponseListener.onDatabaseNetworkError();
+                  }
+                }
+              });
           } else {
             Log.d(TAG, "Error getting documents: ", task.getException());
             dbResponseListener.onDatabaseNetworkError();

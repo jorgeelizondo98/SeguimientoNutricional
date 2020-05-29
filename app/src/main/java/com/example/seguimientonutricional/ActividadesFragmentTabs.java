@@ -101,7 +101,6 @@ public class ActividadesFragmentTabs extends Fragment  {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
         ViewModelProviders.of(getActivity()).get(HomeViewModel.class).getDate().observe(getViewLifecycleOwner(), new Observer<Date>() {
             @Override
             public void onChanged(@Nullable Date newDate) {

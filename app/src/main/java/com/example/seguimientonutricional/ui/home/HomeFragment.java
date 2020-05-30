@@ -19,6 +19,7 @@ import com.example.seguimientonutricional.ActividadesFragmentTabs;
 import com.example.seguimientonutricional.BebidaFormsFragment;
 import com.example.seguimientonutricional.ComidaFormsFragment;
 import com.example.seguimientonutricional.EjercicioFormsFragment;
+import com.example.seguimientonutricional.FormsLifeCyle;
 import com.example.seguimientonutricional.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,7 +29,8 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class HomeFragment extends Fragment implements ActividadesFragmentTabs.OnTabSelectedListener {
+public class HomeFragment extends Fragment implements ActividadesFragmentTabs.OnTabSelectedListener,
+        FormsLifeCyle {
 
     private HomeViewModel homeViewModel;
     private FloatingActionButton fabAddButton;
@@ -58,7 +60,6 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
         fabAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 fabAddButton.hide();
                 Fragment fragment = null;
                 String tag = "";
@@ -145,4 +146,13 @@ public class HomeFragment extends Fragment implements ActividadesFragmentTabs.On
     }
 
 
+    @Override
+    public void onFormsOpened() {
+        fabAddButton.hide();
+    }
+
+    @Override
+    public void onFormsClosed() {
+        fabAddButton.show();
+    }
 }

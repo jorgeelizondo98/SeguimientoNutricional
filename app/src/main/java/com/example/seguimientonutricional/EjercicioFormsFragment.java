@@ -57,13 +57,16 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
     private Integer hour;
     private Integer minutes;
     private Ejercicio currentEjercicio;
+    private Boolean newEjercicio;
 
     public EjercicioFormsFragment() {
         // Required empty public constructor
+        newEjercicio = true;
     }
 
     public EjercicioFormsFragment(Ejercicio ejercicio) {
         currentEjercicio = ejercicio;
+        newEjercicio = false;
     }
 
     @Override
@@ -124,14 +127,18 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
             @Override
             public void onClick(View v) {
                 addEjercicio();
+                FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
                 getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                fragmentHome.onFormsClosed();
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
                 getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                fragmentHome.onFormsClosed();
             }
         });
 
@@ -165,7 +172,11 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
         ejercicio.setTitulo(titulo.getText().toString());
         ejercicio.setDescripcion(descripcion.getText().toString());
         ejercicio.setFecha(fecha);
-        db.addEjercicio(profile, ejercicio);
+        if(newEjercicio){
+            db.addEjercicio(profile, ejercicio);
+        } else {
+            db.updateEjercicio(profile,ejercicio);
+        }
     }
 
     @Override

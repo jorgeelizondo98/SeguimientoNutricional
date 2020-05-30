@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Ejercicio;
 import com.example.seguimientonutricional.EjercicioFormsFragment;
+import com.example.seguimientonutricional.FormsLifeCyle;
 import com.example.seguimientonutricional.R;
 
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class AdapterEjercicio extends RecyclerView.Adapter<AdapterEjercicio.View
             @Override
             public void onClick(View v) {
                 Fragment fragment = new EjercicioFormsFragment(currEjercicio);
+                FormsLifeCyle fragmentHome = (FormsLifeCyle) parent;
+                fragmentHome.onFormsOpened();
                 parent.getChildFragmentManager().beginTransaction()
                         .replace(R.id.container_home_content,fragment,"ejercicioForm")
                         .addToBackStack(null)

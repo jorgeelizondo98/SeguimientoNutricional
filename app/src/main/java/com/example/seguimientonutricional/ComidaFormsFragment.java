@@ -68,14 +68,17 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     private Integer hour;
     private Integer minutes;
     private Comida currentComida;
+    private Boolean newComida;
 
     public ComidaFormsFragment() {
     // Required empty public constructor
+        newComida = true;
     }
 
     public ComidaFormsFragment(Comida comida) {
         // Required empty public constructor
         currentComida = comida;
+        newComida = false;
     }
 
 
@@ -96,7 +99,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
         fm = getActivity().getSupportFragmentManager();
 
-        Fragment fragment = getParentFragmentManager().findFragmentByTag("comidaForm");
+        final Fragment fragment = getParentFragmentManager().findFragmentByTag("comidaForm");
         db = new DBController(fragment);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -129,14 +132,18 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
             @Override
             public void onClick(View v) {
                 addComida();
+                FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
                 getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                fragmentHome.onFormsClosed();
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                  getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
+                getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                fragmentHome.onFormsClosed();
             }
         });
 
@@ -214,7 +221,11 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         comida1.setTitulo(titulo.getText().toString());
         comida1.setDescripcion(descripcion.getText().toString());
         comida1.setFecha(fecha);
-        db.addComida(profile, comida1);
+        if(newComida){
+            db.addComida(profile, comida1);
+        } else {
+            db.updateComida(profile,comida1);
+        }
         if(imageBitmap !=  null){
             db.uploadPhotoAndUpdateComida(profile,comida1,imageBitmap);
         }

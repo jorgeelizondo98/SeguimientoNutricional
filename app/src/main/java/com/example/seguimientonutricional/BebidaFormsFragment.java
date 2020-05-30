@@ -60,13 +60,16 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
     private Integer hour;
     private Integer minutes;
     private Bebida currentBebida;
+    private Boolean newBebida;
 
     public BebidaFormsFragment() {
         // Required empty public constructor
+        newBebida = true;
     }
 
     public BebidaFormsFragment(Bebida bebida) {
         currentBebida = bebida;
+        newBebida = false;
     }
 
     @Override
@@ -115,14 +118,18 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
             @Override
             public void onClick(View v) {
                 addBebida();
+                FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
                 getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                fragmentHome.onFormsClosed();
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
                 getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                fragmentHome.onFormsClosed();
             }
         });
 
@@ -186,7 +193,12 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         bebida.setTitulo(titulo.getText().toString());
         bebida.setDescripcion(descripcion.getText().toString());
         bebida.setFecha(fecha);
-        db.addBebida(profile, bebida);
+        if(newBebida){
+            db.addBebida(profile, bebida);
+        } else {
+            db.updateBebida(profile,bebida);
+        }
+
     }
 
     @Override

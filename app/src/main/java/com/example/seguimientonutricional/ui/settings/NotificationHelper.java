@@ -29,6 +29,8 @@ public class NotificationHelper extends ContextWrapper {
         }
         return mManager;
     }
+
+    //set Notification values
     public NotificationCompat.Builder getChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle("Recordatorio")

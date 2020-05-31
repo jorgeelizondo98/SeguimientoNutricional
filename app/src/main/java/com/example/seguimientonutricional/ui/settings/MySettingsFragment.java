@@ -42,22 +42,23 @@ public class MySettingsFragment extends PreferenceFragmentCompat  {
         switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                final boolean isChecked = sharedPreferences.getBoolean("recordatorio", false);
-                if(isChecked){
-                    switchPreference.setChecked(false);
-                    //Cancel alarm
+                if(switchPreference.isChecked()){
+
+                    //Cancel alarm is switch off
                     AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
                     Intent intent = new Intent(getContext(), AlarmReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
                     alarmManager.cancel(pendingIntent);
+                    switchPreference.setChecked(false);
                     return true;
                 }
                 else{
-                    switchPreference.setChecked(true);
+                    //settingsNotificationFragment->set alarm
                     final FragmentManager fm  = getActivity().getSupportFragmentManager();
                     final Fragment fragment = new SettingsNotificationFragment();
                     fm.beginTransaction().replace(R.id.settings_fragment,fragment)
                             .addToBackStack(null).commit();
+                    switchPreference.setChecked(true);
                     return false;
                 }
             }

@@ -30,7 +30,6 @@ public class SettingsNotificationFragment extends Fragment implements TimePicker
 
     private EditText ed_setTime;
     private Button b_save;
-    private Button b_cancel;
     private Context mContext;
     private TextView mTextView;
 
@@ -52,7 +51,6 @@ public class SettingsNotificationFragment extends Fragment implements TimePicker
         ed_setTime = root.findViewById(R.id.ed_setTime);
         b_save = root.findViewById(R.id.save_button);
         mTextView = root.findViewById(R.id.tv_timer);
-        b_cancel = root.findViewById(R.id.cancel_button);
         b_save = root.findViewById(R.id.save_button);
         mContext=getContext();
 
@@ -78,13 +76,11 @@ public class SettingsNotificationFragment extends Fragment implements TimePicker
             }
         });
 
-
-
-
         return root;
     }
 
 
+    //create calendar type
         @Override
     public void onTimeSet(int hour, int minute) {
             ed_setTime.setText(Integer.toString(hour)+":"+Integer.toString(minute));
@@ -96,11 +92,14 @@ public class SettingsNotificationFragment extends Fragment implements TimePicker
             startAlarm(c);
     }
 
+
     private void updateTimeText(Calendar c) {
         String timeText = "Recordatorio programado para: ";
         timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
         mTextView.setText(timeText);
     }
+
+    //set daily alarm
     private void startAlarm(Calendar c) {
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(mContext, AlarmReceiver.class);
@@ -108,7 +107,8 @@ public class SettingsNotificationFragment extends Fragment implements TimePicker
         if (c.before(Calendar.getInstance())) {
             c.add(Calendar.DATE, 1);
         }
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         Toast.makeText(mContext, "Recordatorio guardado", Toast.LENGTH_SHORT).show();;
     }
 

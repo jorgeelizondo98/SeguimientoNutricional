@@ -1,5 +1,9 @@
 package com.example.seguimientonutricional.ui.settings;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +22,7 @@ import com.example.seguimientonutricional.ComidaFormsFragment;
 import com.example.seguimientonutricional.R;
 import com.example.seguimientonutricional.TimePickerFragment;
 
-public class MySettingsFragment extends PreferenceFragmentCompat {
+public class MySettingsFragment extends PreferenceFragmentCompat  {
 
 
     @Override
@@ -28,40 +32,38 @@ public class MySettingsFragment extends PreferenceFragmentCompat {
 
     public void onResume() {
         super.onResume();
-        //You can change preference summary programmatically like following.
-        final SwitchPreferenceCompat switchPreference = (SwitchPreferenceCompat) findPreference("recordatorio");
-        switchPreference.setSummaryOff("Switch off state updated from code");
-        switchPreference.setSummaryOn("Switch on state updated from code");
 
-        //You can read preference value anywhere in the app like following.
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean isChecked = sharedPreferences.getBoolean("recordatorio", false);
+        //switch de recordatorio
+        final SwitchPreferenceCompat switchPreference = (SwitchPreferenceCompat) findPreference("recordatorio");
+        switchPreference.setSummaryOn("Desactiva recordatorio diario");
+        switchPreference.setSummaryOff("Activa recordatorio diario");
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                if(switchPreference.isChecked()){
-                    Toast.makeText(getActivity(), "isChecked : " + false, Toast.LENGTH_LONG).show();
+                final boolean isChecked = sharedPreferences.getBoolean("recordatorio", false);
+                if(isChecked){
                     switchPreference.setChecked(false);
+                    //Cancel alarm
+                    AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+                    Intent intent = new Intent(getContext(), AlarmReceiver.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
+                    alarmManager.cancel(pendingIntent);
                     return true;
                 }
                 else{
-                    Toast.makeText(getActivity(), "isChecked : " + true, Toast.LENGTH_LONG).show();
-
-
-
+                    switchPreference.setChecked(true);
                     final FragmentManager fm  = getActivity().getSupportFragmentManager();
                     final Fragment fragment = new SettingsNotificationFragment();
                     fm.beginTransaction().replace(R.id.settings_fragment,fragment)
                             .addToBackStack(null).commit();
-
-                    switchPreference.setChecked(true);
                     return false;
                 }
             }
         });
 
     }
+
 
 }

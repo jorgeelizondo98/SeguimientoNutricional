@@ -26,8 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView" />
-
+            android:text=""
+            android:textSize="25dp"
+            android:textAlignment="center"/>
+        <!--
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,18 +77,12 @@
                 android:layout_weight="1"></CheckBox>
 
         </RadioGroup>
-
+        -->
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Cancelar"
-                android:id="@+id/cancel_button"></Button>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

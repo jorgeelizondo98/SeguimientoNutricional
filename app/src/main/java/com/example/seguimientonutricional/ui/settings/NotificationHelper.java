@@ -31,8 +31,9 @@ public class NotificationHelper extends ContextWrapper {
     }
     public NotificationCompat.Builder getChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
-                .setContentTitle("Alarm!")
-                .setContentText("Your AlarmManager is working.")
+                .setContentTitle("Recordatorio")
+                .setContentText("Es un buen momento para registrar tu avance")
                 .setSmallIcon(android.R.drawable.ic_dialog_alert);
     }
+
 }

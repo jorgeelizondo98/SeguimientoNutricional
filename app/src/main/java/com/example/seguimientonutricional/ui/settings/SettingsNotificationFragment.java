@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.seguimientonutricional.ComidaFormsFragment;
 import com.example.seguimientonutricional.R;
@@ -66,10 +67,14 @@ public class SettingsNotificationFragment extends Fragment implements TimePicker
 
         });
 
-        b_cancel.setOnClickListener(new View.OnClickListener() {
+
+        b_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelAlarm();
+                final FragmentManager fm  = getActivity().getSupportFragmentManager();
+                final Fragment fragment = new MySettingsFragment();
+                fm.beginTransaction().replace(R.id.settings_fragment,fragment)
+                        .addToBackStack(null).commit();
             }
         });
 
@@ -92,7 +97,7 @@ public class SettingsNotificationFragment extends Fragment implements TimePicker
     }
 
     private void updateTimeText(Calendar c) {
-        String timeText = "Alarm set for: ";
+        String timeText = "Recordatorio programado para: ";
         timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
         mTextView.setText(timeText);
     }
@@ -104,12 +109,7 @@ public class SettingsNotificationFragment extends Fragment implements TimePicker
             c.add(Calendar.DATE, 1);
         }
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        Toast.makeText(mContext, "Recordatorio guardado", Toast.LENGTH_SHORT).show();;
     }
-    private void cancelAlarm() {
-        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(mContext, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 1, intent, 0);
-        alarmManager.cancel(pendingIntent);
-        mTextView.setText("Alarm canceled");
-    }
+
 }

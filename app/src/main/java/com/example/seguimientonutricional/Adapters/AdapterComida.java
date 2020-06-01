@@ -17,7 +17,7 @@ import com.example.seguimientonutricional.FormsLifeCyle;
 import com.example.seguimientonutricional.R;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 public class AdapterComida extends RecyclerView.Adapter<AdapterComida.ViewHolder> {
 
@@ -47,9 +47,12 @@ public class AdapterComida extends RecyclerView.Adapter<AdapterComida.ViewHolder
 
         holder.mTitulo.setText(currComida.getTitulo());
 
-        Date date = currComida.getFecha();
-        String hora = convertSecondsToHMmSs(date.getTime());
-        holder.mFecha.setText(hora);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currComida.getFecha());
+        Integer hour = cal.get(Calendar.HOUR_OF_DAY);
+        Integer minutes = cal.get(Calendar.MINUTE);
+        holder.mFecha.setText(hour.toString() + ":" + minutes.toString());
+
 
         if(currComida.getFotoUrl() == null){
             holder.mImageView.setImageResource(R.drawable.salad);
@@ -70,12 +73,6 @@ public class AdapterComida extends RecyclerView.Adapter<AdapterComida.ViewHolder
         });
     }
 
-    public static String convertSecondsToHMmSs(long seconds) {
-        long s = seconds % 60;
-        long m = (seconds / 60) % 60;
-        long h = (seconds / (60 * 60)) % 24;
-        return String.format("%d:%02d", h,m);
-    }
     @Override
     public int getItemCount() {
         return mComidas.size();

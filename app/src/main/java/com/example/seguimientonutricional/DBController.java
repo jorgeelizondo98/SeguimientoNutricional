@@ -71,7 +71,8 @@ public class DBController {
   private final static String BEBIDA_TIPO = "bebida";
   private final static String EJERCICIO_TIPO = "ejercicio";
 
-  // Constructor initializes database and storage classes.
+  // Constructor inicializa el objeto de conexión a Firebase Firestore y Firebase Storage.
+  // También Asigna el DBResponseListener recibido como parametro.
   public DBController(Object object) {
     db = FirebaseFirestore.getInstance();
     FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -82,12 +83,24 @@ public class DBController {
     dbResponseListener = (DBResponseListener) object;
   }
 
+  // Interfaz listener de respuestas de la base de datos.
   public interface DBResponseListener {
+    // Avisa que no se pudo acceder a la base de datos.
     void onDatabaseNetworkError();
+
+    // Avisa que se recibio un profile y lo envía.
     void onProfileReceived(Profile profile) throws ParseException;
+
+    // Avisa que se recibió/actualizó una lista de comidas.
     void onComidasReceived(ArrayList<Comida> comidas);
+
+    // Avisa que se recibió/actualizó una lista de bebidas.
     void onBebidasReceived(ArrayList<Bebida> bebidas);
+
+    // Avisa que se recibió/actualizó una lista de ejercicios.
     void onEjerciciosReceived(ArrayList<Ejercicio> ejercicios);
+
+    // Avisa que se asoció un nuevo doctor al perfil del usuario.
     void onNewDoctorAssociated(Profile profile);
   }
 
@@ -103,8 +116,9 @@ public class DBController {
     return formatted_profile;
   }
 
+  // Carga un profile de la base de datos a través de su identificador de usuario de Firebase.
   public void loadProfile(final FirebaseUser user) {
-    // Search in the database for the profile.
+    // Busca el perfil en la base de datos.
     db.collection(COLLECTION_PROFILE).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
       @Override
       public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -130,7 +144,7 @@ public class DBController {
               return;
             }
           }
-          // The profile does not exist, so it should be created.
+          // Si no se encontró el perfil se procede a crearlo.
           profile[0].setName(
               (user.getDisplayName() != null? user.getDisplayName() : null),
               null, null);
@@ -165,11 +179,13 @@ public class DBController {
     });
   }
 
+  // Actualiza el perfil de usuario en la base de datos.
   public void updateProfile(Profile profile) {
     db.collection(COLLECTION_PROFILE).document(profile.getId()).set(formatProfile(profile),
         SetOptions.merge());
   }
 
+  // Formatea un objeto de registro de actividad para subirlo a la base de datos.
   private Map<String, Object> formatRegistro(Registro registro, Map<String, Object> formatted_registro) {
     formatted_registro.put(REGISTRO_TITULO, registro.getTitulo());
     formatted_registro.put(REGISTRO_DESCRIPCION, registro.getDescripcion());
@@ -203,6 +219,7 @@ public class DBController {
     return formatRegistro(ejercicio, formatted_ejercicio);
   }
 
+  // Agrega una comida a la base de datos.
   public void addComida(final Profile profile, final Comida comida) {
     db.collection(COLLECTION_PROFILE).document(profile.getId()).collection(COLLECTION_ACTIVIDADES)
         .add(formatComida(comida))
@@ -221,6 +238,7 @@ public class DBController {
         });
   }
 
+  // Agrega una bebida a la base de datos.
   public void addBebida(final Profile profile, final Bebida bebida) {
     db.collection(COLLECTION_PROFILE).document(profile.getId()).collection(COLLECTION_ACTIVIDADES)
         .add(formatBebida(bebida))
@@ -239,6 +257,7 @@ public class DBController {
         });
   }
 
+  // Agrega un ejercicio a la base de datos.
   public void addEjercicio(final Profile profile, final Ejercicio ejercicio) {
     db.collection(COLLECTION_PROFILE).document(profile.getId()).collection(COLLECTION_ACTIVIDADES)
         .add(formatEjercicio(ejercicio))
@@ -303,6 +322,7 @@ public class DBController {
   // Receives a type and a date, and returns the registers for that type in that date.
   @RequiresApi(api = Build.VERSION_CODES.N)
   private void loadRegistros(String profileId, final String tipo, final Date date) {
+    // Guardar resultados en un priority queue que ordene los registros por fecha.
     final PriorityQueue<QueryDocumentSnapshot> registros =
         new PriorityQueue<>(new Comparator<QueryDocumentSnapshot>() {
           @Override
@@ -311,6 +331,7 @@ public class DBController {
                 (Timestamp) o2.getData().get(REGISTRO_FECHA));
           }
         });
+    // Busca los registros en la base de datos.
     db.collection(COLLECTION_PROFILE).document(profileId).collection(COLLECTION_ACTIVIDADES)
         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
         @Override
@@ -325,6 +346,7 @@ public class DBController {
                 registros.add(document);
               }
             }
+            // De acuerdo al tipo de registro llama a la función que lo asignara al objeto adecuado.
             switch (tipo) {
               case COMIDA_TIPO:
                 DBController.this.onRawComidasReceived(registros);
@@ -344,6 +366,7 @@ public class DBController {
       });
   }
 
+  // Crea un objeto registro a partir de una lectura de la base de datos.
   private Registro populateRegistro(QueryDocumentSnapshot document) {
     Registro registro = new Registro();
     registro.setId(document.getId());
@@ -355,11 +378,13 @@ public class DBController {
     return registro;
   }
 
+  // Pide carga de registros de comida a la base de datos.
   @RequiresApi(api = Build.VERSION_CODES.N)
   public void loadComidas(Profile profile, Date date) {
     loadRegistros(profile.getId(), COMIDA_TIPO, date);
   }
 
+  // Crea un objeto de comida a partir de información de la base de datos y la envía al listener.
   private void onRawComidasReceived(PriorityQueue<QueryDocumentSnapshot> rawComidas) {
     ArrayList<Comida> comidas = new ArrayList<>();
     for (QueryDocumentSnapshot document: rawComidas) {
@@ -377,11 +402,13 @@ public class DBController {
     dbResponseListener.onComidasReceived(comidas);
   }
 
+  // Pide carga de registros de bebida a la base de datos.
   @RequiresApi(api = Build.VERSION_CODES.N)
   public void loadBebidas(Profile profile, Date date) {
     loadRegistros(profile.getId(), BEBIDA_TIPO, date);
   }
 
+  // Crea un objeto de bebida a partir de información de la base de datos y la envía al listener.
   private void onRawBebidasReceived(PriorityQueue<QueryDocumentSnapshot> rawBebidas) {
     ArrayList<Bebida> bebidas = new ArrayList<>();
     for (QueryDocumentSnapshot document: rawBebidas) {
@@ -391,11 +418,13 @@ public class DBController {
     dbResponseListener.onBebidasReceived(bebidas);
   }
 
+  // Pide carga de registros de ejercicio a la base de datos.
   @RequiresApi(api = Build.VERSION_CODES.N)
   public void loadEjercicios(Profile profile, Date date) {
     loadRegistros(profile.getId(), EJERCICIO_TIPO, date);
   }
 
+  // Crea un objeto de ejercicio a partir de información de la base de datos y la envía al listener.
   private void onRawEjercicioReceived(PriorityQueue<QueryDocumentSnapshot> rawEjercicio) {
     ArrayList<Ejercicio> ejercicios = new ArrayList<>();
     for (QueryDocumentSnapshot document: rawEjercicio) {
@@ -405,6 +434,7 @@ public class DBController {
     dbResponseListener.onEjerciciosReceived(ejercicios);
   }
 
+  // Registra la asociación de un usuario con un doctor y la envía el listener.
   public void associateDoctor(final Profile profile, final String doctorId) {
     db.collection(COLLECTION_PROFILE).document(profile.getId()).get().addOnCompleteListener(
         new OnCompleteListener<DocumentSnapshot>() {

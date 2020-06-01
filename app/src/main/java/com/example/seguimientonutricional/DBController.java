@@ -365,11 +365,11 @@ public class DBController {
     for (QueryDocumentSnapshot document: rawComidas) {
       Comida comida = new Comida(populateRegistro(document));
       Map<String, Object> comidaDocument = document.getData();
-      Float proteinas = (Float) comidaDocument.get(COMIDA_PROTEINAS);
+      Long proteinas = (Long) comidaDocument.get(COMIDA_PROTEINAS);
       comida.setProteinas((proteinas == null? -1 : proteinas.intValue()));
-      Float carbohidratos = (Float) comidaDocument.get(COMIDA_CARBOHIDRATOS);
+      Long carbohidratos = (Long) comidaDocument.get(COMIDA_CARBOHIDRATOS);
       comida.setCarbohidratos((carbohidratos == null? -1 : carbohidratos.intValue()));
-      Float grasas = (Float) comidaDocument.get(COMIDA_GRASAS);
+      Long grasas = (Long) comidaDocument.get(COMIDA_GRASAS);
       comida.setGrasas((grasas == null? -1 : grasas.intValue()));
       comida.setFotoUrl((String) comidaDocument.get(COMIDA_FOTO));
       comidas.add(comida);

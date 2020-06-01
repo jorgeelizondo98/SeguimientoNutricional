@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity
     mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     findViewById(R.id.google_sign_in_button).setOnClickListener(clickSignIn);
 
-    // Firebase auth for Email and Facebook Signup.
+    // Firebase auth para asignar el inicio de sesión de las plataformas compatibles.
     mAuth = FirebaseAuth.getInstance();
 
     // Colocar el fragmento de inicio de sesión / registro con email según sea el caso.
@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity
     }
   }
 
+  // Posiciona en la interfaz el boton de inicio de sesión o registro.
   private void setRegisterLoginButtonText() {
     Button registerOrLoginButton = findViewById(R.id.register_login);
     if (currentFragment.getTag() == LOGIN_FRAGMENT) {
@@ -124,6 +125,7 @@ public class LoginActivity extends AppCompatActivity
     }
   }
 
+  // Cambia el fragmento de inicio de sesión por el de registro o viceversa.
   public void switchEmailFragment(View view){
     if (currentFragment == null) {
       currentFragment = EmailLoginFragment.newInstance();
@@ -141,6 +143,7 @@ public class LoginActivity extends AppCompatActivity
     setRegisterLoginButtonText();
   }
 
+  // Registra a usuarios en firebase con correo electrónico e inicia sesión.
   @Override
   public void onEmailRegister(String email, String password, String confirm_password) {
     if (password.equals(confirm_password)) {
@@ -166,6 +169,7 @@ public class LoginActivity extends AppCompatActivity
     }
   }
 
+  // Autentica el usuario en Firebase, trae los datos del usuario, e inicia sesión.
   @Override
   public void onEmailLogin(String email, String password) {
     mAuth.signInWithEmailAndPassword(email, password)
@@ -187,11 +191,37 @@ public class LoginActivity extends AppCompatActivity
         });
   }
 
+  // Lanza la actividad de Google para inicio de sesión.
   private void googleSignIn() {
     Intent signInIntent = mGoogleSignInClient.getSignInIntent();
     startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
   }
 
+  // Recibe los resultados de otras actividades.
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    // Cuando se inicio sesión con Google llamar a handleGoogleSignInResult.
+    if (requestCode == GOOGLE_SIGN_IN) {
+      // The Task returned from this call is always completed, no need to attach
+      // a listener.
+      Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+      handleGoogleSignInResult(task);
+
+      // Cuando se inicia sesión con Facebook llamar al listener onActivityResult de Facebook.
+    } else if (requestCode == FACEBOOK_SIGN_IN) {
+      mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+
+      // Cerrar sesión de firebase.
+    } else if (requestCode == LOGOUT) {
+      mAuth.signOut();
+      mGoogleSignInClient.signOut();
+      LoginManager.getInstance().logOut();
+    }
+  }
+
+  // Recibe el resultado de login de Facebook.
   FacebookCallback<LoginResult> loginResultFacebookCallback = new FacebookCallback<LoginResult>() {
     @Override
     public void onSuccess(LoginResult loginResult) {
@@ -210,26 +240,7 @@ public class LoginActivity extends AppCompatActivity
     }
   };
 
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-    if (requestCode == GOOGLE_SIGN_IN) {
-      // The Task returned from this call is always completed, no need to attach
-      // a listener.
-      Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-      handleGoogleSignInResult(task);
-    } else if (requestCode == FACEBOOK_SIGN_IN) {
-      mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-    } else if (requestCode == LOGOUT) {
-      mAuth.signOut();
-      mGoogleSignInClient.signOut();
-      LoginManager.getInstance().logOut();
-    } else {
-
-    }
-  }
-
+  // Verificar el inicio de sesión de Google y pasa a la siguietne actividad en caso de éxito.
   private void handleGoogleSignInResult(Task<GoogleSignInAccount> task) {
     try {
       // Google Sign In was successful, authenticate with Firebase
@@ -261,6 +272,7 @@ public class LoginActivity extends AppCompatActivity
 
   }
 
+  // Verifica el inicio de sesión con Facebook y pasa a la siguiente actividad en caso de éxtio.
   private void handleFacebookAccessToken(AccessToken token) {
     Log.d(TAG, "handleFacebookAccessToken:" + token);
 
@@ -283,6 +295,8 @@ public class LoginActivity extends AppCompatActivity
         });
   }
 
+  // Actualiza la interfaz de usuario a la actividad principal de la app, en caso de que el inicio
+  //    de sesión fuese exitoso.
   private void updateUI(FirebaseUser user) {
     if (user == null) {
       Toast.makeText(LoginActivity.this, R.string.login_fail, Toast.LENGTH_SHORT).show();
@@ -292,6 +306,7 @@ public class LoginActivity extends AppCompatActivity
     }
   }
 
+  // Funcionalidad del botón de inicio de sesión de Google.
   private View.OnClickListener clickSignIn = new View.OnClickListener() {
     @Override
     public void onClick(View view) {

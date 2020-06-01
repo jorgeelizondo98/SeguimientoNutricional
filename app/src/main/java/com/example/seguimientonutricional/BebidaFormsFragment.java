@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -40,12 +41,13 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
     private Button buttonHora;
     private EditText titulo;
     private EditText descripcion;
-    private RadioGroup cantidadRadioGroup;
-    private RadioGroup calidadRadioGroup;
-    private RadioGroup carbohidratosRadioGroup;
+    private RadioGroup sodioRadioGroup;
+    private RadioGroup azucaresRadioGroup;
     private Button confirmButton;
     private Button cancelButton;
     private Calendar c;
+    private EditText cantidad_et;
+    boolean formComplete;
 
     private DBController db;
     private Profile profile;
@@ -53,9 +55,8 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
     private HomeViewModel homeViewModel;
 
 
-    private Boolean carbohidratos;
-    private Integer cantidad;
-    private Integer calidad;
+    private Integer sodio;
+    private Integer azucares;
     private Date fecha;
     private Integer hour;
     private Integer minutes;
@@ -97,12 +98,15 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         titulo = root.findViewById(R.id.titulo_id);
         confirmButton = root.findViewById(R.id.okay_button_id);
         cancelButton = root.findViewById(R.id.cancel_button);
+        cantidad_et = root.findViewById(R.id.cantidad_id);
+        sodioRadioGroup = root.findViewById(R.id.sodio_radiogroup_id);
+        azucaresRadioGroup = root.findViewById(R.id.azucares_radiogroup_id);
 
+        formComplete = true;
         fecha = Calendar.getInstance().getTime();
 
         if(currentBebida != null){
-            titulo.setText(currentBebida.getTitulo());
-            descripcion.setText(currentBebida.getDescripcion());
+            setUI();
         }
 
         buttonHora.setOnClickListener(new View.OnClickListener() {
@@ -117,10 +121,18 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addBebida();
-                FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
-                getParentFragment().getChildFragmentManager().popBackStackImmediate();
-                fragmentHome.onFormsClosed();
+                formComplete = true;
+                checksAllFormFilled();
+                if(formComplete) {
+                    addBebida();
+                    FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
+                    getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                    fragmentHome.onFormsClosed();
+                } else {
+                    Toast.makeText(getActivity()
+                            ,"Favor de llenar todos los campos"
+                            ,Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -133,48 +145,37 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
             }
         });
 
-        carbohidratosRadioGroup = root.findViewById(R.id.carbohidratos_radiogroup_id);
-        cantidadRadioGroup = root.findViewById(R.id.proteinas_radiogroup_id);
-        calidadRadioGroup = root.findViewById(R.id.grasas_radiogroup_id);
 
-        carbohidratosRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+
+        sodioRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                View radioButton = carbohidratosRadioGroup.findViewById(checkedId);
-                int selection = carbohidratosRadioGroup.indexOfChild(radioButton);
+                View radioButton = sodioRadioGroup.findViewById(checkedId);
+                int selection = sodioRadioGroup.indexOfChild(radioButton);
                 switch (selection){
-                    case 1: carbohidratos = true; break;
-                    case 2: carbohidratos = false; break;
+                    case 1: sodio = 0; break;
+                    case 2: sodio = 1; break;
+                    case 3: sodio = 2; break;
+                    case 4: sodio = 3; break;
+                    case 5: sodio = 4; break;
+                    case 6: sodio = 5; break;
                 }
             }
         });
 
-        cantidadRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        azucaresRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                View radioButton = cantidadRadioGroup.findViewById(checkedId);
-                int selection = cantidadRadioGroup.indexOfChild(radioButton);
+                View radioButton = azucaresRadioGroup.findViewById(checkedId);
+                int selection = azucaresRadioGroup.indexOfChild(radioButton);
                 switch (selection){
-                    case 1: cantidad = 1; break;
-                    case 2: cantidad = 2; break;
-                    case 3: cantidad = 3; break;
-                    case 4: cantidad = 4; break;
-                    case 5: cantidad = 5; break;
-                }
-            }
-        });
-
-        calidadRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                View radioButton = calidadRadioGroup.findViewById(checkedId);
-                int selection = calidadRadioGroup.indexOfChild(radioButton);
-                switch (selection){
-                    case 1: calidad = 1; break;
-                    case 2: calidad = 2; break;
-                    case 3: calidad = 3; break;
-                    case 4: calidad = 4; break;
-                    case 5: calidad = 5; break;
+                    case 1: azucares = 0; break;
+                    case 2: azucares = 1; break;
+                    case 3: azucares = 2; break;
+                    case 4: azucares = 3; break;
+                    case 5: azucares = 4; break;
+                    case 6: azucares = 5; break;
                 }
             }
         });
@@ -183,7 +184,25 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
     }
 
 
+    public  void setUI(){
+        titulo.setText(currentBebida.getTitulo());
+        descripcion.setText(currentBebida.getDescripcion());
+        cantidad_et.setText(currentBebida.getCantidad().toString());
+        sodioRadioGroup.check(sodioRadioGroup.getChildAt(
+                currentBebida.getSodio() + 1).getId());
+
+        azucaresRadioGroup.check(azucaresRadioGroup.getChildAt(
+                currentBebida.getAzucares() + 1 ).getId());
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentBebida.getFecha());
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        minutes = cal.get(Calendar.MINUTE);
+        buttonHora.setText(hour.toString() + ":" + minutes.toString());
+    }
+
     private void addBebida() {
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(fecha);
         cal.set(Calendar.HOUR_OF_DAY, hour);
@@ -192,6 +211,9 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         Bebida bebida = new Bebida();
         bebida.setTitulo(titulo.getText().toString());
         bebida.setDescripcion(descripcion.getText().toString());
+        bebida.setmAzucares(azucares);
+        bebida.setmSodio(sodio);
+        bebida.setmCantidad(Integer.parseInt(cantidad_et.getText().toString()));
         bebida.setFecha(fecha);
         if(newBebida){
             db.addBebida(profile, bebida);
@@ -199,6 +221,15 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
             db.updateBebida(profile,bebida);
         }
 
+    }
+
+    private void checksAllFormFilled(){
+        if(titulo.getText() == null){formComplete = false;}
+        if(descripcion.getText() == null){formComplete = false;}
+        if(cantidad_et.getText() == null){formComplete = false;}
+        if(sodio == null){formComplete = false;}
+        if(azucares == null){formComplete = false;}
+        if (hour == null){formComplete = false;}
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -69,6 +70,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     private Integer minutes;
     private Comida currentComida;
     private Boolean newComida;
+    private Boolean formComplete;
 
     public ComidaFormsFragment() {
     // Required empty public constructor
@@ -115,18 +117,10 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         grasasRadioGroup = root.findViewById(R.id.grasas_radiogroup_id);
 
         fecha = Calendar.getInstance().getTime();
+        formComplete = true;
 
         if(currentComida != null){
-            titulo.setText(currentComida.getTitulo());
-            descripcion.setText(currentComida.getDescripcion());
-//            carbohidratosRadioGroup.check(currentComida.getCarbohidratos()-1);
-//            proteinasRadioGroup.check(currentComida.getProteinas()-1);
-//            grasasRadioGroup.check(currentComida.getGrasas()-1);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(currentComida.getFecha());
-            hour = cal.get(Calendar.HOUR_OF_DAY);
-            minutes = cal.get(Calendar.MINUTE);
-            buttonHora.setText(hour.toString() + ":" + minutes.toString());
+            setUI();
         }
 
         buttonHora.setOnClickListener(new View.OnClickListener() {
@@ -141,10 +135,18 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addComida();
-                FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
-                getParentFragment().getChildFragmentManager().popBackStackImmediate();
-                fragmentHome.onFormsClosed();
+                formComplete = true;
+                checksAllFormFilled();
+                if(formComplete) {
+                    addComida();
+                    FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
+                    getParentFragment().getChildFragmentManager().popBackStackImmediate();
+                    fragmentHome.onFormsClosed();
+                }else{
+                    Toast.makeText(getActivity()
+                            ,"Favor de llenar todos los campos"
+                            ,Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -221,6 +223,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
 
     private void addComida() {
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(fecha);
         cal.set(Calendar.HOUR_OF_DAY, hour);
@@ -241,6 +244,33 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         if(imageBitmap !=  null){
             db.uploadPhotoAndUpdateComida(profile,comida,imageBitmap);
         }
+
+    }
+
+    private void checksAllFormFilled(){
+        if(titulo.getText() == null){formComplete = false;}
+        if(descripcion.getText() == null){formComplete = false;}
+        if(carbohidratos == null){formComplete = false;}
+        if(proteinas == null){formComplete = false;}
+        if(grasas == null){formComplete = false;}
+        if (hour == null){formComplete = false;}
+    }
+
+    public  void setUI(){
+        titulo.setText(currentComida.getTitulo());
+        descripcion.setText(currentComida.getDescripcion());
+        carbohidratosRadioGroup.check(carbohidratosRadioGroup.getChildAt(
+                currentComida.getCarbohidratos() + 1).getId());
+
+        proteinasRadioGroup.check(proteinasRadioGroup.getChildAt(
+                currentComida.getProteinas() + 1 ).getId());
+        grasasRadioGroup.check(grasasRadioGroup.getChildAt(
+                currentComida.getGrasas() + 1).getId());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentComida.getFecha());
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        minutes = cal.get(Calendar.MINUTE);
+        buttonHora.setText(hour.toString() + ":" + minutes.toString());
     }
 
     public void startCamera(){

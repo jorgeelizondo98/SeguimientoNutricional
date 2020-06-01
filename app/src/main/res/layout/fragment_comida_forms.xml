@@ -35,8 +35,8 @@
 
                     <ImageView
                         android:id="@+id/imagen_view_id"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
                         android:src="@drawable/salad"/>
 
 
@@ -63,7 +63,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="24dp"
                         android:hint="Ingresa un nombre"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="20dp"/>
 
                     <EditText
                         android:id="@+id/descripcion_id"
@@ -100,6 +102,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.2"
                         android:text="Carbohidratos: "/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"
+                        android:text="0"/>
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -145,6 +153,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:text="0"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"
                         android:text="1"/>
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -181,6 +195,11 @@
                         android:layout_weight="0.2"
                         android:text="Grasas: " />
 
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"
+                        android:text="0"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -223,7 +242,8 @@
                 android:id="@+id/button_hora_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Selecciona la hora"
+                android:text="Selecciona Hora"
+
                 android:background="@color/colorAccent"
                 android:textColor="#ffffff"
                 android:layout_marginTop="16dp"

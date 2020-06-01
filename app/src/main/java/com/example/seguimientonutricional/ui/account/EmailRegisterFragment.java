@@ -13,20 +13,20 @@ import androidx.fragment.app.Fragment;
 import com.example.seguimientonutricional.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+// Fragmento para el registro con correo electrónico.
 public class EmailRegisterFragment extends Fragment {
 
   OnFragmentInteractionListener mListener;
-
 
   private EditText email;
   private EditText password;
   private EditText confirm_password;
   private CardView cardView;
+
+  // Constructor vacío obligatorio requerido.
   public EmailRegisterFragment() {}
 
+  // Método estático para la generación de instancias del fragment.
   public static EmailRegisterFragment newInstance() {
     Bundle args = new Bundle();
 
@@ -35,6 +35,7 @@ public class EmailRegisterFragment extends Fragment {
     return fragment;
   }
 
+  // Interfaz para comunicar a la actividad llamadora que se han ingresado los datos.
   interface OnFragmentInteractionListener {
     void onEmailRegister(String email, String password, String confirm_password);
   }
@@ -56,6 +57,7 @@ public class EmailRegisterFragment extends Fragment {
     confirm_password = rootView.findViewById(R.id.confirm_password);
     cardView = getActivity().findViewById(R.id.card);
 
+    // Al ingresar los datos para el inicio de sesión, enviarle los datos al listener.
     rootView.findViewById(R.id.register).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -75,6 +77,7 @@ public class EmailRegisterFragment extends Fragment {
     cardView.setVisibility(View.VISIBLE);
   }
 
+  // Forzar a las clases que utilicen este fragmento a implementar la interface de listener.
   @Override
   public void onAttach(Context context){
     super.onAttach(context);

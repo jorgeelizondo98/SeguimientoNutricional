@@ -13,9 +13,7 @@ import android.widget.EditText;
 import com.example.seguimientonutricional.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+// Fragmento para el inicio de sesión con correo electrónico.
 public class EmailLoginFragment extends Fragment {
 
   OnFragmentInteractionListener mListener;
@@ -23,10 +21,10 @@ public class EmailLoginFragment extends Fragment {
   private EditText email;
   private EditText password;
 
-  public EmailLoginFragment() {
+  // Constructor vacío obligatorio requerido.
+  public EmailLoginFragment() {}
 
-  }
-
+  // Método estático para la generación de instancias del fragment.
   public static EmailLoginFragment newInstance() {
     Bundle args = new Bundle();
 
@@ -35,6 +33,7 @@ public class EmailLoginFragment extends Fragment {
     return fragment;
   }
 
+  // Interfaz para comunicar a la actividad llamadora que se han ingresado los datos.
   interface OnFragmentInteractionListener {
     void onEmailLogin(String email, String password);
   }
@@ -54,6 +53,7 @@ public class EmailLoginFragment extends Fragment {
     email = rootView.findViewById(R.id.email);
     password = rootView.findViewById(R.id.password);
 
+    // Al ingresar los datos para el inicio de sesión, enviarle los datos al listener.
     rootView.findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -67,6 +67,7 @@ public class EmailLoginFragment extends Fragment {
     return rootView;
   }
 
+  // Forzar a las clases que utilicen este fragmento a implementar la interface de listener.
   @Override
   public void onAttach(Context context){
     super.onAttach(context);

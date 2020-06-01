@@ -23,11 +23,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -105,12 +104,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.DAY_OF_MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        Date dateTime = c.getTime();
+        Calendar c = new GregorianCalendar(year,month,dayOfMonth);
         currFecha = c;
+        Date dateTime = new Date(c.getTimeInMillis());
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.setDate(dateTime);
     }

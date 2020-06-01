@@ -104,19 +104,29 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db.loadProfile(currentUser);
-
         buttonHora = root.findViewById(R.id.button_hora_id);
         descripcion = root.findViewById(R.id.descripcion_id);
         titulo = root.findViewById(R.id.titulo_id);
         confirmButton = root.findViewById(R.id.okay_button_id);
         cancelButton = root.findViewById(R.id.cancel_button);
         imagen = root.findViewById(R.id.imagen_view_id);
+        carbohidratosRadioGroup = root.findViewById(R.id.carbohidratos_radiogroup_id);
+        proteinasRadioGroup = root.findViewById(R.id.proteinas_radiogroup_id);
+        grasasRadioGroup = root.findViewById(R.id.grasas_radiogroup_id);
 
         fecha = Calendar.getInstance().getTime();
 
         if(currentComida != null){
             titulo.setText(currentComida.getTitulo());
             descripcion.setText(currentComida.getDescripcion());
+//            carbohidratosRadioGroup.check(currentComida.getCarbohidratos()-1);
+//            proteinasRadioGroup.check(currentComida.getProteinas()-1);
+//            grasasRadioGroup.check(currentComida.getGrasas()-1);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentComida.getFecha());
+            hour = cal.get(Calendar.HOUR_OF_DAY);
+            minutes = cal.get(Calendar.MINUTE);
+            buttonHora.setText(hour.toString() + ":" + minutes.toString());
         }
 
         buttonHora.setOnClickListener(new View.OnClickListener() {
@@ -148,21 +158,18 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         });
 
 
-        carbohidratosRadioGroup = root.findViewById(R.id.carbohidratos_radiogroup_id);
-        proteinasRadioGroup = root.findViewById(R.id.proteinas_radiogroup_id);
-        grasasRadioGroup = root.findViewById(R.id.grasas_radiogroup_id);
-
         carbohidratosRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 View radioButton = carbohidratosRadioGroup.findViewById(checkedId);
                 int selection = carbohidratosRadioGroup.indexOfChild(radioButton);
                 switch (selection){
-                    case 1: carbohidratos = 1; break;
-                    case 2: carbohidratos = 2; break;
-                    case 3: carbohidratos = 3; break;
-                    case 4: carbohidratos = 4; break;
-                    case 5: carbohidratos = 5; break;
+                    case 1: carbohidratos = 0; break;
+                    case 2: carbohidratos = 1; break;
+                    case 3: carbohidratos = 2; break;
+                    case 4: carbohidratos = 3; break;
+                    case 5: carbohidratos = 4; break;
+                    case 6: carbohidratos = 5; break;
                 }
             }
         });
@@ -173,11 +180,12 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
                 View radioButton = proteinasRadioGroup.findViewById(checkedId);
                 int selection = proteinasRadioGroup.indexOfChild(radioButton);
                 switch (selection){
-                    case 1: proteinas = 1; break;
-                    case 2: proteinas = 2; break;
-                    case 3: proteinas = 3; break;
-                    case 4: proteinas = 4; break;
-                    case 5: proteinas = 5; break;
+                    case 1: proteinas = 0; break;
+                    case 2: proteinas = 1; break;
+                    case 3: proteinas = 2; break;
+                    case 4: proteinas = 3; break;
+                    case 5: proteinas = 4; break;
+                    case 6: proteinas = 5; break;
                 }
             }
         });
@@ -188,11 +196,12 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
                 View radioButton = grasasRadioGroup.findViewById(checkedId);
                 int selection = grasasRadioGroup.indexOfChild(radioButton);
                 switch (selection){
-                    case 1: grasas = 1; break;
-                    case 2: grasas = 2; break;
-                    case 3: grasas = 3; break;
-                    case 4: grasas = 4; break;
-                    case 5: grasas = 5; break;
+                    case 1: grasas = 0; break;
+                    case 2: grasas = 1; break;
+                    case 3: grasas = 2; break;
+                    case 4: grasas = 3; break;
+                    case 5: grasas = 4; break;
+                    case 6: grasas = 5; break;
                 }
             }
         });
@@ -217,17 +226,20 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minutes);
         fecha = cal.getTime();
-        Comida comida1 = new Comida();
-        comida1.setTitulo(titulo.getText().toString());
-        comida1.setDescripcion(descripcion.getText().toString());
-        comida1.setFecha(fecha);
+        Comida comida = new Comida();
+        comida.setTitulo(titulo.getText().toString());
+        comida.setDescripcion(descripcion.getText().toString());
+        comida.setFecha(fecha);
+        comida.setCarbohidratos(carbohidratos);
+        comida.setGrasas(grasas);
+        comida.setProteinas(proteinas);
         if(newComida){
-            db.addComida(profile, comida1);
+            db.addComida(profile, comida);
         } else {
-            db.updateComida(profile,comida1);
+            db.updateComida(profile,comida);
         }
         if(imageBitmap !=  null){
-            db.uploadPhotoAndUpdateComida(profile,comida1,imageBitmap);
+            db.uploadPhotoAndUpdateComida(profile,comida,imageBitmap);
         }
     }
 

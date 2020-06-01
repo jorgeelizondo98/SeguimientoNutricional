@@ -7,9 +7,8 @@ public class Registro {
     private String id;
     private String mTitulo;
     private String mDescripcion;
-    private Date mFecha;
+    private Date   mFecha;
     private String mComentario;
-
 
     public Registro() {
         mFecha = new Date();

@@ -153,6 +153,11 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
         setAdapterEjercicio();
     }
 
+    @Override
+    public void onNewDoctorAssociated(Profile profile) {
+
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onPauseFragment() {

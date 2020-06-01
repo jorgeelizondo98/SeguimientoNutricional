@@ -42,7 +42,6 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
     private Profile profile;
 
 
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
@@ -68,7 +67,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
         switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if(switchPreference.isChecked()){
+                if (switchPreference.isChecked()) {
 
                     //Cancel alarm is switch off
                     AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
@@ -77,12 +76,11 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
                     alarmManager.cancel(pendingIntent);
                     switchPreference.setChecked(false);
                     return true;
-                }
-                else{
+                } else {
                     //settingsNotificationFragment->set alarm
-                    final FragmentManager fm  = getActivity().getSupportFragmentManager();
+                    final FragmentManager fm = getActivity().getSupportFragmentManager();
                     final Fragment fragment = new SettingsNotificationFragment();
-                    fm.beginTransaction().replace(R.id.settings_fragment,fragment)
+                    fm.beginTransaction().replace(R.id.settings_fragment, fragment)
                             .addToBackStack(null).commit();
                     switchPreference.setChecked(true);
                     return false;
@@ -95,12 +93,11 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                if(nutriologo.isChecked()){
+                if (nutriologo.isChecked()) {
                     Toast.makeText(getActivity(), "isChecked : " + false, Toast.LENGTH_LONG).show();
                     nutriologo.setChecked(false);
                     return true;
-                }
-                else{
+                } else {
                     Toast.makeText(getActivity(), "isChecked : " + true, Toast.LENGTH_LONG).show();
                     nutriologo.setChecked(true);
                     sendsToQrFragment();
@@ -111,26 +108,25 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
         });
 
 
-
-        Fragment fragment = getParentFragment().getChildFragmentManager().findFragmentById(R.id.fragment);
+        Fragment fragment = getParentFragment().getChildFragmentManager().findFragmentById(R.id.settings_fragment);
         db = new DBController(fragment);
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db.loadProfile(currentUser);
 
     }
 
-    public void sendsToQrFragment(){
+    public void sendsToQrFragment() {
 
 
         Fragment fragmentQr = new QrFragment();
         List<Fragment> fragments = getChildFragmentManager().getFragments();
         getChildFragmentManager().beginTransaction()
-                .add(R.id.fragment,fragmentQr).addToBackStack(null)
+                .add(R.id.settings_fragment, fragmentQr).addToBackStack(null)
                 .commit();
     }
 
     @Override
-    public void onQRCodeFound(String result ) {
+    public void onQRCodeFound(String result) {
         if (profile != null) {
             db.associateDoctor(profile, result);
         }
@@ -159,4 +155,10 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
     @Override
     public void onEjerciciosReceived(ArrayList<Ejercicio> ejercicios) {
 
+    }
+
+    @Override
+    public void onNewDoctorAssociated(Profile profile) {
+
+    }
 }

@@ -123,4 +123,9 @@ public class DBController_test implements DBController.DBResponseListener {
       Log.d(TAG, "\nEjercicio **********\n" + ejercicio.getTitulo() + '\n' + ejercicio.getDescripcion() + '\n' + ejercicio.getFecha() + "\n**********");
     }
   }
+
+  @Override
+  public void onNewDoctorAssociated(Profile profile) {
+
+  }
 }

@@ -213,6 +213,11 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
     }
 
     @Override
+    public void onNewDoctorAssociated(Profile profile) {
+
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);

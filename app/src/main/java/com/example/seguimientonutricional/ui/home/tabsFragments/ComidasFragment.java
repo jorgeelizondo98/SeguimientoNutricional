@@ -165,6 +165,11 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
 
     }
 
+    @Override
+    public void onNewDoctorAssociated(Profile profile) {
+
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onPauseFragment() {

@@ -22,7 +22,7 @@
         <SwitchPreferenceCompat
             app:key="recordatorio"
             app:title="Recordatorio de llenado"
-            app:defaultValue="false"/>
+            app:defaultValue="true"/>
 
     </PreferenceCategory>
 

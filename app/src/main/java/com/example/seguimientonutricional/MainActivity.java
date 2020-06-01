@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
+
         // This is the database testing script.
         // DBController_test dbt = new DBController_test(FirebaseAuth.getInstance().getCurrentUser());
 

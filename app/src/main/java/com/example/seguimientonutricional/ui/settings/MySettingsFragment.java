@@ -1,14 +1,24 @@
 package com.example.seguimientonutricional.ui.settings;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
+
 
 import com.example.seguimientonutricional.Bebida;
 import com.example.seguimientonutricional.Comida;
@@ -19,6 +29,7 @@ import com.example.seguimientonutricional.R;
 import com.example.seguimientonutricional.ui.account.QrFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -31,20 +42,16 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
     private Profile profile;
 
 
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
-
-
 
     }
 
     public void onResume() {
         super.onResume();
-        //You can change preference summary programmatically like following.
-        final SwitchPreferenceCompat switchPreference = (SwitchPreferenceCompat) findPreference("recordatorio");
-        switchPreference.setSummaryOff("Switch off state updated from code");
-        switchPreference.setSummaryOn("Switch on state updated from code");
+
 
         final SwitchPreferenceCompat nutriologo = (SwitchPreferenceCompat) findPreference("nutriologo");
 
@@ -52,22 +59,37 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean isChecked = sharedPreferences.getBoolean("recordatorio", false);
 
+        //switch de recordatorio
+        final SwitchPreferenceCompat switchPreference = (SwitchPreferenceCompat) findPreference("recordatorio");
+        switchPreference.setSummaryOn("Desactiva recordatorio diario");
+        switchPreference.setSummaryOff("Activa recordatorio diario");
+
+
         switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-
                 if(switchPreference.isChecked()){
-                    Toast.makeText(getActivity(), "isChecked : " + false, Toast.LENGTH_LONG).show();
+
+                    //Cancel alarm is switch off
+                    AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+                    Intent intent = new Intent(getContext(), AlarmReceiver.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
+                    alarmManager.cancel(pendingIntent);
                     switchPreference.setChecked(false);
                     return true;
                 }
                 else{
-                    Toast.makeText(getActivity(), "isChecked : " + true, Toast.LENGTH_LONG).show();
+                    //settingsNotificationFragment->set alarm
+                    final FragmentManager fm  = getActivity().getSupportFragmentManager();
+                    final Fragment fragment = new SettingsNotificationFragment();
+                    fm.beginTransaction().replace(R.id.settings_fragment,fragment)
+                            .addToBackStack(null).commit();
                     switchPreference.setChecked(true);
                     return false;
                 }
             }
         });
+
 
         nutriologo.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -94,6 +116,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
         db = new DBController(fragment);
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db.loadProfile(currentUser);
+
     }
 
     public void sendsToQrFragment(){
@@ -136,5 +159,4 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
     @Override
     public void onEjerciciosReceived(ArrayList<Ejercicio> ejercicios) {
 
-    }
 }

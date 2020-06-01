@@ -5,6 +5,9 @@
     <string name="facebook_app_id">2851192594999297</string>
     <string name="fb_login_protocol_scheme">fb2851192594999297</string>
 
+    <!-- set time notification -->
+    <string name="time_notification">Horario del recordatorio</string>
+
     <!-- Login strings -->
     <string name="or_register">O registrarse</string>
     <string name="or_login">O iniciar sesión</string>

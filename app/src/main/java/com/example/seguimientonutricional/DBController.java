@@ -182,7 +182,7 @@ public class DBController {
   private Map<String, Object> formatComida(Comida comida) {
     Map<String, Object> formatted_comida = new HashMap<>();
     formatted_comida.put(COMIDA_PROTEINAS, comida.getProteinas());
-    formatted_comida.put(COMIDA_CARBOHIDRATOS, comida.getCarbohidratos());
+    formatted_comida.put(COMIDA_CARBOHIDRATOS, (comida.getCarbohidratos()));
     formatted_comida.put(COMIDA_GRASAS, comida.getGrasas());
     formatted_comida.put(COMIDA_FOTO, comida.getFotoUrl());
     formatted_comida.put(REGISTRO_TIPO, COMIDA_TIPO);
@@ -365,9 +365,12 @@ public class DBController {
     for (QueryDocumentSnapshot document: rawComidas) {
       Comida comida = new Comida(populateRegistro(document));
       Map<String, Object> comidaDocument = document.getData();
-      comida.setProteinas((Integer) comidaDocument.get(COMIDA_PROTEINAS));
-      comida.setCarbohidratos((Integer) comidaDocument.get(COMIDA_CARBOHIDRATOS));
-      comida.setGrasas((Integer) comidaDocument.get(COMIDA_GRASAS));
+      Float proteinas = (Float) comidaDocument.get(COMIDA_PROTEINAS);
+      comida.setProteinas((proteinas == null? -1 : proteinas.intValue()));
+      Float carbohidratos = (Float) comidaDocument.get(COMIDA_CARBOHIDRATOS);
+      comida.setCarbohidratos((carbohidratos == null? -1 : carbohidratos.intValue()));
+      Float grasas = (Float) comidaDocument.get(COMIDA_GRASAS);
+      comida.setGrasas((grasas == null? -1 : grasas.intValue()));
       comida.setFotoUrl((String) comidaDocument.get(COMIDA_FOTO));
       comidas.add(comida);
     }

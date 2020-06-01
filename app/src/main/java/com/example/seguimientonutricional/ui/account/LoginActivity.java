@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity
   private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
   private FirebaseUser notRegisteredUser;
 
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -71,7 +72,6 @@ public class LoginActivity extends AppCompatActivity
     this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.activity_login);
-
 
     cardView = findViewById(R.id.card);
     // Configure sign-in to request the user's ID, email address, and basic
@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity
     // Firebase auth for Email and Facebook Signup.
     mAuth = FirebaseAuth.getInstance();
 
+    // Colocar el fragmento de inicio de sesión / registro con email según sea el caso.
     fragmentManager = getSupportFragmentManager();
     // Email signup.
     if (savedInstanceState == null) {
@@ -97,11 +98,10 @@ public class LoginActivity extends AppCompatActivity
       setRegisterLoginButtonText();
     }
 
-    // Facebook login.
+    // Inicializae el login manager de Facebook.
     mFacebookCallbackManager = CallbackManager.Factory.create();
     LoginManager.getInstance().registerCallback(mFacebookCallbackManager,
         loginResultFacebookCallback);
-
   }
   
   @Override

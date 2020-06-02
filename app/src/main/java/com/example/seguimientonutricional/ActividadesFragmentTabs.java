@@ -34,6 +34,7 @@ public class ActividadesFragmentTabs extends Fragment  {
     private HomeViewModel homeViewModel;
     private Integer currentPage = 0;
 
+    //UI
     private TextView fecha;
 
     public ActividadesFragmentTabs() {
@@ -52,17 +53,19 @@ public class ActividadesFragmentTabs extends Fragment  {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_actividades_tabs, container, false);
 
+        //Connecting to layout
         viewPager = root.findViewById(R.id.pager);
         tabLayout = root.findViewById(R.id.tab_layout);
-        //Agrega viewPagerAdapter al tablayout
+
+
+        //Adds a viewpageAdapter to tablayout
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(0);
-
         Fragment fragment = getParentFragment();
-        mListener = (OnTabSelectedListener) fragment;
 
+        mListener = (OnTabSelectedListener) fragment;
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
@@ -97,6 +100,7 @@ public class ActividadesFragmentTabs extends Fragment  {
     }
 
 
+    //Receives Date selected on Calendar from HomeViewModel
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -109,6 +113,8 @@ public class ActividadesFragmentTabs extends Fragment  {
         });
     }
 
+
+    //Formats date to string
     private String formatDate(Date dateTime){
         SimpleDateFormat format = new SimpleDateFormat("EEEE d 'de' MMMM 'del' yyyy",
                 new Locale("es","MEX"));

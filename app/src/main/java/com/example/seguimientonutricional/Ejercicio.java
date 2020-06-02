@@ -22,4 +22,37 @@ public class Ejercicio extends Registro {
   public Integer getIntensidad() { return intensidad; }
 
   public void setIntensidad(Integer intensidad) { this.intensidad = intensidad; }
+
+  public String getHour(){
+    String hour = "";
+    for (char c : duracion.toCharArray()) {
+      if (Character.isWhitespace(c)) {
+        break;
+      }else{
+        hour += c;
+      }
+    }
+
+    return hour;
+  }
+
+
+  public String getMinutes(){
+    String temp;
+    if(getHour().length() == 1){
+       temp = duracion.substring(7);
+    } else {
+       temp = duracion.substring(8);
+    }
+    String minutes = "";
+    for (char c :temp.toCharArray()) {
+      if (Character.isWhitespace(c)) {
+        break;
+      }else{
+        minutes += c;
+      }
+    }
+
+    return minutes;
+  }
 }

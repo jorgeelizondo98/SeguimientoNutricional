@@ -55,7 +55,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="24dp"
                         android:hint="Ingresa un nombre"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:maxLines="3"/>
 
                     <EditText
                         android:id="@+id/descripcion_id"
@@ -107,6 +108,7 @@
                             android:text="Horas"/>
 
                         <EditText
+                            android:id="@+id/horas_id"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:inputType="number|none"
@@ -121,6 +123,7 @@
                             android:text="Minutos"/>
 
                         <EditText
+                            android:id="@+id/minutos_id"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:inputType="number|none"
@@ -208,12 +211,29 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginLeft="32dp"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Comentarios del Doctor"
+                style="?android:listSeparatorTextViewStyle"/>
+
+            <EditText
+                android:id="@+id/comentario_Doctor_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ningún Comentario"
+                android:background="@null"
+                android:maxLines="3"
+                android:textSize="12sp"
+                android:layout_margin="8dp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="8dp">
 
@@ -238,6 +258,10 @@
                     android:layout_marginRight="8dp"/>
 
             </LinearLayout>
+
+
+
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

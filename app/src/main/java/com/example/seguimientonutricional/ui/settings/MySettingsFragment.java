@@ -1,24 +1,25 @@
 package com.example.seguimientonutricional.ui.settings;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
-
-import androidx.fragment.app.DialogFragment;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
-
 
 import com.example.seguimientonutricional.Bebida;
 import com.example.seguimientonutricional.Comida;
@@ -30,7 +31,6 @@ import com.example.seguimientonutricional.ui.account.QrFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
 
     private DBController db;
     private Profile profile;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
 
 
     @Override
@@ -115,14 +116,36 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void sendsToQrFragment() {
 
+        if(hasCameraPermission()){
+            Fragment fragmentQr = new QrFragment();
+            List<Fragment> fragments = getChildFragmentManager().getFragments();
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.settings_fragment, fragmentQr).addToBackStack(null)
+                    .commit();
+        } else {
+            requestCamera();
+        }
+    }
 
-        Fragment fragmentQr = new QrFragment();
-        List<Fragment> fragments = getChildFragmentManager().getFragments();
-        getChildFragmentManager().beginTransaction()
-                .add(R.id.settings_fragment, fragmentQr).addToBackStack(null)
-                .commit();
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public boolean hasCameraPermission() {
+        if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void requestCamera(){
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+        }
+        sendsToQrFragment();
     }
 
     @Override

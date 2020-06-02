@@ -77,6 +77,8 @@ public class DBController {
   private final static String EJERCICIO_DURACION = "cantidad";
   private final static String EJERCICIO_INTENSIDAD = "intensidad";
 
+  private String currentComidaId;
+
   // Constructor inicializa el objeto de conexión a Firebase Firestore y Firebase Storage.
   // También Asigna el DBResponseListener recibido como parametro.
   public DBController(Object object) {
@@ -238,6 +240,7 @@ public class DBController {
           @RequiresApi(api = Build.VERSION_CODES.N)
           @Override
           public void onComplete(@NonNull Task<DocumentReference> task) {
+            currentComidaId = task.getResult().getId().toString();
             loadComidas(profile, comida.getFecha());
           }
         })
@@ -247,7 +250,8 @@ public class DBController {
             dbResponseListener.onDatabaseNetworkError();
           }
         });
-    return comida.getId();
+
+    return currentComidaId;
   }
 
   // Agrega una bebida a la base de datos.
@@ -493,4 +497,7 @@ public class DBController {
         }
       });
   }
+
+
+
 }

@@ -21,7 +21,7 @@ public class DatePickerFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-
+        //Initializes date on calendar with the values of the current one selected by user
         int year = currFecha.get(Calendar.YEAR);
         int month = currFecha.get(Calendar.MONTH);
         int day = currFecha.get(Calendar.DAY_OF_MONTH);

@@ -42,9 +42,7 @@ import java.util.Locale;
 public class ComidaFormsFragment extends Fragment implements TimePickerFragment.OnTimeDialogListener,
         DBController.DBResponseListener {
 
-    private static final int IMAGE_CAPTURE = 101;
-    String currentPhotoPath;
-
+    //UI
     private Button buttonHora;
     private EditText titulo;
     private EditText descripcion;
@@ -53,16 +51,16 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     private RadioGroup grasasRadioGroup;
     private Button confirmButton;
     private Button cancelButton;
-    private Calendar c;
+    private EditText comentarioDoctor;
     private ImageView imagen;
-    private  ImageView addPhotoButton;
+    private ImageView addPhotoButton;
     private Bitmap imageBitmap;
 
+    //DB Controller
     private DBController db;
     private Profile profile;
     FragmentManager fm;
     private HomeViewModel homeViewModel;
-
 
     private Integer carbohidratos;
     private Integer proteinas;
@@ -73,14 +71,20 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     private Comida currentComida;
     private Boolean newComida;
     private Boolean formComplete;
+    private String id;
+    private Calendar c;
+    private String currentPhotoPath;
+
+    //ImageCapture request code
+    private static final int IMAGE_CAPTURE = 101;
+
 
     public ComidaFormsFragment() {
-    // Required empty public constructor
         newComida = true;
     }
 
+    //Constructor for updating the object
     public ComidaFormsFragment(Comida comida) {
-        // Required empty public constructor
         currentComida = comida;
         newComida = false;
     }
@@ -99,15 +103,15 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_comida_forms, container, false);
 
-        imageBitmap = null;
 
+        //Initializing dbController
         fm = getActivity().getSupportFragmentManager();
-
         final Fragment fragment = getParentFragmentManager().findFragmentByTag("comidaForm");
         db = new DBController(fragment);
-
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db.loadProfile(currentUser);
+
+        //Connecting to UI
         buttonHora = root.findViewById(R.id.button_hora_id);
         descripcion = root.findViewById(R.id.descripcion_id);
         titulo = root.findViewById(R.id.titulo_id);
@@ -117,10 +121,18 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         carbohidratosRadioGroup = root.findViewById(R.id.carbohidratos_radiogroup_id);
         proteinasRadioGroup = root.findViewById(R.id.proteinas_radiogroup_id);
         grasasRadioGroup = root.findViewById(R.id.grasas_radiogroup_id);
+        comentarioDoctor = root.findViewById(R.id.comentario_Doctor_id);
+        addPhotoButton = root.findViewById(R.id.addPhoto_id);
+
+
+        //Disable editing in Doctors field
+        comentarioDoctor.setKeyListener(null);
 
         fecha = Calendar.getInstance().getTime();
         formComplete = true;
+        imageBitmap = null;
 
+        //If updating object we populate the form
         if(currentComida != null){
             setUI();
         }
@@ -216,10 +228,6 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
             }
         });
 
-
-        addPhotoButton = root.findViewById(R.id.addPhoto_id);
-
-
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,6 +241,8 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     private void addComida() {
 
         Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
         cal.setTime(fecha);
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minutes);
@@ -244,20 +254,26 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         comida.setCarbohidratos(carbohidratos);
         comida.setGrasas(grasas);
         comida.setProteinas(proteinas);
-        String id = "";
+
+        //Adds or update object
         if(newComida){
             id = db.addComida(profile, comida);
         } else {
             comida.setId(currentComida.getId());
             db.updateComida(profile,comida);
         }
+
+        //If there's an image we upload it
         if(imageBitmap !=  null){
-            comida.setId(id);
+            if(comida.getId() == null){
+                comida.setId(id);
+            }
             db.uploadPhotoAndUpdateComida(profile,comida,imageBitmap);
         }
 
     }
 
+    //Modifies global variable to false if something is missing to be filled by the user.
     private void checksAllFormFilled(){
         if(titulo.getText() == null){formComplete = false;}
         if(descripcion.getText() == null){formComplete = false;}
@@ -267,6 +283,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         if (hour == null){formComplete = false;}
     }
 
+    //Adds values when clicked from RecyclerView Grid
     public  void setUI(){
         titulo.setText(currentComida.getTitulo());
         descripcion.setText(currentComida.getDescripcion());
@@ -286,13 +303,25 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minutes = cal.get(Calendar.MINUTE);
         buttonHora.setText(hour.toString() + ":" + minutes.toString());
+
+        if(currentComida.getComentario() != null){
+            comentarioDoctor.setText(currentComida.getComentario());
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void startCamera(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, IMAGE_CAPTURE);
+        if(hasCameraPermission()){
+            //display camera
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, IMAGE_CAPTURE);
+        } else {
+            requestCameraPermission();
+        }
     }
 
+
+    //checks if the user already gave permission
     @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean hasCameraPermission() {
         if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -302,16 +331,18 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
             return false;
     }
 
+    //asks for camera and taking picture permission
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void requestCameraPermission() {
         String[] permissionRequest = {Manifest.permission.CAMERA};
         requestPermissions(permissionRequest,IMAGE_CAPTURE);
+        startCamera();
     }
 
-
+    //Gets data from image taken by the user.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == IMAGE_CAPTURE) {
             if (resultCode == getActivity().RESULT_OK) {
                 Bundle extras = data.getExtras();
@@ -329,11 +360,13 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        //Removes calendar button from title bar
         MenuItem item = menu.findItem(R.id.action_calendar);
         if(item!=null)
             item.setVisible(false);
     }
 
+    //TimePicker Listener
     @Override
     public void onTimeSet(int hour, int minute) {
         this.hour =  hour;
@@ -342,6 +375,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     }
 
 
+    //DBCONTROLLER LISTENERS
     @Override
     public void onDatabaseNetworkError() {
 
@@ -373,6 +407,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
     }
 
+    //Receives Date selected on Calendar from HomeViewModel
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

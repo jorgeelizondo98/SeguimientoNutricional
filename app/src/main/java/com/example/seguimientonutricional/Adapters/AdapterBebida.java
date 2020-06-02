@@ -21,12 +21,9 @@ import java.util.Calendar;
 
 public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder> {
 
-
-
     private Context mContext;
     private ArrayList<Bebida> mBebidas;
     private Fragment parent;
-
 
     public AdapterBebida(Context mContext, ArrayList<Bebida> bebidas, Fragment parent){
         this.mContext = mContext;
@@ -43,7 +40,6 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         final Bebida currBebida = mBebidas.get(position);
 
         holder.mTitulo.setText(currBebida.getTitulo());
@@ -70,7 +66,6 @@ public class AdapterBebida extends RecyclerView.Adapter<AdapterBebida.ViewHolder
         });
 
     }
-
 
     @Override
     public int getItemCount() {

@@ -209,6 +209,11 @@ public class ProfileFragment extends Fragment implements DBController.DBResponse
     public void onNewDoctorAssociated(Profile profile) {
     }
 
+    @Override
+    public void onComidaPhotoAdded(Comida comida) {
+
+    }
+
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);

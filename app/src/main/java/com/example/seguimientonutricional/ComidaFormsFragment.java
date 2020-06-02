@@ -233,9 +233,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-
                     startCamera();
-
             }
         });
         return root;
@@ -261,7 +259,9 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
         //Adds or update object
         if(newComida){
-            db.addComida(profile, comida);
+            if(imageBitmap == null){
+                db.addComida(profile, comida);
+            }
         } else {
             comida.setId(currentComida.getId());
             db.updateComida(profile,comida);
@@ -317,9 +317,14 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void startCamera(){
+        if(hasCameraPermission()){
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, IMAGE_CAPTURE);
+        } else {
+            requestCameraPermission();
+        }
     }
 
 

@@ -8,7 +8,7 @@
 
         <SwitchPreferenceCompat
             app:key="nutriologo"
-            app:title="Sin registro a nutriólogo"
+            app:title="Registro:"
             app:defaultValue="false"/>
 
 

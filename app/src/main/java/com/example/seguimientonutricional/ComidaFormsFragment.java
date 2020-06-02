@@ -1,6 +1,7 @@
 package com.example.seguimientonutricional;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -32,6 +33,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.seguimientonutricional.ui.home.HomeViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -96,7 +98,6 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     setHasOptionsMenu(true);
   }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -229,9 +230,12 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         });
 
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                startCamera();
+
+                    startCamera();
+
             }
         });
         return root;
@@ -257,8 +261,10 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
         //Adds or update object
         if(newComida){
-            id = db.addComida(profile, comida);
             db.addComida(profile, comida);
+        } else {
+            comida.setId(currentComida.getId());
+            db.updateComida(profile,comida);
         }
         //If there's an image we upload it
         if(imageBitmap !=  null){
@@ -300,20 +306,20 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         minutes = cal.get(Calendar.MINUTE);
         buttonHora.setText(hour.toString() + ":" + minutes.toString());
 
+        if(currentComida.getFotoUrl() != null){
+            Picasso.with(imagen.getContext()).load(currentComida.getFotoUrl()).fit()
+                    .centerInside().into(imagen);
+        }
+
         if(currentComida.getComentario() != null){
             comentarioDoctor.setText(currentComida.getComentario());
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     public void startCamera(){
-        if(hasCameraPermission()){
-            //display camera
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, IMAGE_CAPTURE);
-        } else {
-            requestCameraPermission();
-        }
     }
 
 
@@ -328,11 +334,10 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     }
 
     //asks for camera and taking picture permission
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void requestCameraPermission() {
-        String[] permissionRequest = {Manifest.permission.CAMERA};
-        requestPermissions(permissionRequest,IMAGE_CAPTURE);
-        startCamera();
+    @TargetApi(Build.VERSION_CODES.M)
+    private void requestCameraPermission() {
+        requestPermissions(new String[]{Manifest.permission.CAMERA},
+                IMAGE_CAPTURE );
     }
 
     //Gets data from image taken by the user.

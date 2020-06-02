@@ -54,9 +54,8 @@ public class AdapterComida extends RecyclerView.Adapter<AdapterComida.ViewHolder
         holder.mFecha.setText(hour.toString() + ":" + minutes.toString());
 
 
-        if(currComida.getFotoUrl() == null){
-            holder.mImageView.setImageResource(R.drawable.salad);
-        }
+
+        holder.mImageView.setImageResource(R.drawable.salad);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

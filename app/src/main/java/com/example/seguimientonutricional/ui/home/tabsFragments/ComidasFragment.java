@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Adapters.AdapterComida;
@@ -64,6 +65,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
         FragmentManager fm = getActivity().getSupportFragmentManager();
         mComidas = new ArrayList<Comida>();
 
+
         List<Fragment> allFragments = getParentFragment().getChildFragmentManager().getFragments();
 
         //We get the actual fragment running
@@ -76,6 +78,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db.loadProfile(currentUser);
         fecha = Calendar.getInstance().getTime();
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
         return root;
     }

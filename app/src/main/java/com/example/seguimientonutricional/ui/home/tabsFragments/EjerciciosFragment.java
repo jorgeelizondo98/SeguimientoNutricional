@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Adapters.AdapterEjercicio;
@@ -73,10 +74,13 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
             if (fragmento instanceof EjerciciosFragment){
                 db = new DBController(fragmento);
             }
+
         }
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db.loadProfile(currentUser);
         fecha = Calendar.getInstance().getTime();
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
         return root;
     }

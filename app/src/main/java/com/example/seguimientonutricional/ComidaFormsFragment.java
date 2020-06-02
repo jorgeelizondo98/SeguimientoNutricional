@@ -3,6 +3,7 @@ package com.example.seguimientonutricional;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class ComidaFormsFragment extends Fragment implements TimePickerFragment.OnTimeDialogListener,
@@ -126,6 +128,12 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         buttonHora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Locale locale = new Locale("es");
+                Locale.setDefault(locale);
+                Configuration config =
+                        getActivity().getBaseContext().getResources().getConfiguration();
+                config.setLocale(locale);
+                getActivity().createConfigurationContext(config);
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.setTargetFragment(ComidaFormsFragment.this,1);
                 timePicker.show(getParentFragment().getChildFragmentManager(), "time picker");
@@ -259,13 +267,17 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
     public  void setUI(){
         titulo.setText(currentComida.getTitulo());
         descripcion.setText(currentComida.getDescripcion());
-        carbohidratosRadioGroup.check(carbohidratosRadioGroup.getChildAt(
-                currentComida.getCarbohidratos() + 1).getId());
 
+        carbohidratos = currentComida.getCarbohidratos();
+        grasas = currentComida.getGrasas();
+        proteinas = currentComida.getProteinas();
+
+        carbohidratosRadioGroup.check(carbohidratosRadioGroup.getChildAt(
+                carbohidratos + 1).getId());
         proteinasRadioGroup.check(proteinasRadioGroup.getChildAt(
-                currentComida.getProteinas() + 1 ).getId());
+                proteinas + 1 ).getId());
         grasasRadioGroup.check(grasasRadioGroup.getChildAt(
-                currentComida.getGrasas() + 1).getId());
+                grasas + 1).getId());
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentComida.getFecha());
         hour = cal.get(Calendar.HOUR_OF_DAY);
@@ -371,6 +383,7 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
             }
         });
     }
+
 
 
 

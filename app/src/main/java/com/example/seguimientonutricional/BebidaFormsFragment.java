@@ -38,6 +38,7 @@ import java.util.Date;
 public class BebidaFormsFragment extends Fragment implements TimePickerFragment.OnTimeDialogListener,
         DBController.DBResponseListener {
 
+    //UI
     private Button buttonHora;
     private EditText titulo;
     private EditText descripcion;
@@ -45,10 +46,10 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
     private RadioGroup azucaresRadioGroup;
     private Button confirmButton;
     private Button cancelButton;
-    private Calendar c;
     private EditText cantidad_et;
-    boolean formComplete;
+    private EditText comentarioDoctor;
 
+    //DBController
     private DBController db;
     private Profile profile;
     FragmentManager fm;
@@ -62,12 +63,15 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
     private Integer minutes;
     private Bebida currentBebida;
     private Boolean newBebida;
+    private Boolean formComplete;
+    private Calendar c;
 
     public BebidaFormsFragment() {
         // Required empty public constructor
         newBebida = true;
     }
 
+    //Constructor for updating the object
     public BebidaFormsFragment(Bebida bebida) {
         currentBebida = bebida;
         newBebida = false;
@@ -86,13 +90,14 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_bebida_forms, container, false);
 
+        //Initializing DBController
         fm = getActivity().getSupportFragmentManager();
         Fragment fragment = getParentFragmentManager().findFragmentByTag("bebidaForm");
         db = new DBController(fragment);
-
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db.loadProfile(currentUser);
 
+        //Connecting to layout
         buttonHora = root.findViewById(R.id.button_hora_id);
         descripcion = root.findViewById(R.id.descripcion_id);
         titulo = root.findViewById(R.id.titulo_id);
@@ -101,10 +106,16 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         cantidad_et = root.findViewById(R.id.cantidad_id);
         sodioRadioGroup = root.findViewById(R.id.sodio_radiogroup_id);
         azucaresRadioGroup = root.findViewById(R.id.azucares_radiogroup_id);
+        comentarioDoctor = root.findViewById(R.id.comentario_Doctor_id);
+
+
+        //Disable editing in Doctors field
+        comentarioDoctor.setKeyListener(null);
 
         formComplete = true;
         fecha = Calendar.getInstance().getTime();
 
+        //If updating object we populate the form
         if(currentBebida != null){
             setUI();
         }
@@ -121,10 +132,12 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Check if everything is filled up
                 formComplete = true;
                 checksAllFormFilled();
                 if(formComplete) {
                     addBebida();
+                    //Go back to parent Fragment
                     FormsLifeCyle fragmentHome = (FormsLifeCyle) getParentFragment();
                     getParentFragment().getChildFragmentManager().popBackStackImmediate();
                     fragmentHome.onFormsClosed();
@@ -184,6 +197,7 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
     }
 
 
+    //Adds values when clicked from RecyclerView Grid
     public  void setUI(){
         titulo.setText(currentBebida.getTitulo());
         descripcion.setText(currentBebida.getDescripcion());
@@ -201,6 +215,10 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minutes = cal.get(Calendar.MINUTE);
         buttonHora.setText(hour.toString() + ":" + minutes.toString());
+
+        if(currentBebida.getComentario() != null){
+            comentarioDoctor.setText(currentBebida.getComentario());
+        }
     }
 
     private void addBebida() {
@@ -216,6 +234,8 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         bebida.setmSodio(sodio);
         bebida.setmCantidad(Integer.parseInt(cantidad_et.getText().toString()));
         bebida.setFecha(fecha);
+
+        //Add or update object
         if(newBebida){
             db.addBebida(profile, bebida);
         } else {
@@ -225,6 +245,7 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
 
     }
 
+    //Modifies global variable to false if something is missing to be filled by the user.
     private void checksAllFormFilled(){
         if(titulo.getText() == null){formComplete = false;}
         if(descripcion.getText() == null){formComplete = false;}
@@ -236,11 +257,13 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        //Removes calendar button from titlebar
         MenuItem item = menu.findItem(R.id.action_calendar);
         if(item!=null)
             item.setVisible(false);
     }
 
+    //TIME PICKER LISTENER
     @Override
     public void onTimeSet(int hour, int minute) {
         this.hour =  hour;
@@ -248,6 +271,7 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         buttonHora.setText(Integer.toString(hour) + ":"+ Integer.toString(minute));
     }
 
+    //DB CONTROLLER LISTENERS
     @Override
     public void onDatabaseNetworkError() {
 
@@ -279,6 +303,7 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
 
     }
 
+    //Receives date selected by calendar with HomeViewModel
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

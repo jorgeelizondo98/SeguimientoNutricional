@@ -35,8 +35,8 @@
 
                     <ImageView
                         android:id="@+id/imagen_view_id"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
                         android:src="@drawable/salad"/>
 
 
@@ -64,6 +64,7 @@
                         android:layout_marginRight="24dp"
                         android:hint="Ingresa un nombre"
                         android:textSize="14sp"
+                        android:maxLines="3"
                         android:layout_marginBottom="20dp"
                         android:layout_marginTop="20dp"/>
 
@@ -233,7 +234,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:text="Hora"
                 style="?android:listSeparatorTextViewStyle"/>
 
@@ -250,13 +252,31 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginLeft="32dp"/>
 
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Comentarios del Doctor"
+                style="?android:listSeparatorTextViewStyle"/>
+
+            <EditText
+                android:id="@+id/comentario_Doctor_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ningún Comentario"
+                android:background="@null"
+                android:maxLines="3"
+                android:textSize="12sp"
+                android:layout_margin="8dp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp">
 
                 <Button
@@ -280,10 +300,6 @@
                     android:layout_marginRight="8dp"/>
 
             </LinearLayout>
-
-
-
-
 
 
         </LinearLayout>

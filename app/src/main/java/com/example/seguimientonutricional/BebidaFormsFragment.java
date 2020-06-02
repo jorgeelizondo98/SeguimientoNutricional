@@ -188,11 +188,13 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         titulo.setText(currentBebida.getTitulo());
         descripcion.setText(currentBebida.getDescripcion());
         cantidad_et.setText(currentBebida.getCantidad().toString());
+        sodio = currentBebida.getSodio();
+        azucares = currentBebida.getAzucares();
         sodioRadioGroup.check(sodioRadioGroup.getChildAt(
-                currentBebida.getSodio() + 1).getId());
+                sodio + 1).getId());
 
         azucaresRadioGroup.check(azucaresRadioGroup.getChildAt(
-                currentBebida.getAzucares() + 1 ).getId());
+                azucares + 1 ).getId());
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentBebida.getFecha());

@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Adapters.AdapterBebida;
@@ -81,6 +82,7 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
             setAdapterBebida();
         }
 
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
         return root;
     }

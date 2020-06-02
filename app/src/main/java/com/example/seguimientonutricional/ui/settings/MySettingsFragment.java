@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
@@ -91,15 +90,15 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
 
 
         nutriologo.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 if (nutriologo.isChecked()) {
-                    Toast.makeText(getActivity(), "isChecked : " + false, Toast.LENGTH_LONG).show();
                     nutriologo.setChecked(false);
                     return true;
                 } else {
-                    Toast.makeText(getActivity(), "isChecked : " + true, Toast.LENGTH_LONG).show();
+
                     nutriologo.setChecked(true);
                     sendsToQrFragment();
                     return false;
@@ -118,16 +117,16 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void sendsToQrFragment() {
-
         if(hasCameraPermission()){
             Fragment fragmentQr = new QrFragment();
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             getChildFragmentManager().beginTransaction()
                     .add(R.id.settings_fragment, fragmentQr).addToBackStack(null)
                     .commit();
-        } else {
+        } else{
             requestCamera();
         }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -145,7 +144,6 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
                 == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         }
-        sendsToQrFragment();
     }
 
     @Override

@@ -356,8 +356,8 @@ public class DBController {
         new PriorityQueue<>(new Comparator<QueryDocumentSnapshot>() {
           @Override
           public int compare(QueryDocumentSnapshot o1, QueryDocumentSnapshot o2) {
-            return ((Timestamp) o1.getData().get(REGISTRO_FECHA)).compareTo(
-                (Timestamp) o2.getData().get(REGISTRO_FECHA));
+            return ((Timestamp) o2.getData().get(REGISTRO_FECHA)).compareTo(
+                (Timestamp) o1.getData().get(REGISTRO_FECHA));
           }
         });
     // Busca los registros en la base de datos.

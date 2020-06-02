@@ -346,7 +346,6 @@ public class DBController {
           if (task.isSuccessful()) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             for (QueryDocumentSnapshot document : task.getResult()) {
-              Log.d(TAG, document.getId() + " => " + document.getData());
               Date registroDate = ((Timestamp) document.getData().get(REGISTRO_FECHA)).toDate();
               if (tipo.equals(document.getData().get(REGISTRO_TIPO)) &&
                   sdf.format(date).equals(sdf.format(registroDate))) {

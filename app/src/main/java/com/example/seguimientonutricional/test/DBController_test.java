@@ -128,4 +128,9 @@ public class DBController_test implements DBController.DBResponseListener {
   public void onNewDoctorAssociated(Profile profile) {
 
   }
+
+  @Override
+  public void onComidaPhotoAdded(Comida comida) {
+
+  }
 }

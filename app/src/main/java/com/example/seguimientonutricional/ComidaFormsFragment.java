@@ -247,15 +247,10 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         String id = "";
         if(newComida){
             id = db.addComida(profile, comida);
-        } else {
-            comida.setId(currentComida.getId());
-            db.updateComida(profile,comida);
+            db.addComida(profile, comida);
+        } else if(imageBitmap !=  null) {
+          db.uploadPhotoAndUpdateComida(profile, comida, imageBitmap);
         }
-        if(imageBitmap !=  null){
-            comida.setId(id);
-            db.uploadPhotoAndUpdateComida(profile,comida,imageBitmap);
-        }
-
     }
 
     private void checksAllFormFilled(){
@@ -370,6 +365,11 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
 
     @Override
     public void onNewDoctorAssociated(Profile profile) {
+
+    }
+
+    @Override
+    public void onComidaPhotoAdded(Comida comida) {
 
     }
 

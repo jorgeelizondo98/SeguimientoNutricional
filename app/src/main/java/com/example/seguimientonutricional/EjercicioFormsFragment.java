@@ -222,6 +222,11 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
     }
 
     @Override
+    public void onComidaPhotoAdded(Comida comida) {
+
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);

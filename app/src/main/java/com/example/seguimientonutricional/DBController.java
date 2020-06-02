@@ -1,6 +1,7 @@
 package com.example.seguimientonutricional;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -108,6 +109,9 @@ public class DBController {
 
     // Avisa que se asoció un nuevo doctor al perfil del usuario.
     void onNewDoctorAssociated(Profile profile);
+
+    // Avisa que se ha agregado una foto a una comida.
+    void onComidaPhotoAdded(Comida comida);
   }
 
   // Takes an instance of Profile and formats it into a map of <String, Object>.
@@ -312,7 +316,7 @@ public class DBController {
   // Takes a Profile, a Comida, and a Bitmap. uploads the Bitmap to Firebase Storage, gets the url
   //    and adds it to Comida.
   // If error, returned comida will have no id.
-  public Comida uploadPhotoAndUpdateComida(final Profile profile, final Comida comida, Bitmap img) {
+  public void uploadPhotoAndUpdateComida(final Profile profile, final Comida comida, Bitmap img) {
     final StorageReference ref = storage.getReference().child(profile.getId() + "/" +
         COLLECTION_ACTIVIDADES + comida.getFecha().toString());
 
@@ -324,11 +328,20 @@ public class DBController {
     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
       @Override
       public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-        comida.setFotoUrl(ref.getDownloadUrl().toString());
-        updateComida(profile, comida);
+        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+          @Override
+          public void onSuccess(Uri uri) {
+            comida.setFotoUrl(uri.toString());
+            if (comida.getId() == null) {
+              addComida(profile, comida);
+            } else {
+              updateComida(profile, comida);
+            }
+            dbResponseListener.onComidaPhotoAdded(comida);
+          }
+        });
       }
     });
-    return comida;
   }
 
   // Receives a type and a date, and returns the registers for that type in that date.

@@ -170,6 +170,11 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
 
     }
 
+    @Override
+    public void onComidaPhotoAdded(Comida comida) {
+
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onPauseFragment() {

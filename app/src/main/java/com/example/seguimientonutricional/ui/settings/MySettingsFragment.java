@@ -161,4 +161,9 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements QrFr
     public void onNewDoctorAssociated(Profile profile) {
 
     }
+
+    @Override
+    public void onComidaPhotoAdded(Comida comida) {
+
+    }
 }

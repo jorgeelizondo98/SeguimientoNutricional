@@ -158,6 +158,11 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
 
     }
 
+    @Override
+    public void onComidaPhotoAdded(Comida comida) {
+
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onPauseFragment() {

@@ -54,6 +54,7 @@ public class DBController {
   private final static String PROFILE_SECONDLASTNAME = "apellidoMaterno";
   private final static String PROFILE_EMAIL = "correo";
   private final static String PROFILE_PHOTOURL = "fotoPerfil";
+  private final static String PROFILE_DOCTOR_REF = "doctorActual";
   private final static String PROFILE_NOMBREDOCTOR = "nombreDoctor";
 
   private final static String COLLECTION_ACTIVIDADES = "actividades";
@@ -450,7 +451,13 @@ public class DBController {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                   if (task.isSuccessful()) {
-                    profile.setNombreDoctor((String) task.getResult().get(DOCTOR_NOMBRE));
+                    String nombreDoctor = (String) task.getResult().get(DOCTOR_NOMBRE);
+                    profile.setNombreDoctor(nombreDoctor);
+                    Map<String, Object> formattedProfile = new HashMap<>();
+                    formattedProfile.put(DOCTOR_NOMBRE, nombreDoctor);
+                    formattedProfile.put(PROFILE_DOCTOR_REF, task.getResult().getReference());
+                    db.collection(COLLECTION_PROFILE).document(profile.getId()).set(
+                        formattedProfile, SetOptions.merge());
                     dbResponseListener.onNewDoctorAssociated(profile);
                   } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());

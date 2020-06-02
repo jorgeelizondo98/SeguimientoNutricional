@@ -1,22 +1,9 @@
 package com.example.seguimientonutricional.ui.settings;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
-import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -26,22 +13,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.example.seguimientonutricional.Bebida;
 import com.example.seguimientonutricional.Comida;
 import com.example.seguimientonutricional.DBController;
 import com.example.seguimientonutricional.Ejercicio;
 import com.example.seguimientonutricional.Profile;
 import com.example.seguimientonutricional.R;
-import com.example.seguimientonutricional.ui.home.tabsFragments.ComidasFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
 public class ProfileFragment extends Fragment implements DBController.DBResponseListener{

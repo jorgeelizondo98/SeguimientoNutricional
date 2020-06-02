@@ -74,6 +74,8 @@ public class DBController {
   private final static String BEBIDA_SODIO = "sodio";
   private final static String BEBIDA_AZUCARES = "azucares";
   private final static String EJERCICIO_TIPO = "ejercicio";
+  private final static String EJERCICIO_DURACION = "cantidad";
+  private final static String EJERCICIO_INTENSIDAD = "intensidad";
 
   // Constructor inicializa el objeto de conexión a Firebase Firestore y Firebase Storage.
   // También Asigna el DBResponseListener recibido como parametro.
@@ -222,6 +224,8 @@ public class DBController {
   // Takes an instance of Ejercicio and formats it into a map of <String, Object>.
   private Map<String, Object> formatEjercicio(Ejercicio ejercicio) {
     Map<String, Object> formatted_ejercicio = new HashMap<>();
+    formatted_ejercicio.put(EJERCICIO_INTENSIDAD, ejercicio.getIntensidad());
+    formatted_ejercicio.put(EJERCICIO_DURACION, ejercicio.getDuracion());
     formatted_ejercicio.put(REGISTRO_TIPO, EJERCICIO_TIPO);
     return formatRegistro(ejercicio, formatted_ejercicio);
   }
@@ -442,6 +446,10 @@ public class DBController {
     ArrayList<Ejercicio> ejercicios = new ArrayList<>();
     for (QueryDocumentSnapshot document: rawEjercicio) {
       Ejercicio ejercicio = new Ejercicio(populateRegistro(document));
+      Map<String, Object> ejercicioDocument = document.getData();
+      Long intensidad = (Long) ejercicioDocument.get(EJERCICIO_INTENSIDAD);
+      ejercicio.setIntensidad((intensidad == null? 1 : intensidad.intValue()));
+      ejercicio.setDuracion((String) ejercicioDocument.get(EJERCICIO_DURACION));
       ejercicios.add(ejercicio);
     }
     dbResponseListener.onEjerciciosReceived(ejercicios);

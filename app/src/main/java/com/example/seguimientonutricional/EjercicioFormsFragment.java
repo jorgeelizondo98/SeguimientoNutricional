@@ -95,7 +95,7 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
         confirmButton = root.findViewById(R.id.okay_button_id);
         cancelButton = root.findViewById(R.id.cancel_button);
         intensidadRadioGroup = root.findViewById(R.id.intensidad_radiogroup_id);
-        duracionButton = root.findViewById(R.id.duarcion_button);
+
 
 
         fecha = Calendar.getInstance().getTime();
@@ -113,14 +113,7 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
             }
         });
 
-        duracionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.setTargetFragment(EjercicioFormsFragment.this,2);
-                timePicker.show(getParentFragment().getChildFragmentManager(), "time picker");
-            }
-        });
+
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,6 +178,7 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
         if(newEjercicio){
             db.addEjercicio(profile, ejercicio);
         } else {
+            ejercicio.setId(currentEjercicio.getId());
             db.updateEjercicio(profile,ejercicio);
         }
     }

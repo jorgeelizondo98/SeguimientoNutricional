@@ -227,7 +227,7 @@ public class DBController {
   }
 
   // Agrega una comida a la base de datos.
-  public void addComida(final Profile profile, final Comida comida) {
+  public String addComida(final Profile profile, final Comida comida) {
     db.collection(COLLECTION_PROFILE).document(profile.getId()).collection(COLLECTION_ACTIVIDADES)
         .add(formatComida(comida))
         .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -243,6 +243,7 @@ public class DBController {
             dbResponseListener.onDatabaseNetworkError();
           }
         });
+    return comida.getId();
   }
 
   // Agrega una bebida a la base de datos.

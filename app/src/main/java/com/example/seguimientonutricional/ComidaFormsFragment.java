@@ -244,12 +244,15 @@ public class ComidaFormsFragment extends Fragment implements TimePickerFragment.
         comida.setCarbohidratos(carbohidratos);
         comida.setGrasas(grasas);
         comida.setProteinas(proteinas);
+        String id = "";
         if(newComida){
-            db.addComida(profile, comida);
+            id = db.addComida(profile, comida);
         } else {
+            comida.setId(currentComida.getId());
             db.updateComida(profile,comida);
         }
         if(imageBitmap !=  null){
+            comida.setId(id);
             db.uploadPhotoAndUpdateComida(profile,comida,imageBitmap);
         }
 

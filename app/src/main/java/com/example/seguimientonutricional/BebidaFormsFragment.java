@@ -204,7 +204,6 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
     }
 
     private void addBebida() {
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(fecha);
         cal.set(Calendar.HOUR_OF_DAY, hour);
@@ -220,6 +219,7 @@ public class BebidaFormsFragment extends Fragment implements TimePickerFragment.
         if(newBebida){
             db.addBebida(profile, bebida);
         } else {
+            bebida.setId(currentBebida.getId());
             db.updateBebida(profile,bebida);
         }
 

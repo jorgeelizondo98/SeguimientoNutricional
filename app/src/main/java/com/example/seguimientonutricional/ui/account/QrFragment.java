@@ -23,7 +23,6 @@ public class QrFragment extends Fragment {
 
 
     private CodeScanner mQRScanner;
-
     QrFragment.OnQrFragmentInteractionListener mQrListener;
 
     public QrFragment() {
@@ -62,6 +61,7 @@ public class QrFragment extends Fragment {
             }
         });
 
+        //Reload Scanner when
         scannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

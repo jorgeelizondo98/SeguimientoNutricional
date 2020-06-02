@@ -26,7 +26,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void onCalendarSelected(){
-        //Despliega pop-up del calendario
+        //Shows CalendarDialog
         FragmentManager manager = getSupportFragmentManager();
         DatePickerFragment dialog = new DatePickerFragment(currFecha);
         dialog.show(manager,DIALOG_DATE);
@@ -104,9 +103,10 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = new GregorianCalendar(year,month,dayOfMonth);
-        currFecha = c;
-        Date dateTime = new Date(c.getTimeInMillis());
+        Calendar cal = Calendar.getInstance();
+        cal.set(year,month,dayOfMonth,0,0);
+        currFecha = cal;
+        Date dateTime = new Date(cal.getTimeInMillis());
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.setDate(dateTime);
     }

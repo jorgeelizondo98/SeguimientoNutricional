@@ -1,6 +1,5 @@
 package com.example.seguimientonutricional.ui.home.tabsFragments;
 
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Adapters.AdapterBebida;
@@ -64,7 +62,6 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
         mBebidas = new ArrayList<Bebida>();
-        makeGridViewDynamic();
 
         List<Fragment> allFragments = getParentFragment().getChildFragmentManager().getFragments();
 
@@ -89,19 +86,6 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
     }
 
 
-
-    private void makeGridViewDynamic(){
-        if(mRecyclerView != null){
-            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-            }
-            else{
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
-            }
-        }
-    }
-
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterBebida(){
         if(getParentFragment() != null) {
@@ -115,6 +99,7 @@ public class BebidasFragment extends Fragment implements DBController.DBResponse
         db.loadBebidas(profile,fecha);
     }
 
+    //Receives Date selected on Calendar from HomeViewModel
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

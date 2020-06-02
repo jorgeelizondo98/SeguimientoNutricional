@@ -1,6 +1,5 @@
 package com.example.seguimientonutricional.ui.home.tabsFragments;
 
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Adapters.AdapterEjercicio;
@@ -59,37 +57,28 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_ejercicios, container, false);
+
+        //Connecting to layout
         mRecyclerView = root.findViewById(R.id.recycler_view_id);
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
+
+
         mEjercicio = new ArrayList<Ejercicio>();
-        makeGridViewDynamic();
 
+        //Connect to DatabaseController
         List<Fragment> allFragments = getParentFragment().getChildFragmentManager().getFragments();
-
         //We get the actual fragment running
         for (Fragment fragmento: allFragments) {
             if (fragmento instanceof EjerciciosFragment){
                 db = new DBController(fragmento);
             }
         }
-
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         db.loadProfile(currentUser);
         fecha = Calendar.getInstance().getTime();
 
         return root;
-    }
-
-    private void makeGridViewDynamic(){
-        if(mRecyclerView != null){
-            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-            }
-            else{
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
-            }
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -105,6 +94,7 @@ public class EjerciciosFragment extends Fragment implements DBController.DBRespo
         db.loadEjercicios(profile,fecha);
     }
 
+    //Receives Date selected on Calendar from HomeViewModel
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

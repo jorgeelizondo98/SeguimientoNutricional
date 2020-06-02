@@ -1,6 +1,5 @@
 package com.example.seguimientonutricional.ui.home.tabsFragments;
 
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seguimientonutricional.Adapters.AdapterComida;
@@ -52,11 +50,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        makeGridViewDynamic();
-    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -69,7 +63,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
         mComidas = new ArrayList<Comida>();
-        makeGridViewDynamic();
+
         List<Fragment> allFragments = getParentFragment().getChildFragmentManager().getFragments();
 
         //We get the actual fragment running
@@ -87,17 +81,6 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
     }
 
 
-    private void makeGridViewDynamic(){
-        if(mRecyclerView != null){
-            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-            }
-            else{
-                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
-            }
-        }
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setAdapterComida(){
         if(getParentFragment() != null){
@@ -111,7 +94,7 @@ public class ComidasFragment extends Fragment implements DBController.DBResponse
     private void loadsComida(){
        db.loadComidas(profile,fecha);
     }
-
+    //Receives Date selected on Calendar from HomeViewModel
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

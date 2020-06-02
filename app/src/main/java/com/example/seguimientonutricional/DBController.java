@@ -60,7 +60,7 @@ public class DBController {
   private final static String REGISTRO_TITULO = "titulo";
   private final static String REGISTRO_DESCRIPCION = "descripcion";
   private final static String REGISTRO_FECHA = "fecha";
-  private final static String REGISTRO_COMENTARIO = "comentario";
+  private final static String REGISTRO_COMENTARIO = "comentarioDoctor";
   private final static String REGISTRO_TIPO = "tipo";
 
   private final static String COMIDA_FOTO = "foto";
@@ -69,6 +69,9 @@ public class DBController {
   private final static String COMIDA_PROTEINAS = "proteinas";
   private final static String COMIDA_GRASAS = "grasas";
   private final static String BEBIDA_TIPO = "bebida";
+  private final static String BEBIDA_CANTIDAD = "cantidad";
+  private final static String BEBIDA_SODIO = "sodio";
+  private final static String BEBIDA_AZUCARES = "azucares";
   private final static String EJERCICIO_TIPO = "ejercicio";
 
   // Constructor inicializa el objeto de conexión a Firebase Firestore y Firebase Storage.
@@ -208,6 +211,9 @@ public class DBController {
   // Takes an instance of Bebida and formats it into a map of <String, Object>.
   private Map<String, Object> formatBebida(Bebida bebida) {
     Map<String, Object> formatted_bebida = new HashMap<>();
+    formatted_bebida.put(BEBIDA_AZUCARES, bebida.getAzucares());
+    formatted_bebida.put(BEBIDA_CANTIDAD, bebida.getCantidad());
+    formatted_bebida.put(BEBIDA_SODIO, bebida.getSodio());
     formatted_bebida.put(REGISTRO_TIPO, BEBIDA_TIPO);
     return formatRegistro(bebida, formatted_bebida);
   }
@@ -413,6 +419,13 @@ public class DBController {
     ArrayList<Bebida> bebidas = new ArrayList<>();
     for (QueryDocumentSnapshot document: rawBebidas) {
       Bebida bebida = new Bebida(populateRegistro(document));
+      Map<String, Object> bebidaDocument = document.getData();
+      Long sodio = (Long) bebidaDocument.get(BEBIDA_SODIO);
+      bebida.setmSodio((sodio == null? -1 : sodio.intValue()));
+      Long azucares = (Long) bebidaDocument.get(BEBIDA_AZUCARES);
+      bebida.setmAzucares((azucares == null? -1 : azucares.intValue()));
+      Long cantidad = (Long) bebidaDocument.get(BEBIDA_CANTIDAD);
+      bebida.setmCantidad((cantidad == null? -1 : cantidad.intValue()));
       bebidas.add(bebida);
     }
     dbResponseListener.onBebidasReceived(bebidas);

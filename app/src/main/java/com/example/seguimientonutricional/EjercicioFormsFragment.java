@@ -101,8 +101,7 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
         fecha = Calendar.getInstance().getTime();
 
         if(currentEjercicio != null){
-            titulo.setText(currentEjercicio.getTitulo());
-            descripcion.setText(currentEjercicio.getDescripcion());
+            setUI();
         }
 
         buttonHora.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +159,17 @@ public class EjercicioFormsFragment extends Fragment implements TimePickerFragme
         });
 
         return root;
+    }
+
+    public  void setUI(){
+        titulo.setText(currentEjercicio.getTitulo());
+        descripcion.setText(currentEjercicio.getDescripcion());
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentEjercicio.getFecha());
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        minutes = cal.get(Calendar.MINUTE);
+        buttonHora.setText(hour.toString() + ":" + minutes.toString());
     }
 
     private void addEjercicio() {

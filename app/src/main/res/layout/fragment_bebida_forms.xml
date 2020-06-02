@@ -81,8 +81,30 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cantidad:"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="16dp"/>
+
+                    <EditText
+                        android:id="@+id/cantidad_id"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"/>
+
+
+
+                </LinearLayout>
+
                 <RadioGroup
-                    android:id="@+id/carbohidratos_radiogroup_id"
+                    android:id="@+id/sodio_radiogroup_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -92,7 +114,12 @@
                         android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="Cantidad: " />
+                        android:text="Sodio: " />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"
+                        android:text="0"/>
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -122,7 +149,7 @@
                 </RadioGroup>
 
                 <RadioGroup
-                    android:id="@+id/proteinas_radiogroup_id"
+                    android:id="@+id/azucares_radiogroup_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -132,47 +159,12 @@
                         android:layout_width="96dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="Calidad: " />
-
+                        android:text= "Azucares: " />
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:text="1"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="2"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="3"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="4"/>
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:text="5"/>
-                </RadioGroup>
-
-                <RadioGroup
-                    android:id="@+id/grasas_radiogroup_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="8dp">
-
-                    <TextView
-                        android:layout_width="96dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:text= "¿Tiene carbohidratos? " />
+                        android:text="0"/>
 
                     <RadioButton
                         android:layout_width="wrap_content"

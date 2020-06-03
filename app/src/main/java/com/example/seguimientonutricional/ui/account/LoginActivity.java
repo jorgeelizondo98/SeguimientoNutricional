@@ -23,6 +23,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -97,6 +98,10 @@ public class LoginActivity extends AppCompatActivity
     mFacebookCallbackManager = CallbackManager.Factory.create();
     LoginManager.getInstance().registerCallback(mFacebookCallbackManager,
         loginResultFacebookCallback);
+
+    // Initialize Facebook Login button
+    LoginButton loginButton = findViewById(R.id.login_button);
+    loginButton.setReadPermissions("email", "public_profile");
   }
   
   @Override

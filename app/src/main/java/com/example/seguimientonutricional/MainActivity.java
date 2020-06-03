@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,9 +28,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -42,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private static final String DIALOG_DATE = "DialogDate";
     private boolean logout = false;
     private Calendar currFecha;
-
 
     HomeViewModel homeViewModel;
 
@@ -161,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
     }
 

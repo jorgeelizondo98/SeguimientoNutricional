@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            // TODO: Aqui se debe reposicionar el boton de add.
         }
     }
 

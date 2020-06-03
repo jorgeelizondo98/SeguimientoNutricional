@@ -57,6 +57,7 @@ public class DBController {
   private final static String PROFILE_PHOTOURL = "fotoPerfil";
   private final static String PROFILE_DOCTOR_REF = "doctorActual";
   private final static String PROFILE_NOMBREDOCTOR = "nombreDoctor";
+  private final static String PROFILE_BIRTHDATE = "fechaNacimiento";
 
   private final static String COLLECTION_ACTIVIDADES = "actividades";
   private final static String REGISTRO_TITULO = "titulo";
@@ -125,6 +126,7 @@ public class DBController {
     formatted_profile.put(PROFILE_EMAIL, profile.getEmail());
     formatted_profile.put(PROFILE_NOMBREDOCTOR, profile.getNombreDoctor());
     formatted_profile.put(PROFILE_PHOTOURL, profile.getPhotoUrl());
+    formatted_profile.put(PROFILE_BIRTHDATE, new Date());
     return formatted_profile;
   }
 
@@ -356,8 +358,8 @@ public class DBController {
         new PriorityQueue<>(new Comparator<QueryDocumentSnapshot>() {
           @Override
           public int compare(QueryDocumentSnapshot o1, QueryDocumentSnapshot o2) {
-            return ((Timestamp) o1.getData().get(REGISTRO_FECHA)).compareTo(
-                (Timestamp) o2.getData().get(REGISTRO_FECHA));
+            return ((Timestamp) o2.getData().get(REGISTRO_FECHA)).compareTo(
+                (Timestamp) o1.getData().get(REGISTRO_FECHA));
           }
         });
     // Busca los registros en la base de datos.

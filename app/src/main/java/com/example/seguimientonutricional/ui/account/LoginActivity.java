@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -23,6 +22,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -56,10 +56,6 @@ public class LoginActivity extends AppCompatActivity
   private static final String LOGIN_FRAGMENT = "login";
   private static final String REGISTER_FRAGMENT = "register";
 
-  private CardView cardView;
-  private FirebaseUser notRegisteredUser;
-
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -68,7 +64,6 @@ public class LoginActivity extends AppCompatActivity
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.activity_login);
 
-    cardView = findViewById(R.id.card);
     // Configure sign-in to request the user's ID, email address, and basic
     // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
     GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -97,6 +92,10 @@ public class LoginActivity extends AppCompatActivity
     mFacebookCallbackManager = CallbackManager.Factory.create();
     LoginManager.getInstance().registerCallback(mFacebookCallbackManager,
         loginResultFacebookCallback);
+
+    // Initialize Facebook Login button
+    LoginButton loginButton = findViewById(R.id.login_button);
+    loginButton.setReadPermissions("email", "public_profile");
   }
   
   @Override
@@ -150,7 +149,7 @@ public class LoginActivity extends AppCompatActivity
                 // Sign in success, update UI with the signed-in user's information
                 Log.d(TAG, "createUserWithEmail:success");
                 FirebaseUser user = mAuth.getCurrentUser();
-                notRegisteredUser = user;
+                updateUI(user);
               } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
